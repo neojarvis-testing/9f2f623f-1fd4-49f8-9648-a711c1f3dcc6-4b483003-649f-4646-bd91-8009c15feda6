@@ -9,8 +9,10 @@ public class UserMapper {
         LoginDTO loginDTO= new LoginDTO();
         loginDTO.setToken(token);
         loginDTO.setUserId(user.getUserId());
-        loginDTO.setUserRole(user.getUserRole());
         loginDTO.setUsername(user.getUsername());
+        loginDTO.setEmail(user.getEmail());
+        loginDTO.setMobileNumber(user.getMobileNumber());
+        loginDTO.setUserRole(user.getUserRole());
         return loginDTO;
     }
 }
