@@ -21,66 +21,49 @@ import jakarta.annotation.security.RolesAllowed;
 @RestController
 @RequestMapping("/api/orders")
 public class OrdersController {
+
     @Autowired
     OrderServiceImpl orderServiceImpl;
 
     @PostMapping
     @RolesAllowed("USER")
     public ResponseEntity<Orders> addOrder(@RequestBody Orders orders) {
-        orders = orderServiceImpl.addOrder(orders);
-        return ResponseEntity.status(201).body(orders);
+        Orders newOrder = orderServiceImpl.addOrder(orders);
+        return ResponseEntity.status(201).body(newOrder);
     }
 
     @GetMapping("/{orderId}")
     @RolesAllowed({"ADMIN", "USER"})
-    public ResponseEntity<?> getOrderById(@PathVariable int orderId) {
+    public ResponseEntity<Optional<Orders>> getOrderById(@PathVariable int orderId) {
         Optional<Orders> order = orderServiceImpl.getOrderById(orderId);
-        if (order.isPresent()) {
-            return ResponseEntity.status(200).body(order.get());
-        } else {
-            return ResponseEntity.status(404).build();
-        }
+        return ResponseEntity.status(200).body(order);
     }
 
     @GetMapping
     @RolesAllowed("ADMIN")
-    public ResponseEntity<?> getAllOrders() {
+    public ResponseEntity<List<Orders>> getAllOrders() {
         List<Orders> orders = orderServiceImpl.getAllOrders();
-        if (orders.isEmpty()) {
-            return ResponseEntity.status(204).build(); // No Content
-        }
         return ResponseEntity.status(200).body(orders);
     }
 
     @PutMapping("/{orderId}")
-    @RolesAllowed("ADMIN") 
-    public ResponseEntity<?> updateOrder(@PathVariable int orderId, @RequestBody Orders orderDetails) {
+    @RolesAllowed("ADMIN")
+    public ResponseEntity<Optional<Orders>> updateOrder(@PathVariable int orderId, @RequestBody Orders orderDetails) {
         Optional<Orders> updatedOrder = orderServiceImpl.updateOrder(orderId, orderDetails);
-        if (updatedOrder.isPresent()) {
-            return ResponseEntity.status(200).body(updatedOrder.get());
-        } else {
-            return ResponseEntity.status(404).build();
-        }
+        return ResponseEntity.status(200).body(updatedOrder);
     }
 
     @DeleteMapping("/{orderId}")
     @RolesAllowed("USER")
-    public ResponseEntity<?> deleteOrder(@PathVariable int orderId) {
+    public ResponseEntity<Boolean> deleteOrder(@PathVariable int orderId) {
         boolean isDeleted = orderServiceImpl.deleteOrder(orderId);
-        if (isDeleted) {
-            return ResponseEntity.status(204).build(); // No Content
-        } else {
-            return ResponseEntity.status(404).build();
-        }
-    }   
-    
+        return ResponseEntity.status(200).body(isDeleted);
+    }
+
     @GetMapping("/user/{userId}")
-    @RolesAllowed({"USER"})
-    public ResponseEntity<?> getOrdersByUserId(@PathVariable int userId) {
+    @RolesAllowed("USER")
+    public ResponseEntity<Optional<List<Orders>>> getOrdersByUserId(@PathVariable int userId) {
         Optional<List<Orders>> orders = orderServiceImpl.getOrdersByUserId(userId);
-        if (orders.isEmpty()) {
-            return ResponseEntity.status(204).build(); // No Content
-        }
-        return ResponseEntity.status(200).body(orders.get());
+        return ResponseEntity.status(200).body(orders);
     }
 }
