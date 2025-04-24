@@ -1,5 +1,7 @@
 package com.examly.springapp.service;
  
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +24,10 @@ UserRepo userRepo;
     public LoginDTO loginUser(User user) {
         user =  userRepo.findByEmail(user.getEmail());
         return UserMapper.mappedToLoginDTO(user);
+    }
+
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
     }
 }

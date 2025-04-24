@@ -1,5 +1,6 @@
 package com.examly.springapp.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.Food;
@@ -18,11 +20,12 @@ import com.examly.springapp.service.FoodServiceImpl;
 import jakarta.annotation.security.RolesAllowed;
 
 @RestController
+@RequestMapping("api/food")
 public class FoodController {
     @Autowired 
     FoodServiceImpl foodService;
 
-    @PostMapping("api/food")
+    @PostMapping
     @RolesAllowed("ADMIN")
     public ResponseEntity<Food> addFood(@RequestBody Food food) {
         Food createdFood = foodService.addFood(food);
@@ -74,10 +77,5 @@ public class FoodController {
         } else {
             return ResponseEntity.status(404).build();
         }
-    }
-
-
-
-
-    
+    }    
 }
