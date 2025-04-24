@@ -11,11 +11,11 @@ import com.examly.springapp.service.UserServiceImpl;
 
 @RestController
 public class AuthController {
-@Autowired
-UserServiceImpl userService;
+    @Autowired
+    UserServiceImpl userService;
 
     @PostMapping("/api/register")
-    public ResponseEntity<?> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@RequestBody User user){
         user = userService.createUser(user);
         return ResponseEntity.status(201).body(user);
     }
