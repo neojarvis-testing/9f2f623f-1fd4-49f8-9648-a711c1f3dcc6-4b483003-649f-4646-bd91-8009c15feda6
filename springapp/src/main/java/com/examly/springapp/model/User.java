@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
  
 @Entity
 public class User {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
     @Column(unique = true)
     private String email;
