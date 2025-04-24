@@ -18,10 +18,10 @@ public class UserServiceImpl implements UserService{
     UserRepo userRepo;
     @Override
     public User createUser(User user) {
-        User existingUser=userRepo.findByEmail(user.getEmail());
-        if(existingUser!=null){
-            throw new UserNotFoundException("User already exists!!!");
-        }
+        // User existingUser=userRepo.findByEmail(user.getEmail());
+        // if(existingUser!=null){
+        //     throw new UserNotFoundException("User already exists!!!");
+        // }
         return userRepo.save(user);
     }
 
@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService{
         }
         if(loginData.getEmail().equals(user.getEmail()) && loginData.getPassword().equals(user.getPassword())){
             user=userRepo.findByEmail(user.getEmail());
-            // System.out.println(user.getEmail());
             return UserMapper.mappedToLoginDTO(user);
         }
         throw new UserNotFoundException("Invalid Credentials");
