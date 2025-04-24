@@ -9,7 +9,8 @@ import com.examly.springapp.exception.UserNotFoundException;
 import com.examly.springapp.model.LoginDTO;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepo;
-import com.examly.utility.UserMapper;
+import com.examly.springapp.utility.UserMapper;
+
  
 @Service
 public class UserServiceImpl implements UserService{
@@ -17,9 +18,14 @@ public class UserServiceImpl implements UserService{
     UserRepo userRepo;
     @Override
     public User createUser(User user) {
+        // User existingUser=userRepo.findByEmail(user.getEmail());
+        // if(existingUser!=null){
+        //     throw new UserNotFoundException("User already exists!!!");
+        // }
         return userRepo.save(user);
     }
 
+    @Override
     public LoginDTO loginUser(User user) {
         User loginData =  userRepo.findByEmail(user.getEmail());
         if(loginData==null){
@@ -27,7 +33,6 @@ public class UserServiceImpl implements UserService{
         }
         if(loginData.getEmail().equals(user.getEmail()) && loginData.getPassword().equals(user.getPassword())){
             user=userRepo.findByEmail(user.getEmail());
-            // System.out.println(user.getEmail());
             return UserMapper.mappedToLoginDTO(user);
         }
         throw new UserNotFoundException("Invalid Credentials");
@@ -36,5 +41,5 @@ public class UserServiceImpl implements UserService{
 
     public List<User> getAllUsers() {
         return userRepo.findAll();
-    }
-}
+    } 
+} 

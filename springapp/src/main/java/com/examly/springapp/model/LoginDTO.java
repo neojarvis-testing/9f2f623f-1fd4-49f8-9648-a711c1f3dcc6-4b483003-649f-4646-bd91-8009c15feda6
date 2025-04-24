@@ -1,9 +1,9 @@
 package com.examly.springapp.model;
 
 public class LoginDTO {
-    private String token;           //token to be returned..
-    private String username;        //User's username
-    private String userRole;        //Role of the user->ADMIN/USER
+    private String token;      
+    private String username;        
+    private String userRole;        
     private long userId;
     private String email;
     private String mobileNumber;

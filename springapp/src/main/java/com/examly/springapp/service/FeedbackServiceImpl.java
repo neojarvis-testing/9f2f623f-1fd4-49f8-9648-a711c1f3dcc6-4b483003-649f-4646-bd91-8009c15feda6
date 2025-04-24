@@ -44,12 +44,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public Feedback getFeedbacksByUserId(int userId) {
-        Feedback feedback = feedbackRepo.findByUserId(userId);
-        if(feedback==null){
-            return null;
-        }
-        return feedbackRepo.save(feedback);
+    public List<Feedback> getFeedbacksByUserId(int userId) {
+        List<Feedback> feedbacksList = feedbackRepo.findByUserId(userId);
+        return feedbacksList;
     }
     
 }
