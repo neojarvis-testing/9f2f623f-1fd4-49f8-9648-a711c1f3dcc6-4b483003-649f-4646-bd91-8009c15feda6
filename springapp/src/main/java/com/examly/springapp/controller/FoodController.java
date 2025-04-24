@@ -5,14 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.examly.springapp.model.Food;
 import com.examly.springapp.service.FoodServiceImpl;
@@ -22,7 +15,8 @@ import jakarta.annotation.security.RolesAllowed;
 @RestController
 @RequestMapping("api/food")
 public class FoodController {
-    @Autowired 
+
+    @Autowired
     FoodServiceImpl foodService;
 
     @PostMapping
@@ -32,50 +26,31 @@ public class FoodController {
         return ResponseEntity.status(201).body(createdFood);
     }
 
-    // View Food by Id
     @GetMapping("/{foodId}")
     @RolesAllowed({"ADMIN", "USER"})
-    public ResponseEntity<?> getFoodById(@PathVariable int foodId) {
+    public ResponseEntity<Optional<Food>> getFoodById(@PathVariable int foodId) {
         Optional<Food> food = foodService.getFoodById(foodId);
-        if (food.isPresent()) {
-            return ResponseEntity.status(200).body(food.get());
-        } else {
-            return ResponseEntity.status(404).build();
-        }
+        return ResponseEntity.status(200).body(food);
     }
 
-    // View All Foods 
     @GetMapping
     @RolesAllowed("ADMIN")
-    public ResponseEntity<?> getAllFoods() {
+    public ResponseEntity<List<Food>> getAllFoods() {
         List<Food> foods = foodService.getAllFoods();
-        if (foods.isEmpty()) {
-            return ResponseEntity.status(204).build(); // No Content
-        }
         return ResponseEntity.status(200).body(foods);
     }
 
-    // Edit Food
     @PutMapping("/{foodId}")
-    @RolesAllowed("ADMIN") 
-    public ResponseEntity<?> updateFood(@PathVariable int foodId, @RequestBody Food foodDetails) {
+    @RolesAllowed("ADMIN")
+    public ResponseEntity<Optional<Food>> updateFood(@PathVariable int foodId, @RequestBody Food foodDetails) {
         Optional<Food> updatedFood = foodService.updateFood(foodId, foodDetails);
-        if (updatedFood.isPresent()) {
-            return ResponseEntity.status(200).body(updatedFood.get());
-        } else {
-            return ResponseEntity.status(404).build();
-        }
+        return ResponseEntity.status(200).body(updatedFood);
     }
 
-    // Delete Food
     @DeleteMapping("/{foodId}")
     @RolesAllowed("ADMIN")
-    public ResponseEntity<?> deleteFood(@PathVariable int foodId) {
+    public ResponseEntity<Boolean> deleteFood(@PathVariable int foodId) {
         boolean isDeleted = foodService.deleteFood(foodId);
-        if (isDeleted) {
-            return ResponseEntity.status(204).build(); // No Content
-        } else {
-            return ResponseEntity.status(404).build();
-        }
-    }    
+        return ResponseEntity.status(200).body(isDeleted);
+    }
 }
