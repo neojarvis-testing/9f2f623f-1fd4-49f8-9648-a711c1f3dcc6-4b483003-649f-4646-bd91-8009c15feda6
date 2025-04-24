@@ -5,9 +5,13 @@ public class LoginDTO {
     private String username;        //User's username
     private String userRole;        //Role of the user->ADMIN/USER
     private long userId;
+    private String email;
+    private String mobileNumber;
+    
     public String getToken() {
         return token;
     }
+    
     public void setToken(String token) {
         this.token = token;
     }
@@ -29,6 +33,23 @@ public class LoginDTO {
     public void setUserId(long userId) {
         this.userId = userId;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
     public LoginDTO(String token, String username, String userRole, long userId) {
         this.token = token;
         this.username = username;
