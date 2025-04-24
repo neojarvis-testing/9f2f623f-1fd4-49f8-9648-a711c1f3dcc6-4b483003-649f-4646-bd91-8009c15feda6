@@ -1,10 +1,20 @@
-package com.examly.springapp.model;
+package com.examly.springapp.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public class LoginDTO {
-    private String token;      
-    private String username;        
+    private String token; 
+    private String username; 
+
+    @NotBlank(message = "Password is mandatory")
+    private String password;
+
     private String userRole;        
     private long userId;
+
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is mandatory")
     private String email;
     private String mobileNumber;
     
@@ -49,13 +59,25 @@ public class LoginDTO {
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public LoginDTO(String token, String username, String userRole, long userId) {
+    
+    public LoginDTO(String token, String username, String password, String userRole, long userId, String email,
+            String mobileNumber) {
         this.token = token;
         this.username = username;
+        this.password = password;
         this.userRole = userRole;
         this.userId = userId;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
     }
+
     public LoginDTO(){
 
     }
