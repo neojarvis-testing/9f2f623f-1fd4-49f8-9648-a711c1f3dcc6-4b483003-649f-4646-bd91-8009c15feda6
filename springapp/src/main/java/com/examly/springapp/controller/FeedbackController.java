@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.Feedback;
 import com.examly.springapp.model.Food;
+import com.examly.springapp.service.FeedbackService;
 import com.examly.springapp.service.FeedbackServiceImpl;
 
 import jakarta.annotation.security.RolesAllowed;
@@ -22,7 +23,7 @@ import jakarta.annotation.security.RolesAllowed;
 @RequestMapping("api/feedback")
 public class FeedbackController {
     @Autowired
-    FeedbackServiceImpl feedbackService;
+    FeedbackService feedbackService;
 
     @PostMapping
     @RolesAllowed("USER")
@@ -51,7 +52,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/user/{userId}")
-    @RolesAllowed("User")
+    @RolesAllowed("USER")
     public ResponseEntity<?>getFeedbacksByUserId(@PathVariable int userId){
         List<Feedback> list = feedbackService.getFeedbacksByUserId(userId);
         if(list.isEmpty()){

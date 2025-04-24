@@ -31,7 +31,7 @@ public class FoodController {
         Food createdFood = foodService.addFood(food);
         return ResponseEntity.status(201).body(createdFood);
     }
-   
+
     // View Food by Id
     @GetMapping("/{foodId}")
     @RolesAllowed({"ADMIN", "USER"})
