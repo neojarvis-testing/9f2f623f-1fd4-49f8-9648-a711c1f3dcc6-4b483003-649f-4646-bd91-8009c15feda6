@@ -16,7 +16,7 @@ public class Food {
     @Lob
     private String photo;
     @ManyToOne
-    @JoinColumn(name="userId", nullable=false)
+    @JoinColumn(name ="userId", nullable=false)
     private User user;
     public int getFoodId() {
         return foodId;
