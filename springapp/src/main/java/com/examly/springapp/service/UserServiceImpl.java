@@ -3,6 +3,7 @@ package com.examly.springapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.examly.springapp.exception.UserNotFoundException;
 import com.examly.springapp.model.LoginDTO;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepo;
@@ -18,7 +19,15 @@ public class UserServiceImpl implements UserService{
     }
 
     public LoginDTO loginUser(User user) {
-        user =  userRepo.findByEmail(user.getEmail());
-        return UserMapper.mappedToLoginDTO(user);
+        User loginData =  userRepo.findByEmail(user.getEmail());
+        if(loginData==null){
+            throw new UserNotFoundException("User not found!!!");
+        }
+        if(loginData.getEmail().equals(user.getEmail()) && loginData.getPassword().equals(user.getPassword())){
+            user=userRepo.findByEmail(user.getEmail());
+            // System.out.println(user.getEmail());
+            return UserMapper.mappedToLoginDTO(user);
+        }
+        throw new UserNotFoundException("Invalid Credentials");
     }
 }
