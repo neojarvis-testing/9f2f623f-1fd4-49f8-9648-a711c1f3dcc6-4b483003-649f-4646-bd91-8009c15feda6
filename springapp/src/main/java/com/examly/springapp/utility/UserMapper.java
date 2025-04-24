@@ -1,4 +1,4 @@
-package com.examly.utility;
+package com.examly.springapp.utility;
 
 import com.examly.springapp.model.LoginDTO;
 import com.examly.springapp.model.User;
