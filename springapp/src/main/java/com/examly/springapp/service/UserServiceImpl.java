@@ -36,9 +36,7 @@ public class UserServiceImpl implements UserService{
             return UserMapper.mappedToLoginDTO(user);
         }
         throw new UserNotFoundException("Invalid Credentials");
-    }
-
-
+    } 
     public List<User> getAllUsers() {
         return userRepo.findAll();
     } 
