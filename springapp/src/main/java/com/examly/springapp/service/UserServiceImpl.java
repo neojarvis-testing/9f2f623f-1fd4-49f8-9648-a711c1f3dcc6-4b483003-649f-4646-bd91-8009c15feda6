@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.examly.springapp.model.LoginDTO;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepo;
-import com.examly.springapp.service.UserService;
 import com.examly.utility.UserMapper;
  
 @Service
