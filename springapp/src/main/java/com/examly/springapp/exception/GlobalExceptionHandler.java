@@ -11,5 +11,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> method1(UserNotFoundException e){
         return ResponseEntity.status(404).body(e.getMessage());
     }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> method2(ResourceNotFoundException e){
+        return ResponseEntity.status(404).body(e.getMessage());
+    }
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<?> method3(InvalidInputException e){
+        return ResponseEntity.status(404).body(e.getMessage());
+    }
 
 }
