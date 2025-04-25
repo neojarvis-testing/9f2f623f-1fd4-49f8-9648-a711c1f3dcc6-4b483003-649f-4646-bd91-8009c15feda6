@@ -20,9 +20,7 @@ public class Food {
     private int stockQuantity;
     @Lob
     private String photo;
-    @ManyToOne
-    @JoinColumn(name ="userId", nullable=false)
-    private User user;
+    
     public int getFoodId() {
         return foodId;
     }
@@ -53,11 +51,6 @@ public class Food {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-    }
+    
     
 }
