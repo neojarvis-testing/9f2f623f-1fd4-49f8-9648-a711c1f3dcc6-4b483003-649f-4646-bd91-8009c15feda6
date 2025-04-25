@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.examly.springapp.exception.InvalidInputException;
 import com.examly.springapp.exception.ResourceNotFoundException;
+import com.examly.springapp.exception.UserNotFoundException;
+import com.examly.springapp.model.Food;
 import com.examly.springapp.model.Orders;
 import com.examly.springapp.model.User;
+import com.examly.springapp.repository.FoodRepo;
 import com.examly.springapp.repository.OrderRepo;
 import com.examly.springapp.repository.UserRepo;
 
@@ -18,26 +21,45 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderRepo orderRepo;
-
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    FoodRepo foodRepo; 
 
     @Override
     public Orders addOrder(Orders orders) {
-        if (orders == null || orders.getOrderStatus() == null || orders.getOrderStatus().isEmpty()) {
-            throw new InvalidInputException("Order status cannot be null or empty.");
-        }
-        if (orders.getTotalAmount() <= 0) {
-            throw new InvalidInputException("Total amount must be greater than zero.");
-        }
-        if (orders.getQuantity() <= 0) {
-            throw new InvalidInputException("Quantity must be greater than zero.");
-        }
-        if (orders.getOrderDate() == null) {
-            throw new InvalidInputException("Order date cannot be null.");
-        }
-        return orderRepo.save(orders);
+    if (orders == null || orders.getOrderStatus() == null || orders.getOrderStatus().isEmpty()) {
+        throw new InvalidInputException("Order status cannot be null or empty.");
     }
+    if (orders.getTotalAmount() <= 0) {
+        throw new InvalidInputException("Total amount must be greater than zero.");
+    }
+    if (orders.getQuantity() <= 0) {
+        throw new InvalidInputException("Quantity must be greater than zero.");
+    }
+    if (orders.getOrderDate() == null) {
+        throw new InvalidInputException("Order date cannot be null.");
+    }
+
+    // Fetch and set User 
+    User user = userRepo.findById(orders.getUser().getUserId()).orElse(null);
+    if (user == null) {
+        throw new UserNotFoundException("User not found");
+    }
+    orders.setUser(user);
+
+    // Fetch and set Food
+    Food food = foodRepo.findById(orders.getFood().getFoodId()).orElse(null);
+    if (food == null) {
+        throw new ResourceNotFoundException("Food not found"); 
+    }
+    orders.setFood(food);
+
+    // Set default Order Status
+    orders.setOrderStatus("Pending");
+
+    return orderRepo.save(orders);
+}
 
     @Override
     public Optional<Orders> getOrderById(int orderId) {

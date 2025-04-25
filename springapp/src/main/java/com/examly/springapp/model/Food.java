@@ -1,5 +1,6 @@
 package com.examly.springapp.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +14,7 @@ public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int foodId;
+    @Column(unique = true)
     private String foodName;
     private double price;
     private int stockQuantity;
