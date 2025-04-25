@@ -1,31 +1,35 @@
 package com.examly.springapp.service;
- 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;  
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.examly.springapp.config.UserPrinciple;
 import com.examly.springapp.dto.LoginDTO;
 import com.examly.springapp.dto.UserDTO;
 import com.examly.springapp.exception.UserNotFoundException;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepo;
 import com.examly.springapp.utility.UserMapper;
+import java.util.List;
 
- 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService, UserDetailsService {
+  
     @Autowired
-    UserRepo userRepo;
+    private UserRepo userRepo;
+
     @Autowired
-    PasswordEncoder encoder;
-    @Override
+    private PasswordEncoder encoder;
+
+    @Override 
     public UserDTO createUser(UserDTO userDTO) {
-        User user=UserMapper.mapToUser(userDTO);
+        User user = UserMapper.mapToUser(userDTO);
         user.setPassword(encoder.encode(user.getPassword()));
-        User existingUser=userRepo.findByEmail(user.getEmail());
-        if(existingUser!=null){
+        User existingUser = userRepo.findByEmail(user.getEmail());
+        if (existingUser != null) {
             throw new UserNotFoundException("User already exists!!!");
         }
         User savedUser = userRepo.save(user);
@@ -34,16 +38,40 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public LoginDTO loginUser(LoginDTO loginDTO) {
-        User existingUser =  userRepo.findByEmail(loginDTO.getEmail());
-        if(existingUser==null){
+        User existingUser = userRepo.findByEmail(loginDTO.getEmail());
+        if (existingUser == null) {
             throw new UserNotFoundException("User not found!!!");
         }
-        if(existingUser.getEmail().equals(loginDTO.getEmail()) && encoder.matches(loginDTO.getPassword(), existingUser.getPassword())){
-            return UserMapper.mappedToLoginDTO(existingUser);
+        if (encoder.matches(loginDTO.getPassword(), existingUser.getPassword())) {
+            return new LoginDTO(
+                null, // Token will be set later in the controller
+                existingUser.getUsername(),
+                null, // Do not include the password in the response
+                existingUser.getUserRole(),
+                existingUser.getUserId(),
+                existingUser.getEmail(),
+                existingUser.getMobileNumber()
+            );
         }
         throw new UserNotFoundException("Invalid Credentials");
-    } 
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepo.findAll();
-    } 
-} 
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        User user = userRepo.findByEmail(username);
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        // return new org.springframework.security.core.userdetails.User(
+        //     user.getEmail(),
+        //     user.getPassword(),
+        //     List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        // );
+        return UserPrinciple.build(user);
+    }
+}

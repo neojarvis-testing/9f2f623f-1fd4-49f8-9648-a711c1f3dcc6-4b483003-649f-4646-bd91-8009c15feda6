@@ -20,7 +20,7 @@ public class FoodController {
     FoodServiceImpl foodService;
 
     @PostMapping
-    @RolesAllowed("ADMIN")
+    //@RolesAllowed("ADMIN")
     public ResponseEntity<Food> addFood(@RequestBody Food food) {
         Food createdFood = foodService.addFood(food);
         return ResponseEntity.status(201).body(createdFood);
