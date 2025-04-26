@@ -4,14 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginDTO {
-    private String token; 
+    private String token=""; 
     private String username; 
 
     @NotBlank(message = "Password is mandatory")
     private String password;
 
     private String userRole;        
-    private long userId;
+    private int userId;
 
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is mandatory")
@@ -37,10 +37,10 @@ public class LoginDTO {
     public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
-    public long getUserId() {
+    public int getUserId() {
         return userId;
     }
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -66,9 +66,7 @@ public class LoginDTO {
         this.password = password;
     }
 
-    
-    public LoginDTO(String token, String username, String password, String userRole, long userId, String email,
-            String mobileNumber) {
+    public LoginDTO(String token, String username, String password, String userRole, int userId, String email, String mobileNumber) {
         this.token = token;
         this.username = username;
         this.password = password;
@@ -78,7 +76,6 @@ public class LoginDTO {
         this.mobileNumber = mobileNumber;
     }
 
-    public LoginDTO(){
-
+    public LoginDTO() {
     }
 }
