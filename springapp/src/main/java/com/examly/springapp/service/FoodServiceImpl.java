@@ -1,7 +1,6 @@
 package com.examly.springapp.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,19 +40,19 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Optional<Food> getFoodById(int foodId) {
+    public Food getFoodById(int foodId) {
         if (foodId <= 0) {
             throw new InvalidInputException("Food ID must be positive.");
         }
-        Optional<Food> food = foodRepo.findById(foodId);
-        if (!food.isPresent()) {
+        Food food = foodRepo.findById(foodId).orElse(null);
+        if (food==null) {
             throw new ResourceNotFoundException("Food not found with ID: " + foodId);
         }
         return food;
     }
 
     @Override
-    public Optional<Food> updateFood(int foodId, Food foodDetails) {
+    public Food updateFood(int foodId, Food foodDetails) {
         if (foodId <= 0) {
             throw new InvalidInputException("Food ID must be positive.");
         }
@@ -67,12 +66,12 @@ public class FoodServiceImpl implements FoodService {
             throw new InvalidInputException("Stock quantity cannot be negative.");
         }
 
-        Optional<Food> existingFood = foodRepo.findById(foodId);
-        if (!existingFood.isPresent()) {
+        Food existingFood = foodRepo.findById(foodId).orElse(null);
+        if (existingFood==null) {
             throw new ResourceNotFoundException("Food not found with ID: " + foodId);
         }
         foodDetails.setFoodId(foodId);
-        return Optional.of(foodRepo.save(foodDetails));
+        return foodRepo.save(foodDetails);
     }
 
     @Override
