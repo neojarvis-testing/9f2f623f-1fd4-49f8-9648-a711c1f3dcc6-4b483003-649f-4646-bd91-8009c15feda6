@@ -123,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ResourceNotFoundException("Available Quantity of "+food.getFoodName()+" is "+food.getStockQuantity());
         }
         orderDetails.setOrderId(orderId);
-        orderDetails.setOrderStatus(existingOrder.getOrderStatus());
+        // orderDetails.setOrderStatus(existingOrder.getOrderStatus());
         // orderDetails.setOrderDate(existingOrder.getOrderDate());
         // orderDetails.setTotalAmount(food.getPrice()*orderDetails.getQuantity());
         // food.setStockQuantity(food.getStockQuantity()-orderDetails.getQuantity());
