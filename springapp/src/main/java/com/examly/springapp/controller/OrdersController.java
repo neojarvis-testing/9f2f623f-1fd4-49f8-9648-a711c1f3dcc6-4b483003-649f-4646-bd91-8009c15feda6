@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.examly.springapp.model.Orders;
 import com.examly.springapp.service.OrderService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
 
 /**
@@ -16,6 +18,8 @@ import jakarta.annotation.security.RolesAllowed;
  */
 @RestController
 @RequestMapping("/api/orders")
+@Tag(name = "Orders", description = "Endpoints for managing orders")
+
 public class OrdersController {
 
     private final OrderService orderService;
@@ -31,6 +35,8 @@ public class OrdersController {
      * Endpoint for adding a new order.
      * Creates a new order and returns the created order with HTTP status 201.
      */
+
+    @Operation(summary = "Add a new order", description = "Allows a user to add a new order.")
     @PostMapping
     @RolesAllowed("USER")
     public ResponseEntity<Orders> addOrder(@RequestBody Orders orders) {
@@ -42,6 +48,8 @@ public class OrdersController {
      * Endpoint for retrieving an order by ID.
      * Retrieves an order by its ID and returns it with HTTP status 200.
      */
+
+    @Operation(summary = "Get order by ID", description = "Allows an admin or user to retrieve an order by its ID.")
     @GetMapping("/{orderId}")
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<Orders> getOrderById(@PathVariable int orderId) {
@@ -53,6 +61,8 @@ public class OrdersController {
      * Endpoint for retrieving all orders.
      * Retrieves all orders and returns them with HTTP status 200.
      */
+
+    @Operation(summary = "Get all orders", description = "Allows an admin to retrieve all orders.")
     @GetMapping
     @RolesAllowed("ADMIN")
     public ResponseEntity<List<Orders>> getAllOrders() {
@@ -64,6 +74,8 @@ public class OrdersController {
      * Endpoint for updating an order by ID.
      * Updates an order by its ID and returns the updated order with HTTP status 200.
      */
+
+    @Operation(summary = "Update order by ID", description = "Allows an admin to update the details of an order by its ID.")
     @PutMapping("/{orderId}")
     @RolesAllowed("ADMIN")
     public ResponseEntity<Orders> updateOrder(@PathVariable int orderId, @RequestBody Orders orderDetails) {
@@ -75,6 +87,8 @@ public class OrdersController {
      * Endpoint for deleting an order by ID.
      * Deletes an order by its ID and returns a boolean indicating the deletion status with HTTP status 200.
      */
+
+    @Operation(summary = "Delete order by ID", description = "Allows a user to delete an order by its ID.")
     @DeleteMapping("/{orderId}")
     @RolesAllowed("USER")
     public ResponseEntity<Boolean> deleteOrder(@PathVariable int orderId) {
@@ -86,6 +100,8 @@ public class OrdersController {
      * Endpoint for retrieving orders by user ID.
      * Retrieves orders by user ID and returns them with HTTP status 200.
      */
+
+    @Operation(summary = "Get orders by user ID", description = "Allows a user to retrieve all orders they have placed.")
     @GetMapping("/user/{userId}")
     @RolesAllowed("USER")
     public ResponseEntity<List<Orders>> getOrdersByUserId(@PathVariable int userId) {

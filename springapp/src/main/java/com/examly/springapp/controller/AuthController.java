@@ -18,6 +18,8 @@ import com.examly.springapp.dto.UserDTO;
 import com.examly.springapp.model.User;
 import com.examly.springapp.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 
@@ -27,6 +29,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/")
+@Tag(name = "Authentication", description = "APIs for user authentication and registration")
 public class AuthController {
 
     private final UserService userService;
@@ -53,13 +56,14 @@ public class AuthController {
      */
 
 
+    
+    @Operation(summary = "Register a new user", description = "Registers a new user with the provided details.")
     @PostMapping("register")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO){
         userDTO = userService.createUser(userDTO);
         return ResponseEntity.status(201).body(userDTO); 
     }
-
-    
+  
     /**
      * Endpoint for user login.
      * 
@@ -67,6 +71,7 @@ public class AuthController {
      * @return a ResponseEntity containing the LoginDTO with token and HTTP status 200, or an error message with HTTP status 401
      */
 
+    @Operation(summary = "Authenticate and log in a user", description = "Authenticates user credentials and generates a JWT token.")
     @PostMapping("login")
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(
@@ -86,13 +91,14 @@ public class AuthController {
         return ResponseEntity.status(200).body(existingUserDTO);
     }
     
-
+    @Operation(summary = "Get Users from Database", description = "Get All Users from the Database.")
     @GetMapping("users")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> list = userService.getAllUsers();
         return ResponseEntity.status(200).body(list); 
     }
 }
+
 
 
 

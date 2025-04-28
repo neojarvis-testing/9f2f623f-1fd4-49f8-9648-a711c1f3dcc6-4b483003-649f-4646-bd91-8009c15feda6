@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.examly.springapp.model.Food;
 import com.examly.springapp.service.FoodService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
 
 /**
@@ -16,6 +18,7 @@ import jakarta.annotation.security.RolesAllowed;
  */
 @RestController
 @RequestMapping("api/food")
+@Tag(name = "Food", description = "Endpoints for managing food items")
 public class FoodController {
 
     private final FoodService foodService;
@@ -31,6 +34,11 @@ public class FoodController {
      * Endpoint for adding a new food item.
      * Creates a new food item and returns the created food item with HTTP status 201.
      */
+
+    @Autowired
+    FoodService foodService;
+    
+    @Operation(summary = "Add a new food item", description = "Allows an admin to add a new food item to the inventory.")
     @PostMapping
     @RolesAllowed("ADMIN")
     public ResponseEntity<Food> addFood(@RequestBody Food food) {
@@ -42,6 +50,8 @@ public class FoodController {
      * Endpoint for retrieving a food item by ID.
      * Retrieves a food item by its ID and returns it with HTTP status 200.
      */
+
+    @Operation(summary = "Get food item by ID", description = "Allows an admin or user to retrieve a food item by its ID.")
     @GetMapping("/{foodId}")
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<Food> getFoodById(@PathVariable int foodId) {
@@ -53,6 +63,9 @@ public class FoodController {
      * Endpoint for retrieving all food items.
      * Retrieves all food items and returns them with HTTP status 200.
      */
+
+    @Operation(summary = "Get all food items", description = "Allows an admin to retrieve all food items in the inventory.")
+
     @GetMapping
     @RolesAllowed("ADMIN")
     public ResponseEntity<List<Food>> getAllFoods() {
@@ -64,6 +77,8 @@ public class FoodController {
      * Endpoint for updating a food item by ID.
      * Updates a food item by its ID and returns the updated food item with HTTP status 200.
      */
+
+    @Operation(summary = "Update food item by ID", description = "Allows an admin to update the details of a food item by its ID.")
     @PutMapping("/{foodId}")
     @RolesAllowed("ADMIN")
     public ResponseEntity<Food> updateFood(@PathVariable int foodId, @RequestBody Food foodDetails) {
@@ -75,6 +90,8 @@ public class FoodController {
      * Endpoint for deleting a food item by ID.
      * Deletes a food item by its ID and returns a boolean indicating the deletion status with HTTP status 200.
      */
+
+    @Operation(summary = "Delete food item by ID", description = "Allows an admin to delete a food item by its ID.")
     @DeleteMapping("/{foodId}")
     @RolesAllowed("ADMIN")
     public ResponseEntity<Boolean> deleteFood(@PathVariable int foodId) {
