@@ -1,10 +1,12 @@
 package com.examly.springapp.service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.examly.springapp.exception.InvalidInputException;
 import com.examly.springapp.exception.ResourceNotFoundException;
@@ -15,8 +17,6 @@ import com.examly.springapp.model.User;
 import com.examly.springapp.repository.FoodRepo;
 import com.examly.springapp.repository.OrderRepo;
 import com.examly.springapp.repository.UserRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -34,26 +34,22 @@ public class OrderServiceImpl implements OrderService {
     public Orders addOrder(Orders orders) {
         logger.info("Adding order: {}", orders);
         if (orders == null || orders.getOrderStatus() == null || orders.getOrderStatus().isEmpty()) {
-            logger.error("Invalid input: Order status cannot be null or empty.");
+            logger.error("Invalid order status: {}", orders);
             throw new InvalidInputException("Order status cannot be null or empty.");
         }
-        if (orders.getTotalAmount() <= 0) {
-            logger.error("Invalid input: Total amount must be greater than zero.");
-            throw new InvalidInputException("Total amount must be greater than zero.");
-        }
         if (orders.getQuantity() <= 0) {
-            logger.error("Invalid input: Quantity must be greater than zero.");
+            logger.error("Invalid order quantity: {}", orders.getQuantity());
             throw new InvalidInputException("Quantity must be greater than zero.");
         }
         if (orders.getOrderDate() == null) {
-            logger.error("Invalid input: Order date cannot be null.");
+            logger.error("Invalid order date: {}", orders.getOrderDate());
             throw new InvalidInputException("Order date cannot be null.");
         }
 
         // Fetch and set User 
         User user = userRepo.findById(orders.getUser().getUserId()).orElse(null);
         if (user == null) {
-            logger.error("User not found with ID: {}", orders.getUser().getUserId());
+            logger.error("User not found: {}", orders.getUser().getUserId());
             throw new UserNotFoundException("User not found");
         }
         orders.setUser(user);
@@ -61,32 +57,42 @@ public class OrderServiceImpl implements OrderService {
         // Fetch and set Food
         Food food = foodRepo.findById(orders.getFood().getFoodId()).orElse(null);
         if (food == null) {
-            logger.error("Food not found with ID: {}", orders.getFood().getFoodId());
+            logger.error("Food not found: {}", orders.getFood().getFoodId());
             throw new ResourceNotFoundException("Food not found"); 
+        }
+        if (food.getStockQuantity() < orders.getQuantity()) {
+            if (food.getStockQuantity() == 0) {
+                logger.error("Food out of stock: {}", food.getFoodName());
+                throw new ResourceNotFoundException(food.getFoodName() + " Out of Stock!!");
+            }
+            logger.error("Insufficient stock for {}: Available Quantity is {}", food.getFoodName(), food.getStockQuantity());
+            throw new ResourceNotFoundException("Available Quantity of " + food.getFoodName() + " is " + food.getStockQuantity());
         }
         orders.setFood(food);
 
         // Set default Order Status
         orders.setOrderStatus("Pending");
-
+        orders.setOrderDate(LocalDate.now());
+        // orders.setTotalAmount(food.getPrice()*orders.getQuantity());
+        food.setStockQuantity(food.getStockQuantity() - orders.getQuantity());
         Orders savedOrder = orderRepo.save(orders);
         logger.info("Order added successfully: {}", savedOrder);
         return savedOrder;
     }
 
     @Override
-    public Optional<Orders> getOrderById(int orderId) {
-        logger.info("Fetching order with ID: {}", orderId);
+    public Orders getOrderById(int orderId) {
+        logger.info("Fetching order by ID: {}", orderId);
         if (orderId <= 0) {
-            logger.error("Invalid input: Order ID must be positive.");
+            logger.error("Invalid order ID: {}", orderId);
             throw new InvalidInputException("Order ID must be positive.");
         }
-        Optional<Orders> order = orderRepo.findById(orderId);
-        if (!order.isPresent()) {
+        Orders order = orderRepo.findById(orderId).orElse(null);
+        if (order == null) {
             logger.error("Order not found with ID: {}", orderId);
             throw new ResourceNotFoundException("Order not found with ID: " + orderId);
         }
-        logger.info("Order fetched successfully: {}", order);
+        logger.info("Order found: {}", order);
         return order;
     }
 
@@ -95,56 +101,70 @@ public class OrderServiceImpl implements OrderService {
         logger.info("Fetching all orders");
         List<Orders> orders = orderRepo.findAll();
         if (orders.isEmpty()) {
-            logger.error("No orders available.");
+            logger.error("No orders available");
             throw new ResourceNotFoundException("No orders available.");
         }
-        logger.info("All orders fetched successfully");
+        logger.info("Orders found: {}", orders);
         return orders;
     }
 
     @Override
-    public Optional<Orders> updateOrder(int orderId, Orders orderDetails) {
+    public Orders updateOrder(int orderId, Orders orderDetails) {
         logger.info("Updating order with ID: {}", orderId);
         if (orderId <= 0) {
-            logger.error("Invalid input: Order ID must be positive.");
+            logger.error("Invalid order ID: {}", orderId);
             throw new InvalidInputException("Order ID must be positive.");
         }
-        Optional<Orders> existingOrder = orderRepo.findById(orderId);
-        if (!existingOrder.isPresent()) {
+        Orders existingOrder = orderRepo.findById(orderId).orElse(null);
+        if (existingOrder == null) {
             logger.error("Order not found with ID: {}", orderId);
             throw new ResourceNotFoundException("Order not found with ID: " + orderId);
         }
         if (orderDetails == null || orderDetails.getOrderStatus() == null || orderDetails.getOrderStatus().isEmpty()) {
-            logger.error("Invalid input: Order status cannot be null or empty.");
+            logger.error("Invalid order status: {}", orderDetails);
             throw new InvalidInputException("Order status cannot be null or empty.");
         }
-        if (orderDetails.getTotalAmount() <= 0) {
-            logger.error("Invalid input: Total amount must be greater than zero.");
-            throw new InvalidInputException("Total amount must be greater than zero.");
-        }
         if (orderDetails.getQuantity() <= 0) {
-            logger.error("Invalid input: Quantity must be greater than zero.");
+            logger.error("Invalid order quantity: {}", orderDetails.getQuantity());
             throw new InvalidInputException("Quantity must be greater than zero.");
         }
         if (orderDetails.getOrderDate() == null) {
-            logger.error("Invalid input: Order date cannot be null.");
+            logger.error("Invalid order date: {}", orderDetails.getOrderDate());
             throw new InvalidInputException("Order date cannot be null.");
         }
+
+        Food food = foodRepo.findById(orderDetails.getFood().getFoodId()).orElse(null);
+        if (food == null) {
+            logger.error("Food not found: {}", orderDetails.getFood().getFoodId());
+            throw new ResourceNotFoundException("Food not found"); 
+        }
+        if (food.getStockQuantity() < orderDetails.getQuantity()) {
+            if (food.getStockQuantity() == 0) {
+                logger.error("Food out of stock: {}", food.getFoodName());
+                throw new ResourceNotFoundException(food.getFoodName() + " Out of Stock!!");
+            }
+            logger.error("Insufficient stock for {}: Available Quantity is {}", food.getFoodName(), food.getStockQuantity());
+            throw new ResourceNotFoundException("Available Quantity of " + food.getFoodName() + " is " + food.getStockQuantity());
+        }
         orderDetails.setOrderId(orderId);
+        // orderDetails.setOrderStatus(existingOrder.getOrderStatus());
+        // orderDetails.setOrderDate(existingOrder.getOrderDate());
+        // orderDetails.setTotalAmount(food.getPrice()*orderDetails.getQuantity());
+        // food.setStockQuantity(food.getStockQuantity()-orderDetails.getQuantity());
         Orders updatedOrder = orderRepo.save(orderDetails);
         logger.info("Order updated successfully: {}", updatedOrder);
-        return Optional.of(updatedOrder);
+        return updatedOrder;
     }
 
     @Override
     public boolean deleteOrder(int orderId) {
         logger.info("Deleting order with ID: {}", orderId);
         if (orderId <= 0) {
-            logger.error("Invalid input: Order ID must be positive.");
+            logger.error("Invalid order ID: {}", orderId);
             throw new InvalidInputException("Order ID must be positive.");
         }
-        Optional<Orders> order = orderRepo.findById(orderId);
-        if (!order.isPresent()) {
+        Orders order = orderRepo.findById(orderId).orElse(null);
+        if (order == null) {
             logger.error("Order not found with ID: {}", orderId);
             throw new ResourceNotFoundException("Order not found with ID: " + orderId);
         }
@@ -154,14 +174,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<List<Orders>> getOrdersByUserId(int userId) {
-        logger.info("Fetching orders for User ID: {}", userId);
+    public List<Orders> getOrdersByUserId(int userId) {
+        logger.info("Fetching orders by User ID: {}", userId);
         if (userId <= 0) {
-            logger.error("Invalid input: User ID must be positive.");
+            logger.error("Invalid user ID: {}", userId);
             throw new InvalidInputException("User ID must be positive.");
         }
-        Optional<User> existingUser = userRepo.findById(userId);
-        if (!existingUser.isPresent()) {
+        User existingUser = userRepo.findById(userId).orElse(null);
+        if (existingUser == null) {
             logger.error("User not found with ID: {}", userId);
             throw new ResourceNotFoundException("User not found with ID: " + userId);
         }
@@ -170,7 +190,7 @@ public class OrderServiceImpl implements OrderService {
             logger.error("No orders found for User ID: {}", userId);
             throw new ResourceNotFoundException("No orders found for User ID: " + userId);
         }
-        logger.info("Orders fetched successfully for User ID: {}", userId);
-        return Optional.of(userOrders);
+        logger.info("Orders found for User ID {}: {}", userId, userOrders);
+        return userOrders;
     }
 }

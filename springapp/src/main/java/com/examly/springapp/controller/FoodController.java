@@ -1,14 +1,13 @@
 package com.examly.springapp.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.examly.springapp.model.Food;
-import com.examly.springapp.service.FoodServiceImpl;
+import com.examly.springapp.service.FoodService;
 
 import jakarta.annotation.security.RolesAllowed;
 
@@ -17,10 +16,10 @@ import jakarta.annotation.security.RolesAllowed;
 public class FoodController {
 
     @Autowired
-    FoodServiceImpl foodService;
+    FoodService foodService;
 
     @PostMapping
-    //@RolesAllowed("ADMIN")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<Food> addFood(@RequestBody Food food) {
         Food createdFood = foodService.addFood(food);
         return ResponseEntity.status(201).body(createdFood);
@@ -28,8 +27,8 @@ public class FoodController {
 
     @GetMapping("/{foodId}")
     @RolesAllowed({"ADMIN", "USER"})
-    public ResponseEntity<Optional<Food>> getFoodById(@PathVariable int foodId) {
-        Optional<Food> food = foodService.getFoodById(foodId);
+    public ResponseEntity<Food> getFoodById(@PathVariable int foodId) {
+        Food food = foodService.getFoodById(foodId);
         return ResponseEntity.status(200).body(food);
     }
 
@@ -42,8 +41,8 @@ public class FoodController {
 
     @PutMapping("/{foodId}")
     @RolesAllowed("ADMIN")
-    public ResponseEntity<Optional<Food>> updateFood(@PathVariable int foodId, @RequestBody Food foodDetails) {
-        Optional<Food> updatedFood = foodService.updateFood(foodId, foodDetails);
+    public ResponseEntity<Food> updateFood(@PathVariable int foodId, @RequestBody Food foodDetails) {
+        Food updatedFood = foodService.updateFood(foodId, foodDetails);
         return ResponseEntity.status(200).body(updatedFood);
     }
 
