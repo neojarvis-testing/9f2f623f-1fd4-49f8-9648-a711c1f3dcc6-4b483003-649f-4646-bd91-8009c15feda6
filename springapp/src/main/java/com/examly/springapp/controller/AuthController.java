@@ -1,8 +1,6 @@
 package com.examly.springapp.controller;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,21 +20,52 @@ import com.examly.springapp.service.UserService;
 
 import jakarta.validation.Valid;
 
+
+/**
+ * This class is a REST controller for handling authentication-related requests.
+ * It provides endpoints for user registration, login, and fetching all users.
+ */
 @RestController
 @RequestMapping("/api/")
 public class AuthController {
-    @Autowired
-    UserService userService;
-    @Autowired
-    JwtUtils jwtUtils;
-     @Autowired
-    private AuthenticationManager authenticationManager;
+
+    private final UserService userService;
+    private final JwtUtils jwtUtils; 
+    private final AuthenticationManager authenticationManager;
+
+     /** Constructor-based dependency injection for UserService, JwtUtils, and AuthenticationManager.
+     * 
+     * @param userService the service for user-related operations
+     * @param jwtUtils the utility class for JWT operations
+     * @param authenticationManager the manager for authentication operations
+     */
+    public AuthController(UserService userService, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
+        this.userService = userService;
+        this.jwtUtils = jwtUtils;
+        this.authenticationManager = authenticationManager;
+    }
+
+     /**
+     * Endpoint for user registration.
+     * 
+     * @param userDTO the data transfer object containing user details
+     * @return a ResponseEntity containing the created UserDTO and HTTP status 201
+     */
+
 
     @PostMapping("register")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO){
         userDTO = userService.createUser(userDTO);
-        return ResponseEntity.status(201).body(userDTO);
+        return ResponseEntity.status(201).body(userDTO); 
     }
+
+    
+    /**
+     * Endpoint for user login.
+     * 
+     * @param loginDTO the data transfer object containing login details
+     * @return a ResponseEntity containing the LoginDTO with token and HTTP status 200, or an error message with HTTP status 401
+     */
 
     @PostMapping("login")
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
@@ -48,13 +77,13 @@ public class AuthController {
 
         LoginDTO existingUserDTO = userService.loginUser(loginDTO);
         if (existingUserDTO == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
 
         // Set the token in the response DTO
         existingUserDTO.setToken(token);
 
-        return ResponseEntity.status(HttpStatus.OK).body(existingUserDTO);
+        return ResponseEntity.status(200).body(existingUserDTO);
     }
     
 
