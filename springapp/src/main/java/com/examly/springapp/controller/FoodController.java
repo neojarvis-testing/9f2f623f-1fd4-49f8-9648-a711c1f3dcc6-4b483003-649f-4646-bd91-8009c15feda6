@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.examly.springapp.model.Food;
+import com.examly.springapp.service.FoodService;
 import com.examly.springapp.service.FoodServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +21,8 @@ import jakarta.annotation.security.RolesAllowed;
 public class FoodController {
 
     @Autowired
-    FoodServiceImpl foodService;
+    FoodService foodService;
+    
     @Operation(summary = "Add a new food item", description = "Allows an admin to add a new food item to the inventory.")
     @PostMapping
     //@RolesAllowed("ADMIN")
