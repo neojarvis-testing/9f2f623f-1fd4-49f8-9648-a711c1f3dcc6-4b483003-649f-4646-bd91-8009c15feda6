@@ -1,6 +1,5 @@
 package com.examly.springapp.service;
 
-import org.springframework.beans.factory.annotation.Autowired;  
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,17 +19,29 @@ import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepo;
 import com.examly.springapp.utility.UserMapper;
 
+/**
+ * This class implements the UserService and UserDetailsService interfaces and provides
+ * business logic for handling user-related operations.
+ */
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-  
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
+    private final PasswordEncoder encoder;
+    /**
+     * Constructor-based dependency injection for UserRepo and PasswordEncoder.
+     */
+    public UserServiceImpl(UserRepo userRepo, PasswordEncoder encoder) {
+        this.userRepo = userRepo;
+        this.encoder = encoder;
+    }
 
-    @Autowired
-    private PasswordEncoder encoder;
-
+    /**
+     * Creates a new user.
+     * Validates the user details and checks for existing user before saving.
+     * Logs the creation process and returns the saved user as a UserDTO.
+     */
     @Override 
     public UserDTO createUser(UserDTO userDTO) {
         logger.info("Creating user: {}", userDTO);
@@ -46,6 +57,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return UserMapper.mapToUserDTO(savedUser);
     }
 
+    /**
+     * Logs in a user.
+     * Validates the user credentials and returns a LoginDTO if successful.
+     * Throws UserNotFoundException if the user is not found or credentials are invalid.
+     */
     @Override
     public LoginDTO loginUser(LoginDTO loginDTO) {
         logger.info("Logging in user with email: {}", loginDTO.getEmail());
@@ -70,6 +86,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         throw new UserNotFoundException("Invalid Credentials");
     }
 
+    /**
+     * Retrieves all users.
+     * Logs the retrieval process and returns the list of users.
+     */
     @Override
     public List<User> getAllUsers() {
         logger.info("Fetching all users");
@@ -78,6 +98,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return users;
     }
 
+    /**
+     * Loads user details by username.
+     * Logs the loading process and returns the user details if found.
+     * Throws UserNotFoundException if the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         logger.info("Loading user by username: {}", username);

@@ -2,24 +2,36 @@ package com.examly.springapp.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.examly.springapp.exception.InvalidInputException;
 import com.examly.springapp.exception.ResourceNotFoundException;
 import com.examly.springapp.model.Food;
 import com.examly.springapp.repository.FoodRepo;
 
+/**
+ * This class implements the FoodService interface and provides
+ * the business logic for handling food-related operations.
+ */
 @Service
 public class FoodServiceImpl implements FoodService {
 
     private static final Logger logger = LoggerFactory.getLogger(FoodServiceImpl.class);
+    private final FoodRepo foodRepo;
+    /**
+     * Constructor-based dependency injection for FoodRepo.
+     */
+    public FoodServiceImpl(FoodRepo foodRepo) {
+        this.foodRepo = foodRepo;
+    }
 
-    @Autowired
-    private FoodRepo foodRepo;
-
+    /**
+     * Adds a new food item.
+     * Validates the food name, price, and stock quantity before saving.
+     * Logs the addition process and returns the saved food item.
+     */
     @Override
     public Food addFood(Food food) {
         logger.info("Adding food: {}", food);
@@ -40,6 +52,11 @@ public class FoodServiceImpl implements FoodService {
         return savedFood;
     }
 
+    /**
+     * Retrieves all food items.
+     * Logs the retrieval process and returns the list of food items.
+     * Throws ResourceNotFoundException if no food items are found.
+     */
     @Override
     public List<Food> getAllFoods() {
         logger.info("Fetching all foods");
@@ -52,13 +69,14 @@ public class FoodServiceImpl implements FoodService {
         return foods;
     }
 
+    /**
+     * Retrieves a food item by ID.
+     * Logs the retrieval process and returns the food item if found.
+     * Throws ResourceNotFoundException if the food item is not found.
+     */
     @Override
     public Food getFoodById(int foodId) {
         logger.info("Fetching food by ID: {}", foodId);
-        if (foodId <= 0) {
-            logger.error("Invalid food ID: {}", foodId);
-            throw new InvalidInputException("Food ID must be positive.");
-        }
         Food food = foodRepo.findById(foodId).orElse(null);
         if (food == null) {
             logger.error("Food not found with ID: {}", foodId);
@@ -68,13 +86,15 @@ public class FoodServiceImpl implements FoodService {
         return food;
     }
 
+    /**
+     * Updates a food item by ID.
+     * Validates the food name, price, and stock quantity before updating.
+     * Logs the update process and returns the updated food item.
+     * Throws ResourceNotFoundException if the food item is not found.
+     */
     @Override
     public Food updateFood(int foodId, Food foodDetails) {
         logger.info("Updating food with ID: {}", foodId);
-        if (foodId <= 0) {
-            logger.error("Invalid food ID: {}", foodId);
-            throw new InvalidInputException("Food ID must be positive.");
-        }
         if (foodDetails == null || foodDetails.getFoodName() == null || foodDetails.getFoodName().isEmpty()) {
             logger.error("Invalid food name: {}", foodDetails);
             throw new InvalidInputException("Food name cannot be null or empty.");
@@ -99,13 +119,14 @@ public class FoodServiceImpl implements FoodService {
         return updatedFood;
     }
 
+    /**
+     * Deletes a food item by ID.
+     * Logs the deletion process and returns true if deletion is successful.
+     * Throws ResourceNotFoundException if the food item is not found.
+     */
     @Override
     public boolean deleteFood(int foodId) {
         logger.info("Deleting food with ID: {}", foodId);
-        if (foodId <= 0) {
-            logger.error("Invalid food ID: {}", foodId);
-            throw new InvalidInputException("Food ID must be positive.");
-        }
         if (!foodRepo.existsById(foodId)) {
             logger.error("Food not found with ID: {}", foodId);
             throw new ResourceNotFoundException("Food not found with ID: " + foodId);
