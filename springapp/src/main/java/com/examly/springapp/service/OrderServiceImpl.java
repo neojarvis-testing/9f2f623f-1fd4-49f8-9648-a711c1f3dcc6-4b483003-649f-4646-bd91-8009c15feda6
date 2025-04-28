@@ -73,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
         // Set default Order Status
         orders.setOrderStatus("Pending");
         orders.setOrderDate(LocalDate.now());
+        orders.setTotalAmount(food.getPrice()*orders.getQuantity());
         food.setStockQuantity(food.getStockQuantity() - orders.getQuantity());
         Orders savedOrder = orderRepo.save(orders);
         logger.info("Order added successfully: {}", savedOrder);
@@ -146,6 +147,10 @@ public class OrderServiceImpl implements OrderService {
             throw new ResourceNotFoundException("Available Quantity of " + food.getFoodName() + " is " + food.getStockQuantity());
         }
         orderDetails.setOrderId(orderId);
+        // orderDetails.setOrderStatus(existingOrder.getOrderStatus());
+        // orderDetails.setOrderDate(existingOrder.getOrderDate());
+        // orderDetails.setTotalAmount(food.getPrice()*orderDetails.getQuantity());
+        // food.setStockQuantity(food.getStockQuantity()-orderDetails.getQuantity());
         Orders updatedOrder = orderRepo.save(orderDetails);
         logger.info("Order updated successfully: {}", updatedOrder);
         return updatedOrder;
