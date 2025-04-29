@@ -24,9 +24,11 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userId', response.userId);
         localStorage.setItem('userRole',response.userRole);
         localStorage.setItem('token',response.token)
+        console.log(response)
+        console.log(response.userRole=='ADMIN')
+        if(response.userRole=='ADMIN'){
 
-        if(response.role==='admin'){
-          this.router.navigate(['/add-food']);
+          this.router.navigate(['/adminAddFood']);
         } else{
           this.router.navigate(['/register'])
         }

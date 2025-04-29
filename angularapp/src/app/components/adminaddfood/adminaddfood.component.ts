@@ -16,10 +16,10 @@ export class AdminaddfoodComponent implements OnInit {
     'Caesar Salad',
     'Chicken Biryani',
     'Spaghetti Carbonara',
-    'Grilled Salmon',
+    'Noodles',
     'Veggie Burger',
     'Tuna Sushi',
-    'Beef Steak',
+    'Pasta',
     'Paneer Tikka',
     'Chocolate Brownie'
   ];
@@ -50,7 +50,7 @@ export class AdminaddfoodComponent implements OnInit {
           this.router.navigate(['/adminViewFood']);
         },
         error: (err) => {
-          console.error(err);
+          console.log(JSON.stringify(err));
           alert('Failed to add food');
         }
       });
@@ -67,4 +67,23 @@ export class AdminaddfoodComponent implements OnInit {
       });
     }
   }
+
+  onFileChange(event: Event, fileType: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+  
+      reader.onload = () => {
+        if (fileType === 'photoFile') { 
+          console.log('Photo file added');
+          this.food.photo = reader.result as string; 
+        }
+      };
+      console.log(this.food)
+      reader.readAsDataURL(file);
+    }
+  }
+  
+
 }

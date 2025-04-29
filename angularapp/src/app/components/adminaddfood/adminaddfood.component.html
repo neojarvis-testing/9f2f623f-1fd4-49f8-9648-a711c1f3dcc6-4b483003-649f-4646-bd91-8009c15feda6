@@ -41,29 +41,18 @@
         </div>
   
         <div class="form-group mb-3">
-          <label for="photo" class="form-label">Photo (Base64):</label>
-          <input
-            type="text"
-            id="photo"
-            class="form-control"
-            [(ngModel)]="food.photo"
-            name="photo"
-            placeholder="Enter photo in Base64 format"
-            required />
+          <label for="photo" class="form-label">
+            Photo:
+          </label>
+          <input 
+            type="file" 
+            id="photoFile" 
+            name="photoFile" 
+            accept=".jpg,.png" 
+            (change)="onFileChange($event, 'photoFile')" 
+            #file="ngModel" [(ngModel)]="food.photo" 
+            required>
         </div>
-  
-        <div class="form-group mb-3">
-          <label for="userId" class="form-label">User ID:</label>
-          <input
-            type="text"
-            id="userId"
-            class="form-control"
-            [(ngModel)]="food.userId"
-            name="userId"
-            placeholder="Enter user ID"
-            required />
-        </div>
-  
         <div class="text-center">
           <button type="submit" class="btn btn-primary me-2">
             {{ editId ? 'Update Food' : 'Add Food' }}
