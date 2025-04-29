@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -8,27 +9,28 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent{
 
-  form: FormGroup;
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) { }
- 
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      email: [''],
-      password: [''],
-      username: [''],
-      mobileNumber: [''],
-      userRole:['USER']
-    })
-  }
-  register(){
-    if(this.form.valid){
-      this.authService.register(this.form.value).subscribe((data)=>{
-        this.router.navigate(["/"]);
-      })
-      
+  user: User = {
+    email: '',
+    password: '',
+    username: '',
+    mobileNumber: '',
+    userRole: 'USER'
+  };
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  onSubmit(form: NgForm): void {
+    if (form.valid) {
+      this.authService.register(this.user).subscribe(() => {
+        alert('Registered successfully!');
+        this.router.navigate(['/login']);
+      }, error => {
+        alert('Registration failed. Try again.');
+        console.error(error);
+      });
     }
   }
-
 }
+
