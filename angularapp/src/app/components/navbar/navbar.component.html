@@ -1,14 +1,37 @@
-<a routerLink="/register">Register</a> <br>
-<a routerLink="/login">Login</a> <br>
-<a routerLink="/adminAddFood">Add Food</a> <br>
-<a routerLink="/adminViewFood">adminViewFood</a> <br>
-<a routerLink="/userViewFood">userViewFood</a> <br>
-<a routerLink="/userAddOrder">userAddOrder</a> <br>
-<a routerLink="/userViewOrders">userViewOrders</a> <br>
-<a routerLink="/adminOrdersChart">adminOrdersChart</a> <br>
-<a routerLink="/adminViewOrders">adminViewOrders</a> <br>
-<a routerLink="/userAddFeedback">userAddFeedback</a> <br>
-<a routerLink="/userViewFeedback">userViewFeedback</a> <br>
-<a routerLink="/adminViewFeedback">adminViewFeedback</a> <br>
+<div class="nav">
+    <h4>🫕 Food Mart</h4>
+    <div class="box">
+        <a routerLink="/register" *ngIf="!authService.isLoggedUser()">Register</a>  
+        <a routerLink="/login" *ngIf="!authService.isLoggedUser()">Login</a>
+    
+        <a class="user" *ngIf="authService.isLoggedUser()">{{authService.getUsername() | titlecase }} / {{authService.getRole()}}</a>
+        <a routerLink="/" *ngIf="authService.isLoggedUser()">Home</a> 
 
-<router-outlet></router-outlet>
+        <div class="dropdown" *ngIf="authService.isLoggedUser()">
+            <a class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false">Food</a>
+            <ul class="dropdown-menu">
+              <li><p *ngIf="authService.isAdmin()" class="dropdown-item" routerLink="/adminAddFood">Add Food</p></li>
+              <li><p *ngIf="authService.isAdmin()" class="dropdown-item" routerLink="/adminViewFood">View Food</p></li>
+              <li><p *ngIf="authService.isUser()" class="dropdown-item" routerLink="/userViewFood">View Food</p></li>
+            </ul>
+        </div>
+
+        <a routerLink="/userAddOrder" *ngIf="authService.isUser()">userAddOrder</a> 
+        <a routerLink="/userViewOrders" *ngIf="authService.isUser()">My Orders</a> 
+
+        <a routerLink="/adminViewOrders" *ngIf="authService.isAdmin()">Order Details</a> 
+
+        <div class="dropdown" *ngIf="authService.isLoggedUser()">
+            <a class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false">Feedback</a>
+            <ul class="dropdown-menu">
+              <li><p *ngIf="authService.isUser()" class="dropdown-item" routerLink="/userAddFeedback">Add Feedback</p></li>
+              <li><p *ngIf="authService.isUser()" class="dropdown-item" routerLink="/userViewFeedback">My Feedback</p></li>
+            </ul>
+        </div>
+
+        <a routerLink="/adminViewFeedback" *ngIf="authService.isAdmin()">Feedbacks</a> 
+        <a routerLink="/adminOrdersChart" *ngIf="authService.isAdmin()">Orders Chart</a> 
+
+        <a class="logout" (click)="logout()" *ngIf="authService.isLoggedUser()"><b> Logout</b>  </a>
+    </div>
+</div>
