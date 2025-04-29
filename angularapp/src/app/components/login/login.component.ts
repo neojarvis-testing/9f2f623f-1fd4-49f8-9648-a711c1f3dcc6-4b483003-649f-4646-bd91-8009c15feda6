@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
         if(response.role==='admin'){
           this.router.navigate(['/add-food']);
         } else{
-          this.router.navigate(['/register'])
+          this.router.navigate(['/'])
         }
       },
       error:(err) =>{

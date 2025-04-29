@@ -1,3 +1,5 @@
+import { Food } from "./food.model";
+
 export class Feedback {
     feedbackId?: number;
     feedbackText: string;
@@ -5,4 +7,5 @@ export class Feedback {
     rating:number
     userId:number;
     foodId:number;
+    food?:Food;
    }
