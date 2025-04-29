@@ -9,15 +9,29 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavbarComponent implements OnInit {
   constructor(public authService:AuthService,private router:Router) { }
-
+  showDialog = false;
   ngOnInit(): void {
   }
 
-  logout(){
-    if(confirm("Are you sure you want to logout?")){
-      this.authService.logout()
-      this.router.navigate(['/login'])
-    }
+  // logout(){
+  //   if(confirm("Are you sure you want to logout?")){
+  //     this.authService.logout()
+  //     this.router.navigate(['/login'])
+  //   }
+  // }
+
+  
+logout(): void {
+   this.showDialog = true;
+}
+  
+onDialogConfirm(result: boolean): void {
+   this.showDialog = false;
+   if (result) {
+   this.authService.logout();
+   this.router.navigate(['/login'])
+   }
   }
+  
 
 }
