@@ -1,14 +1,15 @@
-<div class="orders-container">
-    <h2>Orders Details</h2>
-  
-    <table *ngIf="orders.length > 0">
-      <thead>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Orders Details</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" *ngIf="orders.length > 0">
+      <thead class="thead-dark">
         <tr>
           <th>Order ID</th>
           <th>User ID</th>
-          <th>Food Item</th>
+          <th>Food ID</th>
           <th>Quantity</th>
-          <th>Price</th>
+          <th>Total Amount</th>
           <th>Status</th>
           <th>Action</th>
         </tr>
@@ -16,18 +17,20 @@
       <tbody>
         <tr *ngFor="let order of orders">
           <td>{{ order.orderId }}</td>
-          <td>{{ order.userId }}</td>
-          <td>{{ order.foodItem }}</td>
+          <td>{{ order.user.userId }}</td>
+          <td>{{ order.food.foodId }}</td>
           <td>{{ order.quantity }}</td>
-          <td>{{ order.price }}</td>
+          <td>{{ order.totalAmount }}</td>
           <td>{{ order.orderStatus }}</td>
           <td>
-            <button (click)="updateOrderStatus(order.orderId, 'Making Food')">Making Food</button>
-            <button (click)="updateOrderStatus(order.orderId, 'On the way')">On the way</button>
-            <button (click)="updateOrderStatus(order.orderId, 'Delivered')">Delivered</button>
+            <button class="btn btn-warning btn-sm mr-1" (click)="updateOrderStatus(order.orderId, 'Making Food')">Making Food</button>
+            <button class="btn btn-info btn-sm mr-1" (click)="updateOrderStatus(order.orderId, 'On the way')">On the way</button>
+            <button class="btn btn-success btn-sm mr-1" (click)="updateOrderStatus(order.orderId, 'Delivered')">Delivered</button>
+            <button class="btn btn-danger btn-sm" (click)="updateOrderStatus(order.orderId, 'Rejected')">Rejected</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <p *ngIf="orders.length === 0">Oops! No records found.</p>
+    <p *ngIf="orders.length === 0" class="text-center text-muted">Oops! No records found.</p>
   </div>
+</div>
