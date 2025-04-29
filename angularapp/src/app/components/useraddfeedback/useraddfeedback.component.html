@@ -1,32 +1,26 @@
-<div >
     <h2 >Add Feedback</h2>
     <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
-        <div>
-            <label for="foodItem">Select Food*</label>
-            <select id="foodItem" formControlName="foodItem">
-              <option value="" disabled>Select a food item</option>
-              <option value="Pizza">Pizza</option>
-              <option value="Burger">Burger</option>
-              <option value="Pasta">Pasta</option>
-            </select>
-            <div *ngIf="feedbackForm.controls.foodItem.invalid && feedbackForm.controls.foodItem.touched">
-                <div *ngIf="feedbackForm.controls.foodItem.errors.required">FoodName is Required</div>
-            </div>
-          </div>
-       
-          <div>
-            <label for="feedbackText">Feedback*</label>
-            <textarea id="feedbackText" formControlName="feedbackText"></textarea>
-            <div *ngIf="feedbackForm.controls.feedbackText.invalid && feedbackForm.controls.feedbackText.touched">
-                <div *ngIf="feedbackForm.controls.feedbackText.errors.required">Feedback is required.</div>
-            </div>
-          </div>
-       
-          <div>
-            <label for="rating">Rating</label>
-            <input type="number" id="rating" formControlName="rating" min="1" max="5">
-          </div>
-       
-          <button type="submit" [disabled]="feedbackForm.invalid">Submit</button>
-    </form>
+           <div>
+                <label for="foodItem">Select Food*</label>
+                      <select id="foodItem" formControlName="foodItem" >
+                          <option value="food.foodname" *ngFor="food of foods">{{food.foodname}}</option>
+                      </select>
+  <div *ngIf="feedbackForm.controls.food.invalid && feedbackForm.controls.foodItem.touched">
+      <div *ngIf="feedbackForm.controls.foodItem.errors.required">*Food selection is required.</div>
   </div>
+  </div>
+  <div>
+  <label for="feedbackText">Feedback*</label>
+  <textarea id="feedbackText" formControlName="feedbackText"></textarea>
+  <div *ngIf="feedbackForm.controls.feedbackText.invalid && feedbackForm.controls.feedbackText.touched">
+      <div *ngIf="feedbackForm.controls.feedbackText.errors.required">*Feedback is required.</div>
+  </div>
+  </div>
+  <div>
+  <label for="rating">Rating</label>
+  <input type="number" id="rating" formControlName="rating" min="1" max="5">
+  </div>
+      <button type="submit" [disabled]="feedbackForm.invalid">Submit</button>
+    </form>
+
+      
