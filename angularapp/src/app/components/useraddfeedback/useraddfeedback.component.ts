@@ -16,7 +16,7 @@ export class UseraddfeedbackComponent implements OnInit {
     this.feedbackForm=this.fb.group({
       foodItem:['',[Validators.required]],
       feedbackText:['',[Validators.required]],
-      ratingStars:[null]
+      rating:['',[Validators.required]]
     })
    }
   feedback:Feedback

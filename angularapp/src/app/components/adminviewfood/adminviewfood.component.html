@@ -1,1 +1,31 @@
-<p>adminviewfood works!</p>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+      <div class="card-header text-center">
+        <h2>Food List</h2>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Food ID</th>
+              <th>Food Name</th>
+              <th>Price</th>
+              <th>Stock Quantity</th>
+              <th>Photo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let food of foods">
+              <td>{{ food.foodId }}</td>
+              <td>{{ food.foodName }}</td>
+              <td>{{ food.price }}</td>
+              <td>{{ food.stockQuantity }}</td>
+              <td>
+                <img [src]="food.photo" alt="{{ food.foodName }}" class="img-fluid" style="max-height: 100px;">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

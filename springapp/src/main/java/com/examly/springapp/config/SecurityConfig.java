@@ -59,7 +59,7 @@ public SecurityFilterChain cFilterChain(HttpSecurity http)throws Exception{
     .requestMatchers(HttpMethod.GET, "/api/feedback/user/{userId}").hasRole("USER")
     .requestMatchers(HttpMethod.DELETE, "/api/feedback/{id}").permitAll()
     .requestMatchers("/swagger-ui/**","/v3/api-docs/**","/swagger-ui.html").permitAll()
-    .anyRequest().authenticated())
+    .anyRequest().permitAll())
     .exceptionHandling(exception->exception.authenticationEntryPoint(entryPoint))
     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     
