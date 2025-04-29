@@ -33,4 +33,10 @@
         </div>
     </form>
   </div>
+
+  <div class="dialog-overlay" *ngIf="showDialog">
+    <div class="dialog-box">
+      <p>Registration Successful!</p>
+      <button class="btn btn-primary" (click)="onDialogConfirm()">Ok</button>
+  </div>
   

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminaddfoodComponent } from './components/adminaddfood/adminaddfood.component';
 import { AdminnavComponent } from './components/adminnav/adminnav.component';
-import { AdminorderschartComponent } from './components/adminorderschart/adminorderschart.component';
+//import { AdminorderschartComponent } from './components/adminorderschart/adminorderschart.component';
 import { AdminviewfeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
 import { AdminviewfoodComponent } from './components/adminviewfood/adminviewfood.component';
 import { AdminviewordersComponent } from './components/adminvieworders/adminvieworders.component';
@@ -22,8 +22,10 @@ import { UserviewfeedbackComponent } from './components/userviewfeedback/uservie
 import { UserviewfoodComponent } from './components/userviewfood/userviewfood.component';
 import { UserviewordersComponent } from './components/uservieworders/uservieworders.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './components/logout/logout.component';
+import { Router, RouterModule } from '@angular/router';
+import { AuthInterceptor } from './auth.interceptor';
 
 
 
@@ -32,7 +34,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     AppComponent,
     AdminaddfoodComponent,
     AdminnavComponent,
-    AdminorderschartComponent,
+   // AdminorderschartComponent,
     AdminviewfeedbackComponent,
     AdminviewfoodComponent,
     AdminviewordersComponent,
@@ -57,9 +59,16 @@ import { LogoutComponent } from './components/logout/logout.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

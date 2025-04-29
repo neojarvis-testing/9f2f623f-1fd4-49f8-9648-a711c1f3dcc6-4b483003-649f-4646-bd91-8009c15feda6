@@ -21,17 +21,15 @@ export class NavbarComponent implements OnInit {
   // }
 
   
-logout(): void {
-   this.showDialog = true;
-}
-  
-onDialogConfirm(result: boolean): void {
-   this.showDialog = false;
-   if (result) {
-   this.authService.logout();
-   this.router.navigate(['/login'])
-   }
+  logout(): void {
+    this.showDialog = true;
   }
-  
-
+    
+  onDialogConfirm(result: boolean): void {
+    this.showDialog = false;
+    if (result) {
+    this.authService.logout();
+    this.router.navigate(['/login'])
+    }
+  }
 }
