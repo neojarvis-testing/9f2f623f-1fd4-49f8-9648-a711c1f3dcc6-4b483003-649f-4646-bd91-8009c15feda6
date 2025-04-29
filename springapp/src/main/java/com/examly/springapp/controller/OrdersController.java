@@ -43,6 +43,13 @@ public class OrdersController {
         Orders newOrder = orderService.addOrder(orders);
         return ResponseEntity.status(201).body(newOrder);
     }
+    @PostMapping("/s")
+    @RolesAllowed("USER")
+    public ResponseEntity<Orders> createOrder(@RequestBody Orders orders) {
+        Orders newOrder = orderService.createOrder(orders);
+        return ResponseEntity.status(200).body(newOrder);
+    }
+
 
     /**
      * Endpoint for retrieving an order by ID.
@@ -108,4 +115,4 @@ public class OrdersController {
         List<Orders> orders = orderService.getOrdersByUserId(userId);
         return ResponseEntity.status(200).body(orders);
     }
-}
+} 
