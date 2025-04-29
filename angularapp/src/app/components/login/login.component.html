@@ -1,46 +1,42 @@
-<h2>Login Page</h2>
-<form
-  #loginForm="ngForm"
-  (ngSubmit)="loginUser(loginForm)"
-  style="max-width: 400px;"
->
-<div class="mb-3">
-<label for="email">Email</label>
-<input
-      type="email"
-      id="email"
-      name="email"
-      ngModel
-      placeholder="Enter your email"
-      required
->
-</div>
- 
-  <div class="mb-3">
-<label for="password">Password</label>
-<input
-      type="password"
-      id="password"
-      name="password"
-      ngModel
-      placeholder="Enter your password"
-      required
->
-</div>
- 
-<!--
-<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
- -->
-<div>
-<button type="submit" class="btn btn-primary btn-block">
-      Login
-</button>
-</div>
- 
-  <div>
-<small>
-      Don't have an account?
-<a routerLink="/register">Sign Up</a>
-</small>
-</div>
-</form>
+<div class="container mt-5">
+      <h2 class="text-center">Login</h2>
+      <form (ngSubmit)="login()" #loginForm="ngForm">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="email"
+            name="email"
+            [(ngModel)]="loginData.email"
+            required
+            #email="ngModel"
+          />
+          <div *ngIf="email.invalid && email.touched" class="text-danger">
+            Email is required
+          </div>
+        </div>
+    
+        <div class="form-group mt-3">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            [(ngModel)]="loginData.password"
+            required
+            #password="ngModel"
+          />
+          <div *ngIf="password.invalid && password.touched" class="text-danger">
+            Password is required
+          </div>
+        </div>
+    
+        <button type="submit" class="btn btn-primary mt-4" [disabled]="loginForm.invalid">Login</button>
+        <a routerLink="/register" class="btn btn-link mt-4">Register Here</a>
+    
+        <div *ngIf="errorMessage" class="text-danger mt-3">{{ errorMessage }}</div>
+      </form>
+    </div>
+    
