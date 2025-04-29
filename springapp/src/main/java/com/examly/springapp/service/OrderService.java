@@ -11,5 +11,6 @@ public interface OrderService {
     public Orders updateOrder(int orderId, Orders orderDetails);
     public boolean deleteOrder(int orderId);
     public List<Orders> getOrdersByUserId(int userId);
+    public Orders createOrder(Orders orders);
 
 }
