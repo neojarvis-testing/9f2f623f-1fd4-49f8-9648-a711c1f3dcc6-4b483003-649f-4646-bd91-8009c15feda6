@@ -26,9 +26,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userRole',response.userRole);
         localStorage.setItem('token',response.token);
         localStorage.setItem('username',response.username);
-
-        if(response.role==='ADMIN'){
-          this.router.navigate(['/add-food']);
+        if(response.userRole=='ADMIN'){
+          this.router.navigate(['/adminAddFood']);
         } else{
           this.router.navigate(['/'])
         }
@@ -37,7 +36,6 @@ export class LoginComponent implements OnInit {
         this.errorMessage = 'Invalid username or password';
       }
     )
-
   }
 
   ngOnInit(): void {
