@@ -24,6 +24,7 @@ import { UserviewordersComponent } from './components/uservieworders/uservieword
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './components/logout/logout.component';
+import { Router, RouterModule } from '@angular/router';
 
 
 
@@ -57,7 +58,8 @@ import { LogoutComponent } from './components/logout/logout.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
