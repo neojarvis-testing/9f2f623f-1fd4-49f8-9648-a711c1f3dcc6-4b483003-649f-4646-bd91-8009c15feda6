@@ -12,7 +12,9 @@ export class AuthService {
  
   constructor(private http: HttpClient) { }
  
-
+  register(user: User): Observable<any>{
+    return this.http.post<any>(`${APIURL.APIurl}/register`, user);
+  }
  
   login(login: Login): Observable<any>{
     return this.http.post<any>(`${APIURL.APIurl}/login`, login);
@@ -20,29 +22,29 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('userId');
   }
-  
+ 
   getRole(): string | null {
     return localStorage.getItem('userRole');
   }
-  
+ 
   getUserId(): string | null {
     return localStorage.getItem('userId');
   }
-  
+ 
   isAdmin(): boolean {
     return this.getRole() === 'ADMIN';
   }
-  
+ 
   logout(): void {
     localStorage.removeItem('userId');
     localStorage.removeItem('userRole');
   }
-  
+ 
   isUser(): boolean {
     let role = localStorage.getItem('userRole');
     return role === 'USER';
   }
-  
+ 
   isLoggedUser(): boolean {
     let role = localStorage.getItem('userRole');
     return role !== null;
