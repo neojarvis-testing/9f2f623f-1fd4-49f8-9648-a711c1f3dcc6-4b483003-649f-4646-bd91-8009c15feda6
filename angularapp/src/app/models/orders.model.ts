@@ -7,6 +7,8 @@ export interface orders {
     totalAmount: number;
     quantity:number;
     userId: number;
+    user?:User;
+    food?:Food;
     foodId:number;
     orderDate:string;
     }
