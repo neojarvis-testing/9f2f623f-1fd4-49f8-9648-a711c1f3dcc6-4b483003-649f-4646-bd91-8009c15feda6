@@ -1,1 +1,37 @@
-<p>useraddfeedback works!</p>
+<div >
+    <h2 >Add Feedback</h2>
+    <form #feedbackForm="ngForm" (ngSubmit)="onSubmit(feedbackForm)">
+  
+        <div >
+            <label >Select Food*</label>
+            <select>
+                <option></option>
+            </select>
+        </div>
+  
+        <div class="mb-4">
+            <label class="fw-bold">Email</label>
+            <input type="email" name="email" class="form-control border-primary" [(ngModel)]="user.email" required email #email="ngModel">
+            <div *ngIf="email.invalid && email.touched" class="text-danger mt-1">Valid email is required</div>
+        </div>
+  
+        <div class="mb-4">
+            <label class="fw-bold">Mobile Number</label>
+            <input type="text" name="mobileNumber" class="form-control border-primary" [(ngModel)]="user.mobileNumber" required #mobileNumber="ngModel">
+            <div *ngIf="mobileNumber.invalid && mobileNumber.touched" class="text-danger mt-1">Mobile number is required</div>
+        </div>
+  
+        <div class="mb-4">
+            <label class="fw-bold">Password</label>
+            <input type="password" name="password" class="form-control border-primary" [(ngModel)]="user.password" required #password="ngModel">
+            <div *ngIf="password.invalid && password.touched" class="text-danger mt-1">Password is required</div>
+        </div>  
+        <button class="btn btn-success w-100 py-2 fs-5 shadow-sm" type="submit" [disabled]="registerForm.invalid">Register</button>
+      
+        <div class="text-center mt-3">
+            <span class="fw-semibold">Already have an account?</span>
+            <a routerLink="/login" class="text-primary fw-bold">Login</a>
+        </div>
+    </form>
+  </div>
+  
