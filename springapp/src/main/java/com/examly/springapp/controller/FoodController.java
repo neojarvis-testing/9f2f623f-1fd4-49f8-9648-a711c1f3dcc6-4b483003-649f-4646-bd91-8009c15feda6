@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.examly.springapp.model.Food;
 import com.examly.springapp.service.FoodService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
@@ -35,8 +34,6 @@ public class FoodController {
      * Creates a new food item and returns the created food item with HTTP status 201.
      */
 
-    @Autowired
-    FoodService foodService;
     
     @Operation(summary = "Add a new food item", description = "Allows an admin to add a new food item to the inventory.")
     @PostMapping
