@@ -16,24 +16,21 @@ import { UserviewfoodComponent } from './components/userviewfood/userviewfood.co
 import { UserviewordersComponent } from './components/uservieworders/uservieworders.component';
 
 const routes: Routes = [
-  {path:"api/register",component:RegistrationComponent},
-  {path:"api/login",component:LoginComponent},
+  {path:"register",component:RegistrationComponent},
+  {path:"login",component:LoginComponent},
   {path:"",component:HomeComponent},
+  {path:"adminAddFood",component:AdminaddfoodComponent},
+  {path:"adminViewFood",component:AdminviewfoodComponent},
+  {path:"userViewFood",component:UserviewfoodComponent},
+  {path:"userAddOrder",component:UsermakeorderComponent},
+  {path:"userViewOrders",component:UserviewordersComponent},
+  {path:"adminOrdersChart",component:AdminorderschartComponent},
+  {path:"adminViewOrders",component:AdminviewordersComponent},
+  {path:"userAddFeedback",component:UseraddfeedbackComponent},
+  {path:"userViewFeedback",component:UserviewfeedbackComponent},
+  {path:"adminViewFeedback",component:AdminviewfeedbackComponent},
  
-  {path:"api/adminAddFood",component:AdminaddfoodComponent},
-  {path:"api/adminViewFood",component:AdminviewfoodComponent},
-  {path:"api/userViewFood",component:UserviewfoodComponent},
- 
-  {path:"api/userAddOrder",component:UsermakeorderComponent},
-  {path:"api/userViewOrders",component:UserviewordersComponent},
-  {path:"api/adminOrdersChart",component:AdminorderschartComponent},
-  {path:"api/adminViewOrders",component:AdminviewordersComponent},
- 
-  {path:"api/userAddFeedback",component:UseraddfeedbackComponent},
-  {path:"api/userViewFeedback",component:UserviewfeedbackComponent},
-  {path:"api/adminViewFeedback",component:AdminviewfeedbackComponent},
- 
-  {path:'api/error',component:ErrorComponent},
+  {path:'error',component:ErrorComponent},
   {path:"**",redirectTo:"error",pathMatch:'full'}
 ];
 
