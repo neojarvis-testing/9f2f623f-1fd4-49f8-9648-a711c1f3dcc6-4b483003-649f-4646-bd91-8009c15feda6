@@ -1,1 +1,33 @@
-<p>adminvieworders works!</p>
+<div class="orders-container">
+    <h2>Orders Details</h2>
+  
+    <table *ngIf="orders.length > 0">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>User ID</th>
+          <th>Food Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.orderId }}</td>
+          <td>{{ order.userId }}</td>
+          <td>{{ order.foodItem }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>{{ order.price }}</td>
+          <td>{{ order.orderStatus }}</td>
+          <td>
+            <button (click)="updateOrderStatus(order.orderId, 'Making Food')">Making Food</button>
+            <button (click)="updateOrderStatus(order.orderId, 'On the way')">On the way</button>
+            <button (click)="updateOrderStatus(order.orderId, 'Delivered')">Delivered</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="orders.length === 0">Oops! No records found.</p>
+  </div>
