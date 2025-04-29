@@ -34,8 +34,6 @@ public class FoodController {
      * Endpoint for adding a new food item.
      * Creates a new food item and returns the created food item with HTTP status 201.
      */
-
-
     
     @Operation(summary = "Add a new food item", description = "Allows an admin to add a new food item to the inventory.")
     @PostMapping

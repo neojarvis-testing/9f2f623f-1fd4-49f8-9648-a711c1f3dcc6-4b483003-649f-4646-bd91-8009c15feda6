@@ -23,6 +23,7 @@ import { UserviewfoodComponent } from './components/userviewfood/userviewfood.co
 import { UserviewordersComponent } from './components/uservieworders/uservieworders.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { LogoutComponent } from './components/logout/logout.component';
 
 
 
@@ -46,7 +47,8 @@ import { HttpClientModule } from '@angular/common/http';
     UsernavComponent,
     UserviewfeedbackComponent,
     UserviewfoodComponent,
-    UserviewordersComponent
+    UserviewordersComponent,
+    LogoutComponent
 
 
   ],
