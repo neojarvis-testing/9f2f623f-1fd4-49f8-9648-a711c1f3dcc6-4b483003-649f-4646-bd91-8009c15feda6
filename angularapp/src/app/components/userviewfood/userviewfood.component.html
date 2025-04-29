@@ -1,31 +1,54 @@
 <div class="container mt-5">
-    <div class="card shadow-lg">
-      <div class="card-header text-center">
-        <h2>Food List</h2>
-      </div>
-      <div class="card-body">
-        <table class="table table-striped table-bordered">
-          <thead class="thead-dark">
-            <tr>
-              <th>Food ID</th>
-              <th>Food Name</th>
-              <th>Price</th>
-              <th>Stock Quantity</th>
-              <th>Photo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let food of foods">
-              <td>{{ food.foodId }}</td>
-              <td>{{ food.foodName }}</td>
-              <td>{{ food.price }}</td>
-              <td>{{ food.stockQuantity }}</td>
-              <td>
-                <img [src]="food.photo" alt="{{ food.foodName }}" class="img-fluid" style="max-height: 100px;">
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="card shadow-lg">
+    <div class="card-header text-center">
+      <h2>Food List</h2>
+    </div>
+    <div class="card-body">
+      <div class="food-grid">
+        <div class="food-item" *ngFor="let food of foods">
+          <img [src]="food.photo" alt="{{ food.foodName }}" class="img-fluid food-photo">
+          <div class="food-details">
+            <p><strong>Food ID:</strong> {{ food.foodId }}</p>
+            <p><strong>Food Name:</strong> {{ food.foodName }}</p>
+            <p><strong>Price:</strong> {{ food.price }}</p>
+            <p><strong>Stock Quantity:</strong> {{ food.stockQuantity }}</p>
+          </div>
+          <div class="food-actions">
+            <button class="btn btn-primary btn-sm" (click)="openOrderPopup(food)">Order</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Order Popup Form -->
+  <div class="popup" *ngIf="showOrderPopup">
+    <div class="popup-content">
+      <h3>Order Food Item</h3>
+      <form>
+        <div class="form-group">
+          <label for="foodName">Food Name:</label>
+          <input id="foodName" class="form-control" [(ngModel)]="selectedFood.foodName" name="foodName" readonly>
+        </div>
+        <div class="form-group">
+          <label for="price">Price:</label>
+          <input id="price" type="number" class="form-control" [(ngModel)]="selectedFood.price" name="price" readonly>
+        </div>
+        <div class="form-group">
+          <label for="quantity">Quantity:</label>
+          <input id="quantity" type="number" class="form-control" [(ngModel)]="orderQuantity" name="quantity" min="1">
+        </div>
+        <div class="form-group">
+          <label for="status">Status:</label>
+          <input id="status" class="form-control" value="Pending" readonly>
+        </div>
+        <div class="form-group">
+          <label for="photo">Photo:</label>
+          <img [src]="selectedFood.photo" alt="{{ selectedFood.foodName }}" class="img-fluid food-photo">
+        </div>
+        <button type="button" class="btn btn-success" (click)="confirmOrder()">Confirm Order</button>
+        <button type="button" class="btn btn-secondary" (click)="closeOrderPopup()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

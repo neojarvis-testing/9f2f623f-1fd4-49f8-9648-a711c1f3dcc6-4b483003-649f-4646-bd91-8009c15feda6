@@ -11,19 +11,6 @@ import { FoodService } from 'src/app/services/food.service';
   styleUrls: ['./adminaddfood.component.css']
 })
 export class AdminaddfoodComponent implements OnInit {
-  foodNames: string[] = [
-    'Margherita Pizza',
-    'Caesar Salad',
-    'Chicken Biryani',
-    'Spaghetti Carbonara',
-    'Noodles',
-    'Veggie Burger',
-    'Tuna Sushi',
-    'Pasta',
-    'Paneer Tikka',
-    'Chocolate Brownie'
-  ];
-
   food: Food = {} as Food;
   editId: any;
 
@@ -34,16 +21,9 @@ export class AdminaddfoodComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.editId = this.activatedRoute.snapshot.params['id'];
-    if (this.editId) {
-      this.foodService.getFoodById(this.editId).subscribe((data) => {
-        this.food = data;
-      });
-    }
   }
 
   addFood(): void {
-    if (!this.editId) {
       this.foodService.addFood(this.food).subscribe({
         next: () => {
           alert('Food added successfully');
@@ -55,23 +35,14 @@ export class AdminaddfoodComponent implements OnInit {
         }
       });
     }
-  }
+  
 
-  updateFood(): void {
-    if (this.editId) {
-      this.foodService.updateFood(this.food.foodId, this.food).subscribe({
-        next: () => {
-          this.router.navigate(['/adminViewFood']);
-          alert('Updated food successfully');
-        }
-      });
-    }
-  }
+ 
 
   onFileChange(event: Event, fileType: string): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
+      const file = input.files[0]; 
       const reader = new FileReader();
   
       reader.onload = () => {
@@ -81,9 +52,7 @@ export class AdminaddfoodComponent implements OnInit {
         }
       };
       console.log(this.food)
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file);  
     }
   }
-  
-
 }
