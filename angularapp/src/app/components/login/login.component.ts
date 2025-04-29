@@ -19,25 +19,23 @@ export class LoginComponent implements OnInit {
   
   constructor(private authService:AuthService,private router:Router) { }
   login(){
-    this.authService.login(this.loginData).subscribe({
-      next:(response) =>{
+    this.authService.login(this.loginData).subscribe(
+      (response) =>{
+        alert("Login Successful!")
         localStorage.setItem('userId', response.userId);
         localStorage.setItem('userRole',response.userRole);
-        localStorage.setItem('token',response.token)
-        console.log(response)
-        console.log(response.userRole=='ADMIN')
+        localStorage.setItem('token',response.token);
+        localStorage.setItem('username',response.username);
         if(response.userRole=='ADMIN'){
-
           this.router.navigate(['/adminAddFood']);
         } else{
-          this.router.navigate(['/register'])
+          this.router.navigate(['/'])
         }
       },
-      error:(err) =>{
+      (error) =>{
         this.errorMessage = 'Invalid username or password';
       }
-    })
-
+    )
   }
 
   ngOnInit(): void {

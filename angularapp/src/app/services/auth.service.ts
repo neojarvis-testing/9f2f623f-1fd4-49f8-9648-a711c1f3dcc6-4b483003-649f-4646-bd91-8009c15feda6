@@ -26,6 +26,10 @@ export class AuthService {
   getRole(): string | null {
     return localStorage.getItem('userRole');
   }
+
+  getUsername(): string | null {
+    return localStorage.getItem('username');
+  }
  
   getUserId(): string | null {
     return localStorage.getItem('userId');
@@ -38,6 +42,8 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('userId');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
   }
  
   isUser(): boolean {
