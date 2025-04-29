@@ -3,10 +3,9 @@ package com.examly.springapp.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.examly.springapp.exception.InvalidInputException;
 import com.examly.springapp.exception.ResourceNotFoundException;
@@ -18,18 +17,33 @@ import com.examly.springapp.repository.FoodRepo;
 import com.examly.springapp.repository.OrderRepo;
 import com.examly.springapp.repository.UserRepo;
 
+/**
+ * This class implements the OrderService interface and provides
+ * the business logic for handling order-related operations.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
-
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
-    @Autowired
-    OrderRepo orderRepo;
-    @Autowired
-    UserRepo userRepo;
-    @Autowired
-    FoodRepo foodRepo; 
+    private final OrderRepo orderRepo;
+    private final UserRepo userRepo;
+    private final FoodRepo foodRepo;
 
+    /**
+     * Constructor-based dependency injection for OrderRepo, UserRepo, and FoodRepo.
+     */
+    public OrderServiceImpl(OrderRepo orderRepo, UserRepo userRepo, FoodRepo foodRepo) {
+        this.orderRepo = orderRepo;
+        this.userRepo = userRepo;
+        this.foodRepo = foodRepo;
+    }
+
+    /**
+     * Adds a new order.
+     * Validates the order status, quantity, and date before saving.
+     * Fetches and sets the associated user and food item.
+     * Logs the addition process and returns the saved order.
+     */
     @Override
     public Orders addOrder(Orders orders) {
         logger.info("Adding order: {}", orders);
@@ -70,23 +84,22 @@ public class OrderServiceImpl implements OrderService {
         }
         orders.setFood(food);
 
-        // Set default Order Status
         orders.setOrderStatus("Pending");
         orders.setOrderDate(LocalDate.now());
-        // orders.setTotalAmount(food.getPrice()*orders.getQuantity());
         food.setStockQuantity(food.getStockQuantity() - orders.getQuantity());
         Orders savedOrder = orderRepo.save(orders);
         logger.info("Order added successfully: {}", savedOrder);
         return savedOrder;
     }
 
+    /**
+     * Retrieves an order by ID.
+     * Logs the retrieval process and returns the order if found.
+     * Throws ResourceNotFoundException if the order is not found.
+     */
     @Override
     public Orders getOrderById(int orderId) {
         logger.info("Fetching order by ID: {}", orderId);
-        if (orderId <= 0) {
-            logger.error("Invalid order ID: {}", orderId);
-            throw new InvalidInputException("Order ID must be positive.");
-        }
         Orders order = orderRepo.findById(orderId).orElse(null);
         if (order == null) {
             logger.error("Order not found with ID: {}", orderId);
@@ -96,6 +109,11 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    /**
+     * Retrieves all orders.
+     * Logs the retrieval process and returns the list of orders.
+     * Throws ResourceNotFoundException if no orders are found.
+     */
     @Override
     public List<Orders> getAllOrders() {
         logger.info("Fetching all orders");
@@ -108,13 +126,15 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
+    /**
+     * Updates an order by ID.
+     * Validates the order status before updating.
+     * Logs the update process and returns the updated order.
+     * Throws ResourceNotFoundException if the order is not found.
+     */
     @Override
     public Orders updateOrder(int orderId, Orders orderDetails) {
         logger.info("Updating order with ID: {}", orderId);
-        if (orderId <= 0) {
-            logger.error("Invalid order ID: {}", orderId);
-            throw new InvalidInputException("Order ID must be positive.");
-        }
         Orders existingOrder = orderRepo.findById(orderId).orElse(null);
         if (existingOrder == null) {
             logger.error("Order not found with ID: {}", orderId);
@@ -124,45 +144,20 @@ public class OrderServiceImpl implements OrderService {
             logger.error("Invalid order status: {}", orderDetails);
             throw new InvalidInputException("Order status cannot be null or empty.");
         }
-        if (orderDetails.getQuantity() <= 0) {
-            logger.error("Invalid order quantity: {}", orderDetails.getQuantity());
-            throw new InvalidInputException("Quantity must be greater than zero.");
-        }
-        if (orderDetails.getOrderDate() == null) {
-            logger.error("Invalid order date: {}", orderDetails.getOrderDate());
-            throw new InvalidInputException("Order date cannot be null.");
-        }
-
-        Food food = foodRepo.findById(orderDetails.getFood().getFoodId()).orElse(null);
-        if (food == null) {
-            logger.error("Food not found: {}", orderDetails.getFood().getFoodId());
-            throw new ResourceNotFoundException("Food not found"); 
-        }
-        if (food.getStockQuantity() < orderDetails.getQuantity()) {
-            if (food.getStockQuantity() == 0) {
-                logger.error("Food out of stock: {}", food.getFoodName());
-                throw new ResourceNotFoundException(food.getFoodName() + " Out of Stock!!");
-            }
-            logger.error("Insufficient stock for {}: Available Quantity is {}", food.getFoodName(), food.getStockQuantity());
-            throw new ResourceNotFoundException("Available Quantity of " + food.getFoodName() + " is " + food.getStockQuantity());
-        }
         orderDetails.setOrderId(orderId);
-        // orderDetails.setOrderStatus(existingOrder.getOrderStatus());
-        // orderDetails.setOrderDate(existingOrder.getOrderDate());
-        // orderDetails.setTotalAmount(food.getPrice()*orderDetails.getQuantity());
-        // food.setStockQuantity(food.getStockQuantity()-orderDetails.getQuantity());
         Orders updatedOrder = orderRepo.save(orderDetails);
         logger.info("Order updated successfully: {}", updatedOrder);
         return updatedOrder;
     }
 
+    /**
+     * Deletes an order by ID.
+     * Logs the deletion process and returns true if deletion is successful.
+     * Throws ResourceNotFoundException if the order is not found.
+     */
     @Override
     public boolean deleteOrder(int orderId) {
         logger.info("Deleting order with ID: {}", orderId);
-        if (orderId <= 0) {
-            logger.error("Invalid order ID: {}", orderId);
-            throw new InvalidInputException("Order ID must be positive.");
-        }
         Orders order = orderRepo.findById(orderId).orElse(null);
         if (order == null) {
             logger.error("Order not found with ID: {}", orderId);
@@ -173,13 +168,14 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    /**
+     * Retrieves orders by user ID.
+     * Logs the retrieval process and returns the list of orders.
+     * Throws ResourceNotFoundException if no orders are found for the user ID.
+     */
     @Override
     public List<Orders> getOrdersByUserId(int userId) {
         logger.info("Fetching orders by User ID: {}", userId);
-        if (userId <= 0) {
-            logger.error("Invalid user ID: {}", userId);
-            throw new InvalidInputException("User ID must be positive.");
-        }
         User existingUser = userRepo.findById(userId).orElse(null);
         if (existingUser == null) {
             logger.error("User not found with ID: {}", userId);
@@ -191,7 +187,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ResourceNotFoundException("No orders found for User ID: " + userId);
         }
         logger.info("Orders found for User ID {}: {}", userId, userOrders);
-        return userOrders;
+        return userOrders;   
     }
 
     @Override

@@ -21,6 +21,8 @@ import { UsernavComponent } from './components/usernav/usernav.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
 import { UserviewfoodComponent } from './components/userviewfood/userviewfood.component';
 import { UserviewordersComponent } from './components/uservieworders/uservieworders.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -50,7 +52,10 @@ import { UserviewordersComponent } from './components/uservieworders/uservieword
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

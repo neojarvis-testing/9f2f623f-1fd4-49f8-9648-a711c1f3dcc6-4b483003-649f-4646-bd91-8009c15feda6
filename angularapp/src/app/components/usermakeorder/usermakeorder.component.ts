@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OrderService } from 'src/app/services/order.service';
 
 @Component({
   selector: 'app-usermakeorder',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsermakeorderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private orderService:OrderService) { }
 
   ngOnInit(): void {
   }
