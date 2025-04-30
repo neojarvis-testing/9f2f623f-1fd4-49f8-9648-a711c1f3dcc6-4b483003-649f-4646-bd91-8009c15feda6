@@ -24,7 +24,7 @@ import { UserviewordersComponent } from './components/uservieworders/uservieword
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './components/logout/logout.component';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthInterceptor } from './auth.interceptor';
 
 

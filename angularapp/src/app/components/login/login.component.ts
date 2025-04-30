@@ -21,16 +21,16 @@ export class LoginComponent implements OnInit {
   login(){
     this.authService.login(this.loginData).subscribe(
       (response) =>{
-        alert("Login Successful!")
         localStorage.setItem('userId', response.userId);
         localStorage.setItem('userRole',response.userRole);
         localStorage.setItem('token',response.token);
         localStorage.setItem('username',response.username);
-        if(response.userRole=='ADMIN'){
-          this.router.navigate(['/adminAddFood']);
-        } else{
-          this.router.navigate(['/'])
-        }
+        // if(response.userRole=='ADMIN'){
+        //   this.router.navigate(['/adminAddFood']);
+        // } else{
+        //   this.router.navigate(['/'])
+        // }
+        this.router.navigate(['/'])
       },
       (error) =>{
         this.errorMessage = 'Invalid username or password';

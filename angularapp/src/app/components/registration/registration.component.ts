@@ -16,16 +16,16 @@ export class RegistrationComponent{
     password: '',
     username: '',
     mobileNumber: '',
-    userRole: 'ADMIN'
+    userRole: 'USER'
   };
-showDialog=false
+  showDialog=false
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(form: NgForm): void {
     if (form.valid) {
       this.authService.register(this.user).subscribe(() => {
         this.showDialog = true;
-      }, error => {
+      }, (error) => {
         alert('Registration failed. Try again.');
         console.error(error);
       });

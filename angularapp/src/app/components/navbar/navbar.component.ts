@@ -12,14 +12,6 @@ export class NavbarComponent implements OnInit {
   showDialog = false;
   ngOnInit(): void {
   }
-
-  // logout(){
-  //   if(confirm("Are you sure you want to logout?")){
-  //     this.authService.logout()
-  //     this.router.navigate(['/login'])
-  //   }
-  // }
-
   
   logout(): void {
     this.showDialog = true;

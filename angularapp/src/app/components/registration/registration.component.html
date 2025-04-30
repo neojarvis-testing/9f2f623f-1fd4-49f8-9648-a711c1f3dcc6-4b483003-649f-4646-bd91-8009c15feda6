@@ -1,27 +1,28 @@
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
 <div class="container mt-5 p-5 rounded shadow-lg bg-light">
     <h2 class="text-center text-primary fw-bold">Register</h2>
     <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" novalidate>
   
         <div class="mb-4">
-            <label class="fw-bold">Username</label>
+            <b>Username</b>
             <input type="text" name="userName" class="form-control border-primary" [(ngModel)]="user.username" required #userName="ngModel">
             <div *ngIf="userName.invalid && userName.touched" class="text-danger mt-1">Username is required</div>
         </div>
   
         <div class="mb-4">
-            <label class="fw-bold">Email</label>
+            <b>Email</b>
             <input type="email" name="email" class="form-control border-primary" [(ngModel)]="user.email" required email #email="ngModel">
             <div *ngIf="email.invalid && email.touched" class="text-danger mt-1">Valid email is required</div>
         </div>
   
         <div class="mb-4">
-            <label class="fw-bold">Mobile Number</label>
+            <b>Mobile Number</b>
             <input type="text" name="mobileNumber" class="form-control border-primary" [(ngModel)]="user.mobileNumber" required #mobileNumber="ngModel">
             <div *ngIf="mobileNumber.invalid && mobileNumber.touched" class="text-danger mt-1">Mobile number is required</div>
         </div>
   
         <div class="mb-4">
-            <label class="fw-bold">Password</label>
+            <b>Password</b>
             <input type="password" name="password" class="form-control border-primary" [(ngModel)]="user.password" required #password="ngModel">
             <div *ngIf="password.invalid && password.touched" class="text-danger mt-1">Password is required</div>
         </div>  
@@ -32,6 +33,7 @@
             <a routerLink="/login" class="text-primary fw-bold">Login</a>
         </div>
     </form>
+  </div>
   </div>
 
   <div class="dialog-overlay" *ngIf="showDialog">
