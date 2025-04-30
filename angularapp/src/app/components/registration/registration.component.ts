@@ -18,19 +18,23 @@ export class RegistrationComponent{
     mobileNumber: '',
     userRole: 'USER'
   };
-
+  showDialog=false
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(form: NgForm): void {
     if (form.valid) {
       this.authService.register(this.user).subscribe(() => {
-        alert('Registered successfully!');
-        this.router.navigate(['/login']);
-      }, error => {
+        this.showDialog = true;
+      }, (error) => {
         alert('Registration failed. Try again.');
         console.error(error);
       });
     }
+  }
+    
+  onDialogConfirm(): void {
+    this.showDialog = false;
+    this.router.navigate(['/login'])
   }
 }
 

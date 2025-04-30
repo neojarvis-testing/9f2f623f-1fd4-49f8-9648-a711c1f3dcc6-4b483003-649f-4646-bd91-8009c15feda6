@@ -48,16 +48,8 @@ public class OrderServiceImpl implements OrderService {
     public Orders addOrder(Orders orders) {
         logger.info("Adding order: {}", orders);
         if (orders == null || orders.getOrderStatus() == null || orders.getOrderStatus().isEmpty()) {
-            logger.error("Invalid order status: {}", orders);
+            logger.error("Invalid Order status: {}", orders);
             throw new InvalidInputException("Order status cannot be null or empty.");
-        }
-        if (orders.getQuantity() <= 0) {
-            logger.error("Invalid order quantity: {}", orders.getQuantity());
-            throw new InvalidInputException("Quantity must be greater than zero.");
-        }
-        if (orders.getOrderDate() == null) {
-            logger.error("Invalid order date: {}", orders.getOrderDate());
-            throw new InvalidInputException("Order date cannot be null.");
         }
 
         // Fetch and set User 
@@ -102,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
         logger.info("Fetching order by ID: {}", orderId);
         Orders order = orderRepo.findById(orderId).orElse(null);
         if (order == null) {
-            logger.error("Order not found with ID: {}", orderId);
+            logger.error("Order not found with Id: {}", orderId);
             throw new ResourceNotFoundException("Order not found with ID: " + orderId);
         }
         logger.info("Order found: {}", order);
@@ -137,11 +129,11 @@ public class OrderServiceImpl implements OrderService {
         logger.info("Updating order with ID: {}", orderId);
         Orders existingOrder = orderRepo.findById(orderId).orElse(null);
         if (existingOrder == null) {
-            logger.error("Order not found with ID: {}", orderId);
+            logger.error("Order not found with orderId: {}", orderId);
             throw new ResourceNotFoundException("Order not found with ID: " + orderId);
         }
         if (orderDetails == null || orderDetails.getOrderStatus() == null || orderDetails.getOrderStatus().isEmpty()) {
-            logger.error("Invalid order status: {}", orderDetails);
+            logger.error("Invalid Order Status: {}", orderDetails);
             throw new InvalidInputException("Order status cannot be null or empty.");
         }
         orderDetails.setOrderId(orderId);
@@ -196,14 +188,6 @@ public class OrderServiceImpl implements OrderService {
         if (orders == null || orders.getOrderStatus() == null || orders.getOrderStatus().isEmpty()) {
             logger.error("Invalid order status: {}", orders);
             throw new InvalidInputException("Order status cannot be null or empty.");
-        }
-        if (orders.getQuantity() <= 0) {
-            logger.error("Invalid order quantity: {}", orders.getQuantity());
-            throw new InvalidInputException("Quantity must be greater than zero.");
-        }
-        if (orders.getOrderDate() == null) {
-            logger.error("Invalid order date: {}", orders.getOrderDate());
-            throw new InvalidInputException("Order date cannot be null.");
         }
 
         // Fetch and set User 

@@ -68,3 +68,10 @@
       </form>
     </div>
   </div>
+
+
+  <div class="dialog-overlay" *ngIf="showDialog">
+    <div class="dialog-box">
+      <p>Food added successfully!</p>
+      <button class="btn btn-primary" (click)="onDialogConfirm()">Ok</button>
+  </div>
