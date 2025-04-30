@@ -5,13 +5,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.examly.springapp.exception.ResourceNotFoundException;
 import com.examly.springapp.exception.InvalidInputException;
 import com.examly.springapp.model.Feedback;
-
+import com.examly.springapp.model.Food;
+import com.examly.springapp.model.User;
 import com.examly.springapp.repository.FeedbackRepo;
+import com.examly.springapp.repository.FoodRepo;
+import com.examly.springapp.repository.UserRepo;
 
 /**
  * This class implements the FeedbackService interface and provides
@@ -27,7 +31,12 @@ public class FeedbackServiceImpl implements FeedbackService {
      */
     public FeedbackServiceImpl(FeedbackRepo feedbackRepo) {
         this.feedbackRepo = feedbackRepo;
-    }
+    }  
+    @Autowired
+    FoodRepo foodRepo;
+    @Autowired
+    UserRepo userRepo;
+
 
     /**
      * Creates a new feedback.
@@ -35,32 +44,56 @@ public class FeedbackServiceImpl implements FeedbackService {
      * Logs the creation process and returns the saved feedback.
      */
     @Override
-    public Feedback createFeedback(Feedback feedback) {
-        logger.info("Creating feedback: {}", feedback);
-        if (feedback == null || feedback.getFeedbackText() == null || feedback.getFeedbackText().isEmpty()) {
-            logger.error("Invalid feedback content: {}", feedback);
-            throw new InvalidInputException("Feedback content cannot be null or empty.");
-        }
-        if (feedback.getRating() < 1 || feedback.getRating() > 5) {
-            logger.error("Invalid feedback rating: {}", feedback.getRating());
-            throw new InvalidInputException("Feedback rating must be between 1 and 5.");
-        }
-        if (feedback.getDate() != null && feedback.getDate().isAfter(LocalDate.now())) {
-            logger.error("Invalid feedback date: {}", feedback.getDate());
-            throw new InvalidInputException("Feedback date cannot be in the future.");
-        }
-        if (feedback.getUser() == null) {
-            logger.error("Feedback without user: {}", feedback);
-            throw new InvalidInputException("Feedback must have an associated user.");
-        }
-        if (feedback.getFood() == null) {
-            logger.error("Feedback without food item: {}", feedback);
-            throw new InvalidInputException("Feedback must be associated with a food item.");
-        }
-        Feedback savedFeedback = feedbackRepo.save(feedback);
-        logger.info("Feedback created successfully: {}", savedFeedback);
-        return savedFeedback;
+   public Feedback createFeedback(Feedback feedback) {
+    logger.info("Creating feedback: {}", feedback);
+
+    // Validate Feedback Content
+    if (feedback == null || feedback.getFeedbackText() == null || feedback.getFeedbackText().isEmpty()) {
+        logger.error("Invalid feedback content: {}", feedback);
+        throw new InvalidInputException("Feedback content cannot be null or empty.");
     }
+
+    // Validate Feedback Rating
+    if (feedback.getRating() < 1 || feedback.getRating() > 5) {
+        logger.error("Invalid feedback rating: {}", feedback.getRating());
+        throw new InvalidInputException("Feedback rating must be between 1 and 5.");
+    }
+
+    // Validate Feedback Date
+    if (feedback.getDate() != null && feedback.getDate().isAfter(LocalDate.now())) {
+        logger.error("Invalid feedback date: {}", feedback.getDate());
+        throw new InvalidInputException("Feedback date cannot be in the future.");
+    }
+
+    // Validate User Association
+    if (feedback.getUser() == null || feedback.getUser().getUserId() == 0) {
+        logger.error("Feedback without user: {}", feedback);
+        throw new InvalidInputException("Feedback must have an associated user.");
+    }
+
+    // Validate Food Association
+    if (feedback.getFood() == null || feedback.getFood().getFoodId() == 0) {
+        logger.error("Feedback without food item: {}", feedback);
+        throw new InvalidInputException("Feedback must be associated with a food item.");
+    }
+
+    // Fetch Food Entity
+    Food food = foodRepo.findById(feedback.getFood().getFoodId())
+        .orElseThrow(() -> new ResourceNotFoundException("Food not found with id: " + feedback.getFood().getFoodId()));
+
+    // Fetch User Entity
+    User user = userRepo.findById(feedback.getUser().getUserId())
+        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + feedback.getUser().getUserId()));
+
+    // Set Food and User entities
+    feedback.setFood(food);
+    feedback.setUser(user);
+
+    // Save Feedback Entity
+    Feedback savedFeedback = feedbackRepo.save(feedback);
+    logger.info("Feedback created successfully: {}", savedFeedback);
+    return savedFeedback;
+}
 
     /**
      * Retrieves feedback by ID.
