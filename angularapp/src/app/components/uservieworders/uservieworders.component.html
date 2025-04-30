@@ -12,6 +12,7 @@
           <th>Food Name</th>
           <th>Quantity</th>
           <th>Total Amount</th>
+          <th>Status</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -21,9 +22,10 @@
           <td>{{ order.food.foodId }}</td>
           <td>{{ order.food.foodName }}</td>
           <td>{{ order.quantity }}</td>
-          <td>{{ order.totalAmount }}</td>
+          <td>{{ order.totalAmount |currency:'INR' }}</td>
+          <td>{{order.orderStatus}}</td>
           <td>
-            <button class="btn btn-danger btn-sm" (click)="confirmDelete(order)">Delete</button>
+            <button class="btn btn-danger btn-sm" (click)="confirmDelete(order)">Cancel</button>
           </td>
         </tr>
       </tbody>

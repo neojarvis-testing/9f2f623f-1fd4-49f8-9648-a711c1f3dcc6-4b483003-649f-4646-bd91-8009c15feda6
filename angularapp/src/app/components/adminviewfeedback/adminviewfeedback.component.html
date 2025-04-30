@@ -10,6 +10,7 @@
           <th>Food Name</th>
           <th>Feedback</th>
           <th>Rating</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,9 @@
           <td>{{ feedback.food.foodName }}</td>
           <td>{{ feedback.feedbackText }}</td>
           <td>{{ feedback.rating }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteFeedback(feedback.feedbackId)">Delete</button>
+          </td>
         </tr>
       </tbody>
     </table>
