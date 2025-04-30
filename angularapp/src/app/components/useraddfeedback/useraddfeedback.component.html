@@ -1,1 +1,38 @@
-<p>useraddfeedback works!</p>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Submit Your Feedback</h2>
+  
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  
+    <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="food">Select Food</label>
+        <select id="food" class="form-control" formControlName="food">
+          <option *ngFor="let food of foodList" [value]="food.foodId">
+            {{ food.foodName }}
+          </option>
+        </select>
+        <div *ngIf="feedbackForm.get('food')?.invalid && feedbackForm.get('food')?.touched" class="text-danger">
+          Please select a food item.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="feedback">Feedback</label>
+        <textarea id="feedback" class="form-control" formControlName="feedback" rows="3"></textarea>
+        <div *ngIf="feedbackForm.get('feedback')?.invalid && feedbackForm.get('feedback')?.touched" class="text-danger">
+          Feedback must be at least 10 characters long.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="rating">Rating</label>
+        <input id="rating" type="number" class="form-control" formControlName="rating" min="1" max="5" />
+        <div *ngIf="feedbackForm.get('rating')?.invalid && feedbackForm.get('rating')?.touched" class="text-danger">
+          Please provide a rating between 1 and 5.
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="feedbackForm.invalid">Submit Feedback</button>
+    </form>
+  </div>

@@ -21,7 +21,7 @@
 
         <a routerLink="/adminViewOrders" *ngIf="authService.isAdmin()">Order Details</a> 
 
-        <div class="dropdown" *ngIf="authService.isLoggedUser()">
+        <div class="dropdown" *ngIf="authService.isUser()">
             <a class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false">Feedback</a>
             <ul class="dropdown-menu">
               <li><p *ngIf="authService.isUser()" class="dropdown-item" routerLink="/userAddFeedback">Add Feedback</p></li>
