@@ -16,7 +16,7 @@ export class RegistrationComponent{
     password: '',
     username: '',
     mobileNumber: '',
-    userRole: 'ADMIN'
+    userRole: 'USER'
   };
 
   constructor(private authService: AuthService, private router: Router) {}
