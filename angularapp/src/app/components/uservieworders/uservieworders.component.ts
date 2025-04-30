@@ -13,6 +13,7 @@ export class UserviewordersComponent implements OnInit {
   errorMessage: string = '';
   showConfirmation = false;
   orderToDelete: orders | null = null;
+  isLoading = true;
 
   constructor(private orderService: OrderService) {}
 
@@ -21,19 +22,26 @@ export class UserviewordersComponent implements OnInit {
     if (storedUserId) {
       this.userId = parseInt(storedUserId);
       this.loadOrders();
+    } else {
+      this.errorMessage = 'User ID not found. Cannot load orders.';
+      this.isLoading = false; // Hide spinner if no user ID
     }
   }
 
   loadOrders(): void {
+    this.isLoading = true; // Show spinner while loading
     this.orderService.getAllOrdersByUserId(this.userId).subscribe({
       next: (data) => {
         this.orders = data;
+        this.isLoading = false; // Hide spinner once data is loaded
       },
       error: () => {
         this.errorMessage = 'Failed to load order history';
+        this.isLoading = false; // Hide spinner on error
       },
     });
   }
+
 
   confirmDelete(order: orders): void {
     this.orderToDelete = order;

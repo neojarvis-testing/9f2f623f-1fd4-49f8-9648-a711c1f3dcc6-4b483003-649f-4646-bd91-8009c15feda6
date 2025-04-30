@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class UserviewfoodComponent implements OnInit {
 
+  isLoading = true; 
   foods: Food[] = []; // Array to store food items
   selectedFood: Food | null = null; // Store the food item to be ordered
   showOrderPopup: boolean = false; // Control order popup visibility
@@ -39,13 +40,16 @@ export class UserviewfoodComponent implements OnInit {
   }
 
   getAllFoods(): void {
+    this.isLoading = true; // Show spinner while loading
     this.foodService.getAllFoods().subscribe({
       next: (data) => {
-        this.foods = data; // Assign fetched food items to the array
+        this.foods = data;
+        this.isLoading = false; // Hide spinner after loading completes
       },
       error: (err) => {
         console.error('Error fetching food items:', err);
         alert('Failed to fetch food items.');
+        this.isLoading = false; // Hide spinner if error occurs
       }
     });
   }
