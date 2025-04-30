@@ -11,7 +11,8 @@ export class AdminviewfoodComponent implements OnInit {
   foods: Food[] = []; // Array to store food items
   selectedFood: Food | null = null; // Store the food item to be edited
   showPopup: boolean = false; // Control popup visibility
-
+  showDialog = false;
+  foodToDelete: number | null = null; 
   constructor(private foodService: FoodService) {}
 
   ngOnInit(): void {
@@ -61,21 +62,37 @@ export class AdminviewfoodComponent implements OnInit {
     this.selectedFood = null; // Reset the selected food
   }
 
-  deleteFood(foodId: number): void {
-    this.foodService.deleteFood(foodId).subscribe(
-      () => {
-        this.foods = this.foods.filter(food => food.foodId !== foodId); // Remove the food item
-        console.log('Food deleted successfully.');
-      },
-      (err) => {
-        console.error('Error deleting food item:', err);
-        if (err.status === 500) {
-          alert('Internal server error. Please try again later.');
-        } else {
-          alert('Failed to delete food item. Error: ' + err.message);
-        }
-      }
-    );
+   confirmDeleteFood(foodId: number): void {
+     this.foodToDelete = foodId;
+     this.showDialog = true; // Show the confirmation dialog
   }
+    
+ deleteFood(): void {
+   if (this.foodToDelete !== null) {
+    this.foodService.deleteFood(this.foodToDelete).subscribe(() => {
+      this.foods = this.foods.filter(food => food.foodId !== this.foodToDelete); // Remove the food item
+      this.closeDialog();
+    }, (err) => {
+      console.error('Error deleting food item:', err);
+      if (err.status === 500) {
+        alert('Internal server error. Please try again later.');
+      } else {
+        alert('Failed to delete food item. Error: ' + err.message);
+      }
+   });
+  }
+}
   
+closeDialog(): void {
+  this.showDialog = false;
+  this.foodToDelete = null; // Reset the food to delete
+}
+  
+onDialogConfirm(confirm: boolean): void {
+  if (confirm) {
+    this.deleteFood();
+  } else {
+    this.closeDialog();
+  }
+}   
 }

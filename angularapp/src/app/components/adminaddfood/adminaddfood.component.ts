@@ -13,6 +13,7 @@ import { FoodService } from 'src/app/services/food.service';
 export class AdminaddfoodComponent implements OnInit {
   food: Food = {} as Food;
   editId: any;
+  showDialog = false;
 
   constructor(
     private foodService: FoodService,
@@ -24,18 +25,20 @@ export class AdminaddfoodComponent implements OnInit {
   }
 
   addFood(): void {
-      this.foodService.addFood(this.food).subscribe({
-        next: () => {
-          alert('Food added successfully');
-          this.router.navigate(['/adminViewFood']);
-        },
-        error: (err) => {
-          console.log(JSON.stringify(err));
-          alert('Failed to add food');
-        }
-      });
-    }
+      this.foodService.addFood(this.food).subscribe(() => {
+          this.showDialog = true;
+      }, (err) => {
+         console.log(JSON.stringify(err));
+         alert('Failed to add food');
+      }
+    );
+  }
   
+
+    onDialogConfirm(): void {
+      this.showDialog = false;
+      this.router.navigate(['/adminViewFood'])
+    }
 
  
 

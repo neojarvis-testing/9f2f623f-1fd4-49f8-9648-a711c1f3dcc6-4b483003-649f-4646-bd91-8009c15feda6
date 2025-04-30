@@ -15,7 +15,7 @@
           </div>
           <div class="food-actions">
             <button class="btn btn-warning btn-sm" (click)="openEditPopup(food)">Edit</button>
-            <button class="btn btn-danger btn-sm" (click)="deleteFood(food.foodId)">Delete</button>
+            <button class="btn btn-danger btn-sm" (click)="confirmDeleteFood(food.foodId)">Delete</button>
           </div>
         </div>
       </div>
@@ -40,8 +40,17 @@
           <input id="stockQuantity" type="number" class="form-control" [(ngModel)]="selectedFood.stockQuantity" name="stockQuantity">
         </div>
         <button type="button" class="btn btn-success" (click)="updateFood()">Update</button>
-        <button type="button" class="btn btn-secondary" (click)="closePopup()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="closePopup()">Cancel</button>
       </form>
     </div>
+  </div>
+</div>
+
+<div class="dialog-overlay" *ngIf="showDialog">
+  <div class="dialog-box">
+    <p>Are you sure you want to Delete?</p>
+    <div >
+    <button class="btn btn-success" (click)="onDialogConfirm(true)">Yes</button>
+    <button class="btn btn-danger" (click)="onDialogConfirm(false)">No</button> </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
-<div class="nav">
-    <h4>🫕 Food Mart</h4>
+<div class="nav" >
+    <h4 routerLink="/" class="cursor">🫕 Food Mart</h4>
     <div class="box">
         <a routerLink="/register" *ngIf="!authService.isLoggedUser()">Register</a>  
         <a routerLink="/login" *ngIf="!authService.isLoggedUser()">Login</a>
@@ -16,7 +16,6 @@
             </ul>
         </div>
 
-        <!-- <a routerLink="/userAddOrder" *ngIf="authService.isUser()">userAddOrder</a>  -->
         <a routerLink="/userViewOrders" *ngIf="authService.isUser()">My Orders</a> 
 
         <a routerLink="/adminViewOrders" *ngIf="authService.isAdmin()">Order Details</a> 
@@ -24,14 +23,28 @@
         <div class="dropdown" *ngIf="authService.isUser()">
             <a class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false">Feedback</a>
             <ul class="dropdown-menu">
-              <li><p *ngIf="authService.isUser()" class="dropdown-item" routerLink="/userAddFeedback">Add Feedback</p></li>
-              <li><p *ngIf="authService.isUser()" class="dropdown-item" routerLink="/userViewFeedback">My Feedback</p></li>
+              <li><p class="dropdown-item" routerLink="/userAddFeedback">Add Feedback</p></li>
+              <li><p class="dropdown-item" routerLink="/userViewFeedback">My Feedback</p></li>
             </ul>
         </div>
 
         <a routerLink="/adminViewFeedback" *ngIf="authService.isAdmin()">Feedbacks</a> 
         <a routerLink="/adminOrdersChart" *ngIf="authService.isAdmin()">Orders Chart</a> 
 
-        <a class="logout" (click)="logout()" *ngIf="authService.isLoggedUser()"><b> Logout</b>  </a>
+        <button class="logout" (click)="logout()" *ngIf="authService.isLoggedUser()"><b>Logout</b></button>
+
     </div>
 </div>
+
+
+<div class="dialog-overlay" *ngIf="showDialog">
+  <div class="dialog-box">
+    <h2>Logout</h2>
+    <p>Are you sure you want to logout?</p>
+    <div >
+    <button class="btn btn-success" (click)="onDialogConfirm(true)">Yes</button>
+    <button class="btn btn-danger" (click)="onDialogConfirm(false)">No</button> </div>
+  </div>
+</div>
+
+  

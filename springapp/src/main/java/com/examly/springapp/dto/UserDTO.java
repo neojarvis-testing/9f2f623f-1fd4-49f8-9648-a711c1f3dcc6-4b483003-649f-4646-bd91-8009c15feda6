@@ -4,7 +4,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class UserDTO {
 
     @Email(message = "Email should be valid")
@@ -26,45 +30,45 @@ public class UserDTO {
     private String userRole;
 
 
-    public String getEmail() {
-        return email;
-    }
+    // public String getEmail() {
+    //     return email;
+    // }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    // public void setEmail(String email) {
+    //     this.email = email;
+    // }
 
-    public String getUsername() {
-        return username;
-    }
+    // public String getUsername() {
+    //     return username;
+    // }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    // public void setUsername(String username) {
+    //     this.username = username;
+    // }
 
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
+    // public String getMobileNumber() {
+    //     return mobileNumber;
+    // }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
+    // public void setMobileNumber(String mobileNumber) {
+    //     this.mobileNumber = mobileNumber;
+    // }
 
-    public String getUserRole() {
-        return userRole;
-    }
+    // public String getUserRole() {
+    //     return userRole;
+    // }
 
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
-    }
+    // public void setUserRole(String userRole) {
+    //     this.userRole = userRole;
+    // }
 
-    public String getPassword() {
-        return password;
-    }
+    // public String getPassword() {
+    //     return password;
+    // }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    // public void setPassword(String password) {
+    //     this.password = password;
+    // }
 
 
 }
