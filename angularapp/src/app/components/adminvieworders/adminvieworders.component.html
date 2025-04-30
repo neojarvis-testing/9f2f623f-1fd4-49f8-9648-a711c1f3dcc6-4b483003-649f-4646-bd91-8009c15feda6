@@ -8,25 +8,36 @@
           <th>Order ID</th>
           <th>User ID</th>
           <th>Food ID</th>
+          <th>Food Name</th>
           <th>Quantity</th>
           <th>Total Amount</th>
           <th>Status</th>
           <th>Action</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let order of orders">
           <td>{{ order.orderId }}</td>
-          <td>{{ order.user.userId }}</td>
+          <td>{{ order.user.userId }}</td> 
           <td>{{ order.food.foodId }}</td>
+          <td>{{ order.food.foodName }}</td>   
           <td>{{ order.quantity }}</td>
-          <td>{{ order.totalAmount }}</td>
+          <td>{{ order.totalAmount | currency:'INR' }}</td>
           <td>{{ order.orderStatus }}</td>
           <td>
-            <button class="btn btn-warning btn-sm mr-1" (click)="updateOrderStatus(order.orderId, 'Making Food')">Making Food</button>
-            <button class="btn btn-info btn-sm mr-1" (click)="updateOrderStatus(order.orderId, 'On the way')">On the way</button>
-            <button class="btn btn-success btn-sm mr-1" (click)="updateOrderStatus(order.orderId, 'Delivered')">Delivered</button>
-            <!-- <button class="btn btn-danger btn-sm" (click)="updateOrderStatus(order.orderId, 'Rejected')">Rejected</button> -->
+            <button class="btn btn-warning btn-sm mr-1" 
+                    (click)="updateOrderStatus(order.orderId, 'Making Food')" 
+                    *ngIf="order.orderStatus === 'Pending'">Making Food</button>
+            <button class="btn btn-info btn-sm mr-1" 
+                    (click)="updateOrderStatus(order.orderId, 'On the way')" 
+                    *ngIf="order.orderStatus === 'Making Food'">On the way</button>
+            <button class="btn btn-success btn-sm mr-1" 
+                    (click)="updateOrderStatus(order.orderId, 'Delivered')" 
+                    *ngIf="order.orderStatus === 'On the way'">Delivered</button>
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteOrder(order.orderId)">Delete</button>
           </td>
         </tr>
       </tbody>
