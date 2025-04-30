@@ -10,7 +10,6 @@ import { AdminviewfoodComponent } from './components/adminviewfood/adminviewfood
 import { AdminviewordersComponent } from './components/adminvieworders/adminvieworders.component';
 import { ErrorComponent } from './components/error/error.component';
 import { UseraddfeedbackComponent } from './components/useraddfeedback/useraddfeedback.component';
-import { UsermakeorderComponent } from './components/usermakeorder/usermakeorder.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
 import { UserviewfoodComponent } from './components/userviewfood/userviewfood.component';
 import { UserviewordersComponent } from './components/uservieworders/uservieworders.component';
@@ -22,7 +21,6 @@ const routes: Routes = [
   {path:"adminAddFood",component:AdminaddfoodComponent},
   {path:"adminViewFood",component:AdminviewfoodComponent},
   {path:"userViewFood",component:UserviewfoodComponent},
-  {path:"userAddOrder",component:UsermakeorderComponent},
   {path:"userViewOrders",component:UserviewordersComponent},
   //{path:"adminOrdersChart",component:AdminorderschartComponent},
   {path:"adminViewOrders",component:AdminviewordersComponent},

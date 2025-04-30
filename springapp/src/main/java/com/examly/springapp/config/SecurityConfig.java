@@ -51,7 +51,7 @@ public SecurityFilterChain cFilterChain(HttpSecurity http)throws Exception{
     .requestMatchers(HttpMethod.GET, "/api/orders/{orderId}").permitAll()
     .requestMatchers(HttpMethod.GET, "/api/orders/user/{userId}").hasRole("USER")
     .requestMatchers(HttpMethod.PUT, "/api/orders/{orderId}").hasRole("ADMIN")
-    .requestMatchers(HttpMethod.DELETE, "/api/orders/{orderId}").hasRole("USER")
+    .requestMatchers(HttpMethod.DELETE, "/api/orders/{orderId}").permitAll()
 
     .requestMatchers(HttpMethod.POST, "/api/feedback").hasRole("USER")
     .requestMatchers(HttpMethod.GET,"/api/feedback").hasRole("ADMIN")
