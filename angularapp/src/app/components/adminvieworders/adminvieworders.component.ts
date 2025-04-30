@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-adminvieworders',
@@ -11,6 +10,7 @@ import { Observable } from 'rxjs';
 export class AdminviewordersComponent implements OnInit {
 
   orders: orders[] = [];
+  selectedUser: any = null; // To store the selected user's profile
 
   constructor(private orderService: OrderService) {}
 
@@ -57,5 +57,19 @@ export class AdminviewordersComponent implements OnInit {
         alert('Failed to delete order.');
       }
     );
+  }
+
+  showUserProfile(userId: number): void {
+    const order = this.orders.find(o => o.user.userId === userId);
+    if (order) {
+      this.selectedUser = order.user;
+      console.log('Selected User:', this.selectedUser); // Debugging log
+    } else {
+      console.log('User not found for userId:', userId); // Debugging log
+    }
+  }
+
+  closeUserProfile(): void {
+    this.selectedUser = null;
   }
 }
