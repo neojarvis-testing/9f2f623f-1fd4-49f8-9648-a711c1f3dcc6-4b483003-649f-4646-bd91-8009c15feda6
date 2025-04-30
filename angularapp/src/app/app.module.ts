@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminaddfoodComponent } from './components/adminaddfood/adminaddfood.component';
-//import { AdminorderschartComponent } from './components/adminorderschart/adminorderschart.component';
+import { AdminorderschartComponent } from './components/adminorderschart/adminorderschart.component';
 import { AdminviewfeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
 import { AdminviewfoodComponent } from './components/adminviewfood/adminviewfood.component';
 import { AdminviewordersComponent } from './components/adminvieworders/adminvieworders.component';
@@ -15,7 +15,6 @@ import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { UseraddfeedbackComponent } from './components/useraddfeedback/useraddfeedback.component';
-import { UsermakeorderComponent } from './components/usermakeorder/usermakeorder.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
 import { UserviewfoodComponent } from './components/userviewfood/userviewfood.component';
 import { UserviewordersComponent } from './components/uservieworders/uservieworders.component';
@@ -30,7 +29,7 @@ import { AuthInterceptor } from './auth.interceptor';
   declarations: [
     AppComponent,
     AdminaddfoodComponent,
-   // AdminorderschartComponent,
+   AdminorderschartComponent,
     AdminviewfeedbackComponent,
     AdminviewfoodComponent,
     AdminviewordersComponent,
@@ -41,7 +40,6 @@ import { AuthInterceptor } from './auth.interceptor';
     NavbarComponent,
     RegistrationComponent,
     UseraddfeedbackComponent,
-    UsermakeorderComponent,
     UserviewfeedbackComponent,
     UserviewfoodComponent,
     UserviewordersComponent,

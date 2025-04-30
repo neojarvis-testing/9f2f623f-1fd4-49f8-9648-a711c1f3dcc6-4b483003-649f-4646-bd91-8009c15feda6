@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { orders } from 'src/app/models/orders.model';
+import { Orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class AdminviewordersComponent implements OnInit {
 
-  orders: orders[] = [];
+  orders: Orders[] = [];
 
   constructor(private orderService: OrderService) {}
 
@@ -20,7 +20,7 @@ export class AdminviewordersComponent implements OnInit {
   fetchOrders(): void {
     this.orderService.getAllOrders().subscribe(
       (data) => {
-        this.orders = data;
+        this.orders = data.sort((a, b) => new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime());
       },
       (error) => {
         console.error('Error fetching orders', error);
@@ -32,7 +32,7 @@ export class AdminviewordersComponent implements OnInit {
     const order = this.orders.find(o => o.orderId === orderId);
     
     if (order) {
-      const updatedOrder: orders = { ...order, orderStatus: status }; // Ensure full order object is sent
+      const updatedOrder: Orders = { ...order, orderStatus: status }; // Ensure full order object is sent
       
       this.orderService.updateOrder(orderId, updatedOrder).subscribe(
         (updatedData) => {
@@ -45,5 +45,16 @@ export class AdminviewordersComponent implements OnInit {
     }
   }
 
-
+  deleteOrder(orderId: number): void {
+    this.orderService.deleteOrder(orderId).subscribe(
+      () => {
+        this.orders = this.orders.filter(order => order.orderId !== orderId); // Remove the deleted order from the list
+        alert('Order deleted successfully');
+      },
+      (error) => {
+        console.error('Error deleting order', error);
+        alert('Failed to delete order.');
+      }
+    );
+  }
 }

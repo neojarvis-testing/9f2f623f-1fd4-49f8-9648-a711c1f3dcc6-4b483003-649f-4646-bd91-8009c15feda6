@@ -1,26 +1,7 @@
-<!-- <p>adminorderschart works!</p>
+<h2 class="text-center fw-bold">Order Analysis</h2>
 <div class="chart-container">
-    <div style="display: block;">
-      <canvas baseChart
-              [datasets]="barChartData"
-              [labels]="barChartLabels"
-              [options]="barChartOptions"
-              [plugins]="barChartPlugins"
-              [legend]="barChartLegend"
-              [chartType]="barChartType">
-      </canvas>
-    </div>
-  </div>
-   -->
-   <!-- <div class="chart-container">
-    <div style="display: block;">
-      <canvas baseChart
-              [datasets]="barChartData"
-              [labels]="barChartLabels"
-              [options]="barChartOptions"
-              [plugins]="barChartPlugins"
-              [legend]="barChartLegend"
-              [chartType]="barChartType">
-      </canvas>
-    </div>
-   --> 
+  <canvas #barChart width="200" height="50"></canvas>
+</div>
+<div class="chart-container">
+  <canvas #lineChart width="200" height="50"></canvas>
+</div>  
