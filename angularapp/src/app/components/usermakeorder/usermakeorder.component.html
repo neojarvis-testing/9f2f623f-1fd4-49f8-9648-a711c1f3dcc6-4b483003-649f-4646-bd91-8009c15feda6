@@ -1,1 +1,21 @@
-<p>usermakeorder works!</p>
+
+<div class="order-form-container">
+    <h2>Confirm Your Order</h2>
+    <form [formGroup]="orderForm" (ngSubmit)="placeOrder()">
+      <div>
+        <label for="foodName">Food Item:</label>
+        <input id="foodName" type="text" [value]="selectedFood?.foodName" disabled />
+      </div>
+      <div>
+        <label for="quantity">Quantity:</label>
+        <input id="quantity" type="number" formControlName="quantity" min="1" />
+      </div>
+      <div>
+        <label for="totalAmount">Total Amount:</label>
+        <input id="totalAmount" type="text" [value]="totalAmount" disabled />
+      </div>
+      <button type="submit">Place Order</button>
+      <button type="button" (click)="cancel()">Cancel</button>
+    </form>
+  </div>
+  

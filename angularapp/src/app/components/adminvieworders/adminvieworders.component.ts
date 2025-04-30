@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { orders } from 'src/app/models/orders.model';
+import { OrderService } from 'src/app/services/order.service';
 
 @Component({
   selector: 'app-adminvieworders',
@@ -7,9 +9,41 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminviewordersComponent implements OnInit {
 
-  constructor() { }
+  orders: orders[] = [];
+
+  constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
+    this.fetchOrders();
   }
+
+  fetchOrders(): void {
+    this.orderService.getAllOrders().subscribe(
+      (data) => {
+        this.orders = data;
+      },
+      (error) => {
+        console.error('Error fetching orders', error);
+      }
+    );
+  }
+
+  updateOrderStatus(orderId: number, status: string): void {
+    const order = this.orders.find(o => o.orderId === orderId);
+    
+    if (order) {
+      const updatedOrder: orders = { ...order, orderStatus: status }; // Ensure full order object is sent
+      
+      this.orderService.updateOrder(orderId, updatedOrder).subscribe(
+        (updatedData) => {
+          order.orderStatus = updatedData.orderStatus; // Update status in UI
+        },
+        (error) => {
+          console.error('Error updating order status', error);
+        }
+      );
+    }
+  }
+
 
 }
