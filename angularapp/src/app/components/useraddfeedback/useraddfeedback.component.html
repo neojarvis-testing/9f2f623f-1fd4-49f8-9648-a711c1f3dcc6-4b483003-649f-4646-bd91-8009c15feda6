@@ -1,38 +1,57 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Submit Your Feedback</h2>
   
-    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger text-center">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="alert alert-success text-center">{{ successMessage }}</div>
   
-    <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+    <form #feedbackForm="ngForm" (ngSubmit)="onSubmit(feedbackForm)">
+      <!-- Dropdown for Food Selection -->
       <div class="form-group">
         <label for="food">Select Food</label>
-        <select id="food" class="form-control" formControlName="food">
-          <option *ngFor="let food of foodList" [value]="food.foodId">
-            {{ food.foodName }}
-          </option>
+        <select id="foodId" class="form-control" [(ngModel)]="foodId" name="foodId" required>
+          <option value="" disabled>Select a food item</option>
+          <option *ngFor="let food of foodList" [value]="food.foodId">{{ food.foodName }}</option>
         </select>
-        <div *ngIf="feedbackForm.get('food')?.invalid && feedbackForm.get('food')?.touched" class="text-danger">
-          Please select a food item.
-        </div>
+        <div *ngIf="!foodId" class="text-danger">Please select a food item.</div>
       </div>
   
+      <!-- Feedback Text -->
       <div class="form-group">
-        <label for="feedback">Feedback</label>
-        <textarea id="feedback" class="form-control" formControlName="feedback" rows="3"></textarea>
-        <div *ngIf="feedbackForm.get('feedback')?.invalid && feedbackForm.get('feedback')?.touched" class="text-danger">
+        <label for="feedbackText">Feedback</label>
+        <textarea
+          id="feedbackText"
+          class="form-control"
+          [(ngModel)]="feedback.feedbackText"
+          name="feedbackText"
+          rows="3"
+          required
+          minlength="10"
+        ></textarea>
+        <div *ngIf="feedback.feedbackText.length < 10" class="text-danger">
           Feedback must be at least 10 characters long.
         </div>
       </div>
   
+      <!-- Rating -->
       <div class="form-group">
         <label for="rating">Rating</label>
-        <input id="rating" type="number" class="form-control" formControlName="rating" min="1" max="5" />
-        <div *ngIf="feedbackForm.get('rating')?.invalid && feedbackForm.get('rating')?.touched" class="text-danger">
+        <input
+          id="rating"
+          type="number"
+          class="form-control"
+          [(ngModel)]="feedback.rating"
+          name="rating"
+          min="1"
+          max="5"
+          required
+        />
+        <div *ngIf="feedback.rating < 1 || feedback.rating > 5" class="text-danger">
           Please provide a rating between 1 and 5.
         </div>
       </div>
   
-      <button type="submit" class="btn btn-primary" [disabled]="feedbackForm.invalid">Submit Feedback</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!foodId || feedback.feedbackText.length < 10 || feedback.rating < 1 || feedback.rating > 5">
+        Submit Feedback
+      </button>
     </form>
   </div>

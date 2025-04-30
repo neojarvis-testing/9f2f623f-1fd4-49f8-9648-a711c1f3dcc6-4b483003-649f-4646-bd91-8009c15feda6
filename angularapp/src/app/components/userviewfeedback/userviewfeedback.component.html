@@ -14,8 +14,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let feedback of feedbackList">
-            <td>{{ feedback.foodName }}</td>
-            <td>{{ feedback.feedback }}</td>
+            <td>{{ feedback.food.foodName }}</td>
+            <td>{{ feedback.feedbackText }}</td>
             <td>{{ feedback.rating }}</td>
           </tr>
         </tbody>
