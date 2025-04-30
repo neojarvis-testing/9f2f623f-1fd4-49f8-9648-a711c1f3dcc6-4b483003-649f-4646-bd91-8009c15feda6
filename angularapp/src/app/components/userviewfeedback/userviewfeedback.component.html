@@ -1,1 +1,33 @@
-<p>userviewfeedback works!</p>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">My Feedback</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">{{ errorMessage }}</div>
+
+  <div class="table-responsive" *ngIf="feedbackList.length > 0">
+    <table class="table table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>Food Name</th>
+          <th>Feedback</th>
+          <th>Rating</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let feedback of feedbackList">
+          <td>{{ feedback.food.foodName }}</td>
+          <td>{{ feedback.feedbackText }}</td>
+          <td>
+            <div class="star-rating">
+              <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= feedback.rating">&#9733;</span>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteFeedback(feedback.feedbackId)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p *ngIf="feedbackList.length === 0" class="text-center text-muted">No feedback available.</p>
+</div>

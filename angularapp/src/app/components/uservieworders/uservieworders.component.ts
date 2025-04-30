@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-uservieworders',
@@ -9,25 +10,30 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class UserviewordersComponent implements OnInit {
   orders: orders[] = [];
-  userId = 1; // Replace with actual user ID retrieved from authentication service
+  userId: number = 0; 
+  errorMessage: string = '';
   showConfirmation = false;
   orderToDelete: orders | null = null;
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchOrders();
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      this.userId = parseInt(storedUserId);
+      this.loadOrders();
+    }
   }
 
-  fetchOrders(): void {
-    this.orderService.getAllOrdersByUserId(this.userId).subscribe(
-      (data) => {
+  loadOrders(): void {
+    this.orderService.getAllOrdersByUserId(this.userId).subscribe({
+      next: (data) => {
         this.orders = data;
       },
-      (error) => {
-        console.error('Error fetching user orders', error);
-      }
-    );
+      error: () => {
+        this.errorMessage = 'Failed to load order history';
+      },
+    });
   }
 
   confirmDelete(order: orders): void {
@@ -37,16 +43,16 @@ export class UserviewordersComponent implements OnInit {
 
   deleteOrder(): void {
     if (this.orderToDelete) {
-      this.orderService.deleteOrder(this.orderToDelete.orderId).subscribe(
-        () => {
+      this.orderService.deleteOrder(this.orderToDelete.orderId).subscribe({
+        next: () => {
           this.orders = this.orders.filter(order => order.orderId !== this.orderToDelete?.orderId);
           this.showConfirmation = false;
           this.orderToDelete = null;
         },
-        (error) => {
-          console.error('Error deleting order', error);
-        }
-      );
+        error: () => {
+          this.errorMessage = 'Failed to delete order';
+        },
+      });
     }
   }
 
@@ -54,6 +60,10 @@ export class UserviewordersComponent implements OnInit {
     this.showConfirmation = false;
     this.orderToDelete = null;
   }
+
+  refreshPage(): void {
+    console.log('hi');
+    // this.router.navigate(['/userViewOrders']);
+    this.loadOrders();
+  }
 }
-
-

@@ -1,0 +1,26 @@
+.container {
+    max-width: 900px;
+    margin: auto;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-muted {
+    color: #6c757d;
+  }
+  .alert {
+    margin-top: 10px;
+  }
+  .text-warning {
+    color: #ffc107;
+  }
+  .star-rating {
+    display: flex;
+    gap: 5px;
+    font-size: 1.5rem;
+    color: #ccc;
+  }
+  
+  .star-rating .filled {
+    color: #ffc107;
+  }

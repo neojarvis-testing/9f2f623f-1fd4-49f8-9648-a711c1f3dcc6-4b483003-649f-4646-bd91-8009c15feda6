@@ -4,10 +4,10 @@ import { User } from "./user.model";
 export class Feedback {
     feedbackId?: number;
     feedbackText: string;
-    date: Date;
+    date?: Date;
     rating:number
+    userId?:number;
     user?:User
-    userId:number;
-    foodId:number;
-    food?:Food;
+    foodId?:number;
+    food?:Food
    }

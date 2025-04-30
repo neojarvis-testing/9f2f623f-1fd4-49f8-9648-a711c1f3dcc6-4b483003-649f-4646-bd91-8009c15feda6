@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Food } from 'src/app/models/food.model';
 import { FoodService } from 'src/app/services/food.service';
+import { OrderService } from 'src/app/services/order.service';
+import { orders } from 'src/app/models/orders.model';
+import { User } from 'src/app/models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-userviewfood',
@@ -10,10 +14,52 @@ import { FoodService } from 'src/app/services/food.service';
 export class UserviewfoodComponent implements OnInit {
 
   foods: Food[] = []; // Array to store food items
+  selectedFood: Food | null = null; // Store the food item to be ordered
+  showOrderPopup: boolean = false; // Control order popup visibility
+  orderQuantity: number = 1; // Default order quantity
+  totalAmount: number = 0; // Total amount for the order
+  order: orders = {
+    orderStatus: 'Pending',
+    totalAmount: 0,
+    quantity: 0,
+    foodId: 0,
+    orderDate: '',
+    userId: 0, // Assuming a static user ID for now, replace with actual user ID if needed
+    user: { userId: 0 } as User ,// Initialize the User object
+    food: {foodId:0} as Food
+  };
+  search: string = '';
+  noItemFound: boolean = false;
+  orderDate: string = ''; // Add orderDate property
 
-  constructor(private foodService: FoodService) {}
+  constructor(
+    private foodService: FoodService,
+    private orderService: OrderService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.getAllFoods();
+  }
+
+  searchProduct(): void {
+    this.foodService.getAllFoods().subscribe(data => {
+      this.foods = data;
+      if (this.search !== '') {
+        this.foods = this.foods.filter(filt => {
+          this.noItemFound = true;
+          return filt.foodName.toLowerCase().includes(this.search.toLowerCase());
+        });
+        this.noItemFound = this.foods.length === 0;
+      } else {
+        this.noItemFound = false;
+      }
+    });
+  }
+
+  reset(): void {
+    this.search = '';
+    this.noItemFound = false;
     this.getAllFoods();
   }
 
@@ -21,6 +67,7 @@ export class UserviewfoodComponent implements OnInit {
     this.foodService.getAllFoods().subscribe({
       next: (data) => {
         this.foods = data; // Assign fetched food items to the array
+        this.noItemFound = false; // Reset no items found flag
       },
       error: (err) => {
         console.error('Error fetching food items:', err);
@@ -29,4 +76,47 @@ export class UserviewfoodComponent implements OnInit {
     });
   }
 
+  openOrderPopup(food: Food): void {
+    this.selectedFood = { ...food }; // Create a copy of the food object
+    this.orderQuantity = 1; // Reset order quantity
+    this.totalAmount = this.selectedFood.price; // Initialize total amount
+    this.orderDate = new Date().toLocaleDateString(); // Set the order date to the current date
+    this.showOrderPopup = true; // Show the order popup
+  }
+
+  closeOrderPopup(): void {
+    this.showOrderPopup = false;
+    this.selectedFood = null; // Reset the selected food
+  }
+
+  updateTotalAmount(): void {
+    if (this.selectedFood) {
+      this.totalAmount = this.selectedFood.price * this.orderQuantity;
+    }
+  }
+
+  confirmOrder(): void {
+    if (this.selectedFood) {
+      const userId = Number(localStorage.getItem('userId')); // Get the user ID from local storage
+      this.order.foodId = this.selectedFood.foodId;
+      this.order.quantity = this.orderQuantity;
+      this.order.totalAmount = this.totalAmount;
+      this.order.orderDate = new Date().toISOString(); // System-generated order date
+      this.order.userId = userId; // Set the user ID
+      this.order.user.userId = userId; // Set the user ID in the User object
+      this.order.food.foodId = this.selectedFood.foodId;
+
+      this.orderService.placeOrder(this.order).subscribe(
+        () => {
+          alert('Order placed successfully');
+          this.closeOrderPopup();
+          //this.router.navigate(['/userViewOrders']); // Navigate to order history or any other page
+        },
+        (error) => {
+          console.error('Error placing order:', error);
+          alert('Failed to place order.');
+        }
+      );
+    }
+  }
 }

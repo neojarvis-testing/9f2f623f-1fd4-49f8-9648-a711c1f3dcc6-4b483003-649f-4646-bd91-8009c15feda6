@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Feedback } from 'src/app/models/feedback.model';
-import { FeedbackService } from 'src/app/services/feedback.service';
+import { Feedback } from 'src/app/models/feedback.model'; // Assume a Feedback model exists
+import { FeedbackService } from 'src/app/services/feedback.service'; // Service to fetch feedback
 
 @Component({
   selector: 'app-adminviewfeedback',
@@ -8,24 +8,35 @@ import { FeedbackService } from 'src/app/services/feedback.service';
   styleUrls: ['./adminviewfeedback.component.css']
 })
 export class AdminviewfeedbackComponent implements OnInit {
-  feedbacks:Feedback[]=[]
+  feedbackList: Feedback[] = [];
+  errorMessage: string = '';
 
-  constructor(private service:FeedbackService) { }
+  constructor(private feedbackService: FeedbackService) { }
 
   ngOnInit(): void {
-    this.getFeedbacks()
+    this.loadFeedback();
   }
 
-  getFeedbacks(){
-    this.service.getFeedbacks().subscribe((data)=>{
-      this.feedbacks=data
-    })
+  loadFeedback(): void {
+    this.feedbackService.getFeedbacks().subscribe({
+      next: (data) => {
+        this.feedbackList = data;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load feedback';
+      }
+    });
   }
-
-  deleteFeedback(id:number){
-    this.service.deleteFeedback(id).subscribe((data)=>{
-      this.getFeedbacks()
-    })
+  deleteFeedback(feedbackId: number): void {
+    this.feedbackService.deleteFeedback(feedbackId).subscribe(
+      () => {
+        this.feedbackList = this.feedbackList.filter(feedback => feedback.feedbackId !== feedbackId); // Remove the deleted feedback from the list
+        alert('Feedback deleted successfully');
+      },
+      (error) => {
+        console.error('Error deleting feedback', error);
+        alert('Failed to delete feedback.');
+      }
+    );
   }
-  
 }

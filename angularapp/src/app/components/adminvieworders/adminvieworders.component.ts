@@ -10,6 +10,7 @@ import { OrderService } from 'src/app/services/order.service';
 export class AdminviewordersComponent implements OnInit {
 
   orders: orders[] = [];
+  selectedUser: any = null; // To store the selected user's profile
 
   constructor(private orderService: OrderService) {}
 
@@ -45,5 +46,30 @@ export class AdminviewordersComponent implements OnInit {
     }
   }
 
+  deleteOrder(orderId: number): void {
+    this.orderService.deleteOrder(orderId).subscribe(
+      () => {
+        this.orders = this.orders.filter(order => order.orderId !== orderId); // Remove the deleted order from the list
+        alert('Order deleted successfully');
+      },
+      (error) => {
+        console.error('Error deleting order', error);
+        alert('Failed to delete order.');
+      }
+    );
+  }
 
+  showUserProfile(userId: number): void {
+    const order = this.orders.find(o => o.user.userId === userId);
+    if (order) {
+      this.selectedUser = order.user;
+      console.log('Selected User:', this.selectedUser); // Debugging log
+    } else {
+      console.log('User not found for userId:', userId); // Debugging log
+    }
+  }
+
+  closeUserProfile(): void {
+    this.selectedUser = null;
+  }
 }
