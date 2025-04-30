@@ -6,8 +6,8 @@
   <!-- Main Website Content -->
   <div *ngIf="!isLoading">
     <div class="container-xxl bg-white p-0">
-  
       <!-- Hero Section -->
+
       <div class="container-xxl py-5 bg-dark hero-header mb-5"
         style="background: linear-gradient(rgba(15, 23, 43, .9), rgba(15, 23, 43, .9)), url('https://neurosciencenews.com/files/2019/05/red-meat-ms-risk-neurosciencnews-public.jpg'); background-position: center; background-repeat: no-repeat; background-size: cover;">
         <div class="container my-5 py-5">
@@ -15,10 +15,10 @@
             <div class="col-lg-6 text-center text-lg-start">
               <h1 class="display-3 text-white">Enjoy Our<br>Delicious Meal</h1>
               <p class="text-white mb-4 pb-2">Craving something delicious? Discover fresh bites, trusted vendors, and your favorite meals — all in one place.</p>
-              <a href="register" class="btn btn-primary py-sm-3 px-sm-5 me-3">Register</a>
+              <a href="login" class="btn btn-primary py-sm-3 px-sm-5 me-3">Get Started</a>
             </div>
             <div class="col-lg-6 text-center text-lg-end overflow-hidden">
-               <img class="img-fluid" src="" alt="Hero Image">            </div>
+               <img class="img-fluid" src="https://cdn.pixabay.com/photo/2025/04/14/13/32/buddha-bowl-9533507_1280.png" alt="Hero Image">            </div>
           </div>
         </div>
       </div>
@@ -86,11 +86,12 @@
               </div>
             </div>
             <div class="col-lg-6">
-              <h5 class="section-title text-primary fw-normal">About Us</h5>
-              <h1 class="mb-4">Welcome to <i class="fa fa-utensils text-primary"></i> Restoran</h1>
-              <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos erat ipsum et lorem et sit.</p>
-              <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos erat ipsum et lorem et sit.</p>
-              <a class="btn btn-primary py-3 px-5 mt-2" href="#">Read More</a>
+              <h5 class="section-title text-primary fw-normal" style="font-family: Arial, Helvetica, sans-serif;">About Us</h5>
+              <h1 class="mb-4">Welcome to <i class="fa fa-utensils text-primary"></i> Food Mart</h1>
+              <p class="mb-4">The Food Mart App is a digital platform designed to connect users with restaurants and
+                food vendors, ensuring a seamless and efficient food ordering experience.</p>
+              <p class="mb-4">The system ensures smooth transactions, real-time order status updates, and a user-friendly experience.</p>
+              <a class="btn btn-primary py-3 px-5 mt-2" href="#">Register</a>
             </div>
           </div>
         </div>
@@ -100,25 +101,25 @@
       <div class="container-fluid bg-dark text-light footer pt-5 mt-5">
         <div class="container py-5">
           <div class="row g-5">
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
               <h4 class="text-primary mb-4">Food Mart</h4>
               <a class="btn btn-link" href="#">About Us</a>
               <a class="btn btn-link" href="#">Contact Us</a>
             </div>
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
               <h4 class="text-primary mb-4">Contact</h4>
               <p><i class="fa fa-map-marker-alt me-3"></i>Abc Street, 12345 XYZ</p>
               <p><i class="fa fa-phone-alt me-3"></i>+91 1234567890</p>
-              <p><i class="fa fa-envelope me-3"></i>foodmart@gmail.com</p>
+              <p><i class="fa fa-envelope me-3"></i>{{email}}</p>
             </div>
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
               <h4 class="text-primary mb-4">Opening</h4>
               <h5>Monday - Saturday</h5>
               <p>09AM - 09PM</p>
               <h5>Sunday</h5>
               <p>10AM - 08PM</p>
             </div>
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
               <h4 class="text-primary mb-4">Newsletter</h4>
               <p>Subscribe for our latest updates.</p>
               <div class="position-relative" style="max-width: 400px;">

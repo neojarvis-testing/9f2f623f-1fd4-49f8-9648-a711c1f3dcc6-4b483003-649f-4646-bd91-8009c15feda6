@@ -20,7 +20,7 @@
   }
   
   .spinner {
-    border: 6px solid #f3f3f3;
+    border: 6px solid #0346ff;
     border-top: 6px solid var(--primary);
     border-radius: 50%;
     width: 50px;
@@ -33,7 +33,11 @@
     100% { transform: rotate(360deg); }
   }
   
-  /* Removed redundant hero-header background since it's inline now */
+
+  .hero-header{
+    margin-top: -140px; 
+  }
+
   .hero-header img {
     animation: imgRotate 50s linear infinite;
   }
