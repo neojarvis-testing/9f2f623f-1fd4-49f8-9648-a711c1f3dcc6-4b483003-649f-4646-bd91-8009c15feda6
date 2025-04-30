@@ -66,4 +66,10 @@ export class UseraddfeedbackComponent implements OnInit {
       this.errorMessage = 'Please fill out all required fields correctly!';
     }
   }
+  
+setRating(rating: number): void {
+   this.feedback.rating = rating;
+ }
+  
+  
 }
