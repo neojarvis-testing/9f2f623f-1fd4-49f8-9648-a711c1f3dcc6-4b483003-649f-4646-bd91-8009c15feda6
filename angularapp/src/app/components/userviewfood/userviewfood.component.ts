@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Food } from 'src/app/models/food.model';
 import { FoodService } from 'src/app/services/food.service';
 import { OrderService } from 'src/app/services/order.service';
-import { orders } from 'src/app/models/orders.model';
+import { Orders } from 'src/app/models/orders.model';
 import { User } from 'src/app/models/user.model';
 import { Router } from '@angular/router';
 
@@ -20,7 +20,7 @@ export class UserviewfoodComponent implements OnInit {
   orderQuantity: number = 1; // Default order quantity
   totalAmount: number = 0; // Total amount for the order
 
-  order: orders = {
+  order: Orders = {
     orderStatus: 'Pending',
     totalAmount: 0,
     quantity: 0,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { orders } from 'src/app/models/orders.model';
+import { Orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
 
 @Component({
@@ -9,7 +9,8 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class AdminviewordersComponent implements OnInit {
 
-  orders: orders[] = [];
+
+  orders: Orders[] = [];
   selectedUser: any = null; // To store the selected user's profile
   isLoading = false;
 
@@ -25,8 +26,8 @@ export class AdminviewordersComponent implements OnInit {
     this.isLoading = true; // Show spinner
     this.orderService.getAllOrders().subscribe(
       (data) => {
-        this.orders = data;
         this.isLoading = false; // Hide spinner
+        this.orders = data.sort((a, b) => new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime());
       },
       (error) => {
         this.isLoading = false; // Hide spinner on error
