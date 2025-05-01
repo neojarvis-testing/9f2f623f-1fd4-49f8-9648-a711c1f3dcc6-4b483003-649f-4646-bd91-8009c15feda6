@@ -1,10 +1,10 @@
-import { orders } from './orders.model';
+import { Orders } from './orders.model';
 
 describe('Orders Model', () => {
 
   fit('frontend_Orders_model_should_create_an_instance', () => {
     // Create a sample Orders object
-    const order: orders = {
+    const order: Orders = {
       orderId: 1001,
       orderStatus: 'Delivered',
       totalAmount: 499.99,

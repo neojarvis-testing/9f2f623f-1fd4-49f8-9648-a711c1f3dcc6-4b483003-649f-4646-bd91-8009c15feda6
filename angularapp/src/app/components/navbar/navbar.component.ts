@@ -7,11 +7,9 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
-  constructor(public authService:AuthService,private router:Router) { }
+export class NavbarComponent {
+  constructor(public readonly authService:AuthService,private readonly router:Router) { }
   showDialog = false;
-  ngOnInit(): void {
-  }
   
   logout(): void {
     this.showDialog = true;
@@ -21,7 +19,7 @@ export class NavbarComponent implements OnInit {
     this.showDialog = false;
     if (result) {
     this.authService.logout();
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
     }
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { orders } from 'src/app/models/orders.model';
+import { Orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
 
 @Component({
@@ -9,21 +9,28 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class AdminviewordersComponent implements OnInit {
 
-  orders: orders[] = [];
-  selectedUser: any = null; // To store the selected user's profile
 
-  constructor(private orderService: OrderService) {}
+  orders: Orders[] = [];
+  selectedUser: any = null; // To store the selected user's profile
+  isLoading = false;
+
+  showSuccessPopup = false; // ✅ Used for order deleted success dialog
+
+  constructor(private readonly orderService: OrderService) {}
 
   ngOnInit(): void {
     this.fetchOrders();
   }
 
   fetchOrders(): void {
+    this.isLoading = true; // Show spinner
     this.orderService.getAllOrders().subscribe(
       (data) => {
-        this.orders = data;
+        this.orders = data.sort((a, b) => new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime());
+        this.isLoading = false; // Hide spinner
       },
       (error) => {
+        this.isLoading = false; // Hide spinner on error
         console.error('Error fetching orders', error);
       }
     );
@@ -31,15 +38,17 @@ export class AdminviewordersComponent implements OnInit {
 
   updateOrderStatus(orderId: number, status: string): void {
     const order = this.orders.find(o => o.orderId === orderId);
-    
+
     if (order) {
-      const updatedOrder: orders = { ...order, orderStatus: status }; // Ensure full order object is sent
-      
+      const updatedOrder: Orders = { ...order, orderStatus: status };
+      this.isLoading = true; // Show spinner
       this.orderService.updateOrder(orderId, updatedOrder).subscribe(
         (updatedData) => {
-          order.orderStatus = updatedData.orderStatus; // Update status in UI
+          order.orderStatus = updatedData.orderStatus;
+          this.isLoading = false; // Hide spinner
         },
         (error) => {
+          this.isLoading = false; // Hide spinner
           console.error('Error updating order status', error);
         }
       );
@@ -47,16 +56,23 @@ export class AdminviewordersComponent implements OnInit {
   }
 
   deleteOrder(orderId: number): void {
+    this.isLoading = true; // Show spinner
     this.orderService.deleteOrder(orderId).subscribe(
       () => {
-        this.orders = this.orders.filter(order => order.orderId !== orderId); // Remove the deleted order from the list
-        alert('Order deleted successfully');
+        this.orders = this.orders.filter(order => order.orderId !== orderId);
+        this.isLoading = false; // Hide spinner
+        this.showSuccessPopup = true; // ✅ Show smooth success dialog
       },
       (error) => {
+        this.isLoading = false; // Hide spinner
         console.error('Error deleting order', error);
-        alert('Failed to delete order.');
+        alert('Failed to delete order.'); // This alert is for error only
       }
     );
+  }
+
+  closeSuccessPopup(): void {
+    this.showSuccessPopup = false;
   }
 
   showUserProfile(userId: number): void {

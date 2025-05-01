@@ -1,60 +1,79 @@
-<div class="container mt-5">
-  <div class="card shadow-lg">
-    <div class="card-header text-center">
-      <h2>Food List</h2>
+<!-- Spinner -->
+<div *ngIf="isLoading" class="spinner-overlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Food List Container -->
+<div class="user-view-food-container">
+  <div class="container mt-5">
+    <!-- Food List Header -->
+    <h2 class="text-center mb-4">Food List</h2>
+
+    <!-- Search and Clear Buttons -->
+    <div class="search-container">
+      <input type="text" [(ngModel)]="search" class="search-input" placeholder="Search for food..." />
+      <button class="search-button" (click)="searchProduct()">Search</button>
+      <button class="clear-button" (click)="reset()">Clear</button>
     </div>
-    <div class="search-bar">
-      <input type="text" [(ngModel)]="search" class="form-control search-input" placeholder="Search for food...">
-      <button (click)="searchProduct()" class="btn btn-primary search-button">Search</button>
-      <button (click)="reset()" class="btn btn-secondary search-button">Clear</button>
+
+    <!-- Food Cards -->
+    <div class="food-list-container">
+      <div *ngFor="let food of foods" class="food-card">
+        <img [src]="food.photo" class="food-image" alt="{{ food.foodName }}">
+        <div class="food-info">
+          <p class="food-name">{{ food.foodName }}</p>
+          <p class="food-price">Price: ₹{{ food.price }}</p>
+          <p class="food-quantity">Stock Quantity: {{ food.stockQuantity }}</p>
+        </div>
+        <button class="place-order-btn" [disabled]="food.stockQuantity === 0" (click)="openOrderPopup(food)">
+          Place Order
+        </button>
+      </div>
     </div>
-    
-    <div *ngIf="noItemFound" class="no-items-found">
-      <p>No items found</p>
-    </div>
-    
-    <div class="card-body">
-      <div class="food-grid">
-        <div class="food-item" *ngFor="let food of foods">
-          <img [src]="food.photo" alt="{{ food.foodName }}" class="img-fluid food-photo">
-          <div class="food-details">
-            <p><strong>Food Name:</strong> {{ food.foodName }}</p>
-            <p><strong>Price:</strong> {{ food.price }}</p>
-            <p><strong>Stock Quantity:</strong> {{ food.stockQuantity }}</p>
-          </div>
-          <div class="food-actions">
-            <button class="btn btn-primary btn-sm" (click)="openOrderPopup(food)">Place order</button>
-          </div>
+
+    <!-- No Items Found Message -->
+    <p *ngIf="noItemFound" class="text-muted">No food items found matching your search.</p>
+
+    <!-- Order Popup -->
+    <div *ngIf="showOrderPopup" class="order-popup-overlay">
+      <div class="order-popup">
+        <button class="close-btn" (click)="closeOrderPopup()">&times;</button> <!-- Close Button -->
+        <h3>Order {{ selectedFood?.foodName }}</h3>
+        <p>Price: ₹{{ selectedFood?.price }}</p>
+        <label for="quantity">Quantity:</label>
+        <input 
+          type="number" 
+          id="quantity" 
+          [(ngModel)]="orderQuantity" 
+          (input)="updateTotalAmount()" 
+          min="1" 
+          [max]="selectedFood?.stockQuantity" 
+          class="form-control">
+        <p>Total: ₹{{ totalAmount }}</p>
+
+        <div class="order-popup-buttons">
+          <button class="btn btn-success" (click)="confirmOrder()">Confirm Order</button>
+          <button class="btn btn-secondary" (click)="closeOrderPopup()">Cancel</button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Order Popup Form -->
-  <div class="popup" *ngIf="showOrderPopup">
-    <div class="popup-content">
-      <h3>Order Food Item</h3>
-      <form>
-        <div class="form-group">
-          <label for="photo"></label>
-          <img [src]="selectedFood.photo" alt="{{ selectedFood.foodName }}" class="img-fluid food-photo">
-        </div>
-        <div class="form-group">
-          <h5>{{selectedFood.foodName}}</h5>  
-        </div>
-        <div class="form-group">
-          <h6>Price: {{selectedFood.price | currency:'INR'}}</h6>  
-        </div>
-        <div class="form-group">
-          <label for="quantity">Quantity:</label>
-          <input id="quantity" type="number" class="form-control" [(ngModel)]="orderQuantity" name="quantity" min="1" (ngModelChange)="updateTotalAmount()">
-        </div>
-        <div class="form-group">
-          <h6>Order Date: {{orderDate}}</h6>
-        </div>
-        <button type="button" class="btn btn-success" (click)="confirmOrder()">Confirm Order</button>
-        <button type="button" class="btn btn-secondary" (click)="closeOrderPopup()">Cancel</button>
-      </form>
+    <!-- Order Success Pop-up -->
+    <div *ngIf="orderSuccess" class="order-success-popup-overlay">
+      <div class="order-success-popup">
+        <h3>Order Placed Successfully</h3>
+        <p><strong>Product Name:</strong> {{ selectedFood?.foodName }}</p>
+        <p><strong>Quantity:</strong> {{ orderQuantity }}</p>
+        <p><strong>Total Amount:</strong> ₹{{ totalAmount }}</p>
+        <p><strong>Order Date:</strong> {{ orderDate }}</p>
+        <button class="btn btn-primary" (click)="closeOrderSuccessPopup()">OK</button>
+      </div>
     </div>
+
   </div>
+</div>
+
+<!-- Spinner -->
+<div *ngIf="isLoading" class="spinner-overlay">
+  <div class="spinner"></div>
 </div>

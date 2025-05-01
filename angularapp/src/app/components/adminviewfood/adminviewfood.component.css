@@ -1,67 +1,83 @@
-.food-grid {
+  /* Spinner */
+  .spinner-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: white;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  .spinner {
+    border: 6px solid #0346ff;
+    border-top: 6px solid var(--primary);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+/* Background and layout */
+.food-bg {
+  min-height: 100vh;
+  padding-top: 100px;
+  padding-bottom: 40px;
+  background: linear-gradient(rgba(15, 23, 43, 0.9), rgba(15, 23, 43, 0.9)),
+              url('https://neurosciencenews.com/files/2019/05/red-meat-ms-risk-neurosciencnews-public.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+}
+
+/* Food Cards */
+.food-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
-}
-
-.food-item {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  gap: 24px;
   padding: 20px;
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.food-photo {
-  max-height: 150px;
-  margin-bottom: 15px;
-}
-
-.food-details {
+.food-card {
+  width: 280px;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  color: black;
 }
 
-.food-details p {
-  margin: 5px 0;
+.food-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
 }
 
-.food-actions {
-  margin-top: 10px;
-}
-
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
+.food-card img {
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.popup-content {
-  background-color: #fff;
-  padding: 20px;
+  height: 180px;
+  object-fit: cover;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 400px;
-  max-width: 100%;
+  margin-bottom: 16px;
 }
 
-button{
-  margin: 10px;
+.food-card .btn {
+  margin: 5px;
+  width: 90px;
 }
 
-
-
+/* Dialog Overlay */
 .dialog-overlay {
   position: fixed;
   top: 0;
@@ -72,16 +88,61 @@ button{
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; 
+  z-index: 9999;
 }
- 
-.dialog-box {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
- 
 
-  
+/* Dialog Box Styling */
+.dialog-box {
+  background-color: #ffffff;
+  padding: 30px 25px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+  color: #393c39;
+}
+
+.dialog-box h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #0F172B;
+}
+
+.dialog-box label {
+  font-weight: 600;
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.dialog-box input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.dialog-box .btn {
+  width: 100px;
+  margin: 5px;
+  font-weight: 600;
+}
+
+/* Smooth popup animation */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

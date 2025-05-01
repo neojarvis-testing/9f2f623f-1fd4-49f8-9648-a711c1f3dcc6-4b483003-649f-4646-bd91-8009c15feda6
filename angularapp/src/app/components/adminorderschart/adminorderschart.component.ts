@@ -1,33 +1,163 @@
-// import { Component, OnInit } from '@angular/core';
-// // import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
-// //import { Label } from 'ng2-charts';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Chart, registerables, ChartConfiguration, ChartType } from 'chart.js';
+import { OrderService } from 'src/app/services/order.service';
+import { Orders } from 'src/app/models/orders.model';
 
+@Component({
+  selector: 'app-adminorderschart',
+  templateUrl: './adminorderschart.component.html',
+  styleUrls: ['./adminorderschart.component.css']
+})
+export class AdminorderschartComponent implements OnInit {
+  @ViewChild('barChart', { static: true }) barChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('lineChart', { static: true }) lineChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('radarChart', { static: true }) radarChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('doughnutChart', { static: true }) doughnutChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('polarAreaChart', { static: true }) polarAreaChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('pieChart', { static: true }) pieChart: ElementRef<HTMLCanvasElement>;
 
-// @Component({
-//   selector: 'app-adminorderschart',
-//   templateUrl: './adminorderschart.component.html',
-//   styleUrls: ['./adminorderschart.component.css']
-// })
-// export class AdminorderschartComponent implements OnInit {
+  isLoading: boolean = true; // Initially set loading state to true
 
-//   public barChartOptions: ChartOptions = {
-//   responsive: true,
-// };
-// //public barChartLabels: Label[] = ['2021', '2022', '2023', '2024', '2025'];
-// public barChartLabels: string[] = ['2021', '2022', '2023', '2024', '2025'];
-// public barChartType: ChartType = 'bar';
-// public barChartLegend = true;
-// public barChartPlugins = [];
+  barChartInstance: Chart<'bar', number[], string>;
+  lineChartInstance: Chart<'line', number[], string>;
+  radarChartInstance: Chart<'radar', number[], string>;
+  doughnutChartInstance: Chart<'doughnut', number[], string>;
+  polarAreaChartInstance: Chart<'polarArea', number[], string>;
+  pieChartInstance: Chart<'pie', number[], string>;
 
-// public barChartData: ChartDataset[] = [
-//   { data: [65, 59, 80, 81, 56], label: 'Pizza' },
-//   { data: [28, 48, 40, 19, 86], label: 'Burger' },
-//   { data: [18, 48, 77, 9, 100], label: 'Pasta' }
-// ];
+  colors: string[] = [
+    'blue',
+    'orange',
+    'green',
+    'pink',
+    'cyan',
+    'purple'
+  ];
 
-// constructor() { }
+  polarColors: string[] = [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(255, 159, 64, 0.2)'
+  ];
 
-// ngOnInit(): void {
-// }
-// }
+  constructor(private orderService: OrderService) { }
 
+  ngOnInit(): void {
+    Chart.register(...registerables);
+    this.fetchOrders();
+  }
+
+  fetchOrders(): void {
+    this.isLoading = true;  // Set loading state to true when data fetching starts
+    this.orderService.getAllOrders().subscribe(
+      (data: Orders[]) => {
+        this.processOrders(data);
+        this.isLoading = false;  // Set loading state to false once data is fetched and processed
+      },
+      (error) => {
+        console.error('Error fetching orders', error);
+        this.isLoading = false;  // Set loading state to false if an error occurs
+      }
+    );
+  }
+
+  processOrders(orders: Orders[]): void {
+    const ordersByDate = orders.reduce((acc, order) => {
+      const date = new Date(order.orderDate).toLocaleDateString();
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {} as { [key: string]: number });
+
+    const sortedDates = Object.keys(ordersByDate).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+    const sortedData = sortedDates.map(date => ordersByDate[date]);
+
+    this.createChart('bar', sortedDates, sortedData, this.colors, 'Orders Per Day');
+    this.createChart('line', sortedDates, sortedData, ['rgba(153, 102, 255, 0.2)'], 'Orders Per Day');
+    this.createChart('radar', sortedDates, sortedData, ['rgba(255, 99, 132, 0.2)'], 'Orders Per Day');
+    this.createChart('doughnut', sortedDates, sortedData, this.colors, 'Orders Per Day');
+    this.createChart('polarArea', sortedDates, sortedData, this.polarColors, 'Orders Per Day');
+    this.createChart('pie', sortedDates, sortedData, this.colors, 'Orders Per Day');
+  }
+
+  createChart(type: ChartType, labels: string[], data: number[], colors: string[], title: string): void {
+    const config: ChartConfiguration<typeof type, number[], string> = {
+      type: type,
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            backgroundColor: colors,
+            borderColor: colors.map(color => color.replace('0.2', '1')),
+            borderWidth: 1,
+            fill: type === 'line' || type === 'radar'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: type !== 'bar' && type !== 'line' && type !== 'radar',
+          },
+          title: {
+            display: true,
+            text: title
+          }
+        },
+        scales: type === 'pie' || type === 'doughnut' ? {} :
+        type === 'radar' || type === 'polarArea'? {
+          r: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        } :
+        {  
+          x: {
+            title: {
+              display: true,
+              text: 'Order Date'
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            },
+            title: {
+              display: true,
+              text: 'No of Orders'
+            }
+          },
+          
+        }
+      }
+    };
+
+    switch (type) {
+      case 'bar':
+        this.barChartInstance = new Chart(this.barChart.nativeElement, config as ChartConfiguration<'bar', number[], string>);
+        break;
+      case 'line':
+        this.lineChartInstance = new Chart(this.lineChart.nativeElement, config as ChartConfiguration<'line', number[], string>);
+        break;
+      case 'radar':
+        this.radarChartInstance = new Chart(this.radarChart.nativeElement, config as ChartConfiguration<'radar', number[], string>);
+        break;
+      case 'doughnut':
+        this.doughnutChartInstance = new Chart(this.doughnutChart.nativeElement, config as ChartConfiguration<'doughnut', number[], string>);
+        break;
+      case 'polarArea':
+        this.polarAreaChartInstance = new Chart(this.polarAreaChart.nativeElement, config as ChartConfiguration<'polarArea', number[], string>);
+        break;
+      case 'pie':
+        this.pieChartInstance = new Chart(this.pieChart.nativeElement, config as ChartConfiguration<'pie', number[], string>);
+        break;
+    }
+  }
+}
