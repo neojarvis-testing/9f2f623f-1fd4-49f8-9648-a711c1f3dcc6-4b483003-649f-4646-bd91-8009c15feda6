@@ -4,7 +4,7 @@ import { FoodService } from 'src/app/services/food.service';
 import { OrderService } from 'src/app/services/order.service';
 import { orders } from 'src/app/models/orders.model';
 import { User } from 'src/app/models/user.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-userviewfood',
@@ -18,6 +18,7 @@ export class UserviewfoodComponent implements OnInit {
   selectedFood: Food | null = null; // Store the food item to be ordered
   showOrderPopup: boolean = false; // Control order popup visibility
   orderQuantity: number = 1; // Default order quantity
+  totalAmount: number = 0; // Total amount for the order
   order: orders = {
     orderStatus: 'Pending',
     totalAmount: 0,
@@ -28,6 +29,9 @@ export class UserviewfoodComponent implements OnInit {
     user: { userId: 0 } as User ,// Initialize the User object
     food: {foodId:0} as Food
   };
+  search: string = '';
+  noItemFound: boolean = false;
+  orderDate: string = ''; // Add orderDate property
 
   constructor(
     private foodService: FoodService,
@@ -39,12 +43,34 @@ export class UserviewfoodComponent implements OnInit {
     this.getAllFoods();
   }
 
+  searchProduct(): void {
+    this.foodService.getAllFoods().subscribe(data => {
+      this.foods = data;
+      if (this.search !== '') {
+        this.foods = this.foods.filter(filt => {
+          this.noItemFound = true;
+          return filt.foodName.toLowerCase().includes(this.search.toLowerCase());
+        });
+        this.noItemFound = this.foods.length === 0;
+      } else {
+        this.noItemFound = false;
+      }
+    });
+  }
+
+  reset(): void {
+    this.search = '';
+    this.noItemFound = false;
+    this.getAllFoods();
+  }
+
   getAllFoods(): void {
     this.isLoading = true; // Show spinner while loading
     this.foodService.getAllFoods().subscribe({
       next: (data) => {
         this.foods = data;
         this.isLoading = false; // Hide spinner after loading completes
+        this.noItemFound = false; // Reset no items found flag
       },
       error: (err) => {
         console.error('Error fetching food items:', err);
@@ -57,6 +83,8 @@ export class UserviewfoodComponent implements OnInit {
   openOrderPopup(food: Food): void {
     this.selectedFood = { ...food }; // Create a copy of the food object
     this.orderQuantity = 1; // Reset order quantity
+    this.totalAmount = this.selectedFood.price; // Initialize total amount
+    this.orderDate = new Date().toLocaleDateString(); // Set the order date to the current date
     this.showOrderPopup = true; // Show the order popup
   }
 
@@ -65,12 +93,18 @@ export class UserviewfoodComponent implements OnInit {
     this.selectedFood = null; // Reset the selected food
   }
 
+  updateTotalAmount(): void {
+    if (this.selectedFood) {
+      this.totalAmount = this.selectedFood.price * this.orderQuantity;
+    }
+  }
+
   confirmOrder(): void {
     if (this.selectedFood) {
       const userId = Number(localStorage.getItem('userId')); // Get the user ID from local storage
       this.order.foodId = this.selectedFood.foodId;
       this.order.quantity = this.orderQuantity;
-      this.order.totalAmount = this.selectedFood.price * this.orderQuantity;
+      this.order.totalAmount = this.totalAmount;
       this.order.orderDate = new Date().toISOString(); // System-generated order date
       this.order.userId = userId; // Set the user ID
       this.order.user.userId = userId; // Set the user ID in the User object
@@ -80,7 +114,7 @@ export class UserviewfoodComponent implements OnInit {
         () => {
           alert('Order placed successfully');
           this.closeOrderPopup();
-          this.router.navigate(['/userViewOrders']); // Navigate to order history or any other page
+          //this.router.navigate(['/userViewOrders']); // Navigate to order history or any other page
         },
         (error) => {
           console.error('Error placing order:', error);

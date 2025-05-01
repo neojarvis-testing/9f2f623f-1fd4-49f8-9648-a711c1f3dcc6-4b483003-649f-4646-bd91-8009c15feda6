@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
     this.showDialog = false;
     if (result) {
     this.authService.logout();
-    this.router.navigate(['/login'])k
+    this.router.navigate(['/login']);
     }
   }
 }

@@ -27,4 +27,16 @@ export class AdminviewfeedbackComponent implements OnInit {
       }
     });
   }
+  deleteFeedback(feedbackId: number): void {
+    this.feedbackService.deleteFeedback(feedbackId).subscribe(
+      () => {
+        this.feedbackList = this.feedbackList.filter(feedback => feedback.feedbackId !== feedbackId); // Remove the deleted feedback from the list
+        alert('Feedback deleted successfully');
+      },
+      (error) => {
+        console.error('Error deleting feedback', error);
+        alert('Failed to delete feedback.');
+      }
+    );
+  }
 }

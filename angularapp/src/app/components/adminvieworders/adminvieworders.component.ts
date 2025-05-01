@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-adminvieworders',
@@ -45,5 +46,16 @@ export class AdminviewordersComponent implements OnInit {
     }
   }
 
-
+  deleteOrder(orderId: number): void {
+    this.orderService.deleteOrder(orderId).subscribe(
+      () => {
+        this.orders = this.orders.filter(order => order.orderId !== orderId); // Remove the deleted order from the list
+        alert('Order deleted successfully');
+      },
+      (error) => {
+        console.error('Error deleting order', error);
+        alert('Failed to delete order.');
+      }
+    );
+  }
 }
