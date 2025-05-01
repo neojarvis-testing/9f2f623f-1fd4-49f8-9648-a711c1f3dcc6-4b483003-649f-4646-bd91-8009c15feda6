@@ -1,22 +1,30 @@
-  .chart-container {
-    display: flex;
-    justify-content: center;
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    justify-items: center;
     align-items: center;
-    background-color: #f9f9f9;
+  }
+
+  .chart-container {
+    background-color: white;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 20px;
-    margin: 40px;
+    margin: 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
   canvas {
     max-width: 100%;
     height: auto;
   }
 
-  h2{
+  h2 {
     padding-top: 30px;
+    color:white;
   }
-  
-  
+
+  .box{
+    background-color: rgb(50, 50, 71);
+  }

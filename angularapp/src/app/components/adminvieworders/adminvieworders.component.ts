@@ -10,7 +10,7 @@ import { OrderService } from 'src/app/services/order.service';
 export class AdminviewordersComponent implements OnInit {
 
 
-  orders: orders[] = [];
+  orders: Orders[] = [];
   selectedUser: any = null; // To store the selected user's profile
 
   constructor(private orderService: OrderService) {}
@@ -59,7 +59,7 @@ export class AdminviewordersComponent implements OnInit {
       }
     );
   }
-}
+
 
   showUserProfile(userId: number): void {
     const order = this.orders.find(o => o.user.userId === userId);
