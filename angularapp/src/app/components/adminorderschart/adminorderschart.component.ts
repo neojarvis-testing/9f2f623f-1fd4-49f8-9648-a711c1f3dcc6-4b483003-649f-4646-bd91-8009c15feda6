@@ -16,7 +16,7 @@ export class AdminorderschartComponent implements OnInit {
   @ViewChild('polarAreaChart', { static: true }) polarAreaChart: ElementRef<HTMLCanvasElement>;
   @ViewChild('pieChart', { static: true }) pieChart: ElementRef<HTMLCanvasElement>;
 
-  isLoading: boolean = false;
+  isLoading: boolean = true; // Initially set loading state to true
 
   barChartInstance: Chart<'bar', number[], string>;
   lineChartInstance: Chart<'line', number[], string>;
@@ -34,20 +34,20 @@ export class AdminorderschartComponent implements OnInit {
     'purple'
   ];
 
-  polarColors:string[]=[
+  polarColors: string[] = [
     'rgba(255, 99, 132, 0.2)',
     'rgba(54, 162, 235, 0.2)',
     'rgba(255, 206, 86, 0.2)',
     'rgba(75, 192, 192, 0.2)',
     'rgba(153, 102, 255, 0.2)',
     'rgba(255, 159, 64, 0.2)'
-  ]
+  ];
+
   constructor(private orderService: OrderService) { }
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     Chart.register(...registerables);
     this.fetchOrders();
-    this.isLoading = true;
   }
 
   fetchOrders(): void {
