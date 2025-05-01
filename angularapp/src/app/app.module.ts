@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminaddfoodComponent } from './components/adminaddfood/adminaddfood.component';
-//import { AdminorderschartComponent } from './components/adminorderschart/adminorderschart.component';
+import { AdminorderschartComponent } from './components/adminorderschart/adminorderschart.component';
 import { AdminviewfeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
 import { AdminviewfoodComponent } from './components/adminviewfood/adminviewfood.component';
 import { AdminviewordersComponent } from './components/adminvieworders/adminvieworders.component';
@@ -29,7 +29,7 @@ import { AuthInterceptor } from './auth.interceptor';
   declarations: [
     AppComponent,
     AdminaddfoodComponent,
-   // AdminorderschartComponent,
+   AdminorderschartComponent,
     AdminviewfeedbackComponent,
     AdminviewfoodComponent,
     AdminviewordersComponent,
@@ -42,7 +42,7 @@ import { AuthInterceptor } from './auth.interceptor';
     UseraddfeedbackComponent,
     UserviewfeedbackComponent,
     UserviewfoodComponent,
-    UserviewordersComponent
+    UserviewordersComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { orders } from 'src/app/models/orders.model';
+import { Orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
 import { Router } from '@angular/router';
 
@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./uservieworders.component.css']
 })
 export class UserviewordersComponent implements OnInit {
-  orders: orders[] = [];
+  orders: Orders[] = [];
   userId: number = 0; 
   errorMessage: string = '';
   showConfirmation = false;
-  orderToDelete: orders | null = null;
+  orderToDelete: Orders | null = null;
+  isLoading = true;
 
   constructor(private orderService: OrderService, private router: Router) {}
 
@@ -22,21 +23,27 @@ export class UserviewordersComponent implements OnInit {
     if (storedUserId) {
       this.userId = parseInt(storedUserId);
       this.loadOrders();
+    } else {
+      this.errorMessage = 'User ID not found. Cannot load orders.';
+      this.isLoading = false; // Hide spinner if no user ID
     }
   }
 
   loadOrders(): void {
+    this.isLoading = true; // Show spinner while loading
     this.orderService.getAllOrdersByUserId(this.userId).subscribe({
       next: (data) => {
         this.orders = data;
+        this.isLoading = false; // Hide spinner once data is loaded
       },
       error: () => {
         this.errorMessage = 'Failed to load order history';
+        this.isLoading = false; // Hide spinner on error
       },
     });
   }
 
-  confirmDelete(order: orders): void {
+  confirmDelete(order: Orders): void {
     this.orderToDelete = order;
     this.showConfirmation = true;
   }

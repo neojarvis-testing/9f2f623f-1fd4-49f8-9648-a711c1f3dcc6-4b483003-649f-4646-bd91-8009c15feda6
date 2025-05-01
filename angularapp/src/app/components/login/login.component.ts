@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Login } from 'src/app/models/login.model';
 import { AuthService } from 'src/app/services/auth.service';
  
 @Component({
@@ -9,7 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent{
   
   loginData={
     email:'',
@@ -17,7 +15,7 @@ export class LoginComponent implements OnInit {
   }
   errorMessage=''
   
-  constructor(private authService:AuthService,private router:Router) { }
+  constructor(private readonly authService:AuthService,private readonly router:Router) { }
   login(){
     this.authService.login(this.loginData).subscribe(
       (response) =>{
@@ -25,20 +23,12 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userRole',response.userRole);
         localStorage.setItem('token',response.token);
         localStorage.setItem('username',response.username);
-        // if(response.userRole=='ADMIN'){
-        //   this.router.navigate(['/adminAddFood']);
-        // } else{
-        //   this.router.navigate(['/'])
-        // }
         this.router.navigate(['/'])
       },
       (error) =>{
         this.errorMessage = 'Invalid username or password';
       }
     )
-  }
-
-  ngOnInit(): void {
   }
 
 }
