@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { orders } from 'src/app/models/orders.model';
+import { Orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
 import { Router } from '@angular/router';
 
@@ -9,11 +9,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./uservieworders.component.css']
 })
 export class UserviewordersComponent implements OnInit {
-  orders: orders[] = [];
+  orders: Orders[] = [];
   userId: number = 0; 
   errorMessage: string = '';
   showConfirmation = false;
-  orderToDelete: orders | null = null;
+  orderToDelete: Orders | null = null;
 
   constructor(private orderService: OrderService, private router: Router) {}
 
@@ -36,7 +36,7 @@ export class UserviewordersComponent implements OnInit {
     });
   }
 
-  confirmDelete(order: orders): void {
+  confirmDelete(order: Orders): void {
     this.orderToDelete = order;
     this.showConfirmation = true;
   }

@@ -1,33 +1,108 @@
-// import { Component, OnInit } from '@angular/core';
-// // import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
-// //import { Label } from 'ng2-charts';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Chart, registerables } from 'chart.js';
+import { OrderService } from 'src/app/services/order.service';
+import { Orders } from 'src/app/models/orders.model';
 
+@Component({
+  selector: 'app-adminorderschart',
+  templateUrl: './adminorderschart.component.html',
+  styleUrls: ['./adminorderschart.component.css']
+})
+export class AdminorderschartComponent implements OnInit {
+  @ViewChild('barChart', { static: true }) barChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('lineChart', { static: true }) lineChart: ElementRef<HTMLCanvasElement>;
 
-// @Component({
-//   selector: 'app-adminorderschart',
-//   templateUrl: './adminorderschart.component.html',
-//   styleUrls: ['./adminorderschart.component.css']
-// })
-// export class AdminorderschartComponent implements OnInit {
+  barChartInstance: Chart;
+  lineChartInstance: Chart;
 
-//   public barChartOptions: ChartOptions = {
-//   responsive: true,
-// };
-// //public barChartLabels: Label[] = ['2021', '2022', '2023', '2024', '2025'];
-// public barChartLabels: string[] = ['2021', '2022', '2023', '2024', '2025'];
-// public barChartType: ChartType = 'bar';
-// public barChartLegend = true;
-// public barChartPlugins = [];
+  constructor(private orderService: OrderService) { }
 
-// public barChartData: ChartDataset[] = [
-//   { data: [65, 59, 80, 81, 56], label: 'Pizza' },
-//   { data: [28, 48, 40, 19, 86], label: 'Burger' },
-//   { data: [18, 48, 77, 9, 100], label: 'Pasta' }
-// ];
+  ngOnInit(): void {
+    Chart.register(...registerables); // Register all necessary components
+    this.fetchOrders();
+  }
 
-// constructor() { }
+  fetchOrders(): void {
+    this.orderService.getAllOrders().subscribe(
+      (data: Orders[]) => {
+        this.processOrders(data);
+      },
+      (error) => {
+        console.error('Error fetching orders', error);
+      }
+    );
+  }
 
-// ngOnInit(): void {
-// }
-// }
+  processOrders(orders: Orders[]): void {
+    const ordersByDate = orders.reduce((acc, order) => {
+      const date = new Date(order.orderDate).toLocaleDateString();
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {} as { [key: string]: number });
 
+    const sortedDates = Object.keys(ordersByDate).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+    const sortedData = sortedDates.map(date => ordersByDate[date]);
+
+    this.createBarChart(sortedDates, sortedData);
+    this.createLineChart(sortedDates, sortedData);
+  }
+
+  createBarChart(labels: string[], data: number[]): void {
+    this.barChartInstance = new Chart(this.barChart.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Orders',
+            data: data,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1 // Set the step size to 1
+            }
+          }
+        }
+      }
+    });
+  }
+
+  createLineChart(labels: string[], data: number[]): void {
+    this.lineChartInstance = new Chart(this.lineChart.nativeElement, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Orders',
+            data: data,
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1 // Set the step size to 1
+            }
+          }
+        }
+      }
+    });
+  }
+}
