@@ -13,7 +13,7 @@ export class UserviewordersComponent implements OnInit {
   userId: number = 0; 
   errorMessage: string = '';
   showConfirmation = false;
-  orderToDelete: orders | null = null;
+  orderToDelete: Orders | null = null;
   isLoading = true;
 
   constructor(private orderService: OrderService, private router: Router) {}
