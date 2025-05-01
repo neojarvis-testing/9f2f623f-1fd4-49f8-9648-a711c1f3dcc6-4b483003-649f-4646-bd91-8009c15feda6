@@ -24,7 +24,7 @@ export class UseraddfeedbackComponent implements OnInit {
   errorMessage: string = '';
   isLoading = true;
 
-  constructor(private foodService: FoodService, private feedbackService: FeedbackService) {}
+  constructor(private readonly foodService: FoodService, private readonly feedbackService: FeedbackService) {}
 
   ngOnInit(): void {
     this.isLoading = true; // Show spinner

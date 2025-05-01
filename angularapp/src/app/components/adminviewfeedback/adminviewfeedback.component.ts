@@ -14,7 +14,7 @@ export class AdminviewfeedbackComponent implements OnInit {
 
   showDialog = false; // ✅ For feedback deleted popup
 
-  constructor(private feedbackService: FeedbackService) {}
+  constructor(private readonly feedbackService: FeedbackService) {}
 
   ngOnInit(): void {
     this.isLoading = true;

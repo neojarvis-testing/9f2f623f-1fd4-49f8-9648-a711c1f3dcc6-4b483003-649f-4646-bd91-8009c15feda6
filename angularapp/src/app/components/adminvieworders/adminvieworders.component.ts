@@ -16,7 +16,7 @@ export class AdminviewordersComponent implements OnInit {
 
   showSuccessPopup = false; // ✅ Used for order deleted success dialog
 
-  constructor(private orderService: OrderService) {}
+  constructor(private readonly orderService: OrderService) {}
 
   ngOnInit(): void {
     this.fetchOrders();
