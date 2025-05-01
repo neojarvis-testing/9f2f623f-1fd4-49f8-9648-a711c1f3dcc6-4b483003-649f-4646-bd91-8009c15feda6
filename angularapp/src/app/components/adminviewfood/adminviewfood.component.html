@@ -1,56 +1,56 @@
-<div class="container mt-5">
-  <div class="card shadow-lg">
-    <div class="card-header text-center">
-      <h2>Food List</h2>
-    </div>
-    <div class="card-body">
-      <div class="food-grid">
-        <div class="food-item" *ngFor="let food of foods">
-          <img [src]="food.photo" alt="{{ food.foodName }}" class="img-fluid food-photo">
-          <div class="food-details">
-            <p><strong>Food ID:</strong> {{ food.foodId }}</p>
-            <p><strong>Food Name:</strong> {{ food.foodName }}</p>
-            <p><strong>Price:</strong> {{ food.price }}</p>
-            <p><strong>Stock Quantity:</strong> {{ food.stockQuantity }}</p>
-          </div>
-          <div class="food-actions">
-            <button class="btn btn-warning btn-sm" (click)="openEditPopup(food)">Edit</button>
-            <button class="btn btn-danger btn-sm" (click)="confirmDeleteFood(food.foodId)">Delete</button>
-          </div>
-        </div>
-      </div>
+<!-- Spinner -->
+<div *ngIf="isLoading" class="spinner-overlay">
+  <div class="spinner"></div>
+</div>
+
+<div class="food-bg">
+
+  <h2 class="text-center mb-4">Food List</h2>
+
+  <!-- Food Cards Container -->
+  <div class="food-container">
+    <div class="food-card" *ngFor="let food of foods">
+      <img [src]="food.photo" alt="Food Image" />
+      <p><b>Food ID:</b> {{ food.foodId }}</p>
+      <p><b>Food Name:</b> {{ food.foodName }}</p>
+      <p><b>Price:</b> {{ food.price }}</p>
+      <p><b>Stock Quantity:</b> {{ food.stockQuantity }}</p>
+      <button class="btn btn-warning" (click)="openEditPopup(food)">Edit</button>
+      <button class="btn btn-danger" (click)="confirmDeleteFood(food.foodId)">Delete</button>
     </div>
   </div>
 
-  <!-- Edit Popup Form -->
-  <div class="popup" *ngIf="showPopup">
-    <div class="popup-content">
-      <h3>Edit Food Item</h3>
-      <form>
-        <div class="form-group">
-          <label for="foodName">Food Name:</label>
-          <input id="foodName" class="form-control" [(ngModel)]="selectedFood.foodName" name="foodName" readonly>
+  <!-- Edit Popup -->
+  <div class="dialog-overlay" *ngIf="showPopup">
+    <div class="dialog-box">
+      <h2>Edit Food</h2>
+      <form (ngSubmit)="updateFood()">
+        <div class="form-group mb-3">
+          <label>Food Name:</label>
+          <input type="text" [(ngModel)]="selectedFood.foodName" name="foodName" class="form-control" required />
         </div>
-        <div class="form-group">
-          <label for="price">Price:</label>
-          <input id="price" type="number" class="form-control" [(ngModel)]="selectedFood.price" name="price">
+        <div class="form-group mb-3">
+          <label>Price:</label>
+          <input type="number" [(ngModel)]="selectedFood.price" name="price" class="form-control" required />
         </div>
-        <div class="form-group">
-          <label for="stockQuantity">Stock Quantity:</label>
-          <input id="stockQuantity" type="number" class="form-control" [(ngModel)]="selectedFood.stockQuantity" name="stockQuantity">
+        <div class="form-group mb-3">
+          <label>Stock Quantity:</label>
+          <input type="number" [(ngModel)]="selectedFood.stockQuantity" name="stockQuantity" class="form-control" required />
         </div>
-        <button type="button" class="btn btn-success" (click)="updateFood()">Update</button>
-        <button type="button" class="btn btn-danger" (click)="closePopup()">Cancel</button>
+        <button type="submit" class="btn btn-success">Save</button>
+        <button type="button" class="btn btn-secondary" (click)="closePopup()">Cancel</button>
       </form>
     </div>
   </div>
-</div>
 
-<div class="dialog-overlay" *ngIf="showDialog">
-  <div class="dialog-box">
-    <p>Are you sure you want to Delete?</p>
-    <div >
-    <button class="btn btn-success" (click)="onDialogConfirm(true)">Yes</button>
-    <button class="btn btn-danger" (click)="onDialogConfirm(false)">No</button> </div>
+  <!-- Delete Confirmation Dialog -->
+  <div class="dialog-overlay" *ngIf="showDialog">
+    <div class="dialog-box">
+      <h2>Delete Confirmation</h2>
+      <p>Are you sure you want to delete this food item?</p>
+      <button class="btn btn-danger" (click)="onDialogConfirm(true)">Yes</button>
+      <button class="btn btn-secondary" (click)="onDialogConfirm(false)">No</button>
+    </div>
   </div>
+
 </div>

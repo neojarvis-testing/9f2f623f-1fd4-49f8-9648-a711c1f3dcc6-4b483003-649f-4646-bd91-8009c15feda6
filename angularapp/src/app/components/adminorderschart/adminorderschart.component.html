@@ -1,7 +1,39 @@
+<div class="box">
 <h2 class="text-center fw-bold">Order Analysis</h2>
 <div class="chart-container">
-  <canvas #barChart width="200" height="50"></canvas>
+  <p>Bar Chart</p>
+  <canvas #barChart width="100" height="25"></canvas>
 </div>
+
 <div class="chart-container">
-  <canvas #lineChart width="200" height="50"></canvas>
-</div>  
+  <p>Line Chart</p>
+  <canvas #lineChart width="100" height="25"></canvas>
+</div>
+
+<div class="chart-grid">
+  <div class="chart-container">
+    <p>Radar Chart</p>
+    <canvas #radarChart width="500"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <p>Pie Chart</p>
+    <canvas #pieChart width="500"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <p>Polar Area Chart</p>
+    <canvas #polarAreaChart width="500"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <p>Doughnut Chart</p>
+    <canvas #doughnutChart width="500"></canvas>
+  </div>
+</div>
+</div>
+
+<!-- Spinner Overlay -->
+<div *ngIf="isLoading" class="spinner-overlay">
+  <div class="spinner"></div>
+</div>
