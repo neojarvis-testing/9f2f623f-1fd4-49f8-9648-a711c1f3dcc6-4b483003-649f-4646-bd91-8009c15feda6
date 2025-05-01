@@ -1,146 +1,304 @@
-/* Food Grid Styling */
-.food-grid {
+:root {
+  --primary: #FEA116;
+  --light: #F1F8FF;
+  --dark: #0F172B;
+}
+
+/* === Background Wrapper === */
+.user-view-food-container {
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: linear-gradient(rgba(15, 23, 43, 0.9), rgba(15, 23, 43, 0.9)),
+    url('https://neurosciencenews.com/files/2019/05/red-meat-ms-risk-neurosciencnews-public.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Food List Container */
+.food-list-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px; /* Increased the gap between food cards */
   justify-content: center;
 }
 
-.food-item {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.food-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.food-photo {
-  max-height: 150px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-}
-
-.food-details {
+/* Food Cards */
+.food-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   text-align: center;
+  width: 250px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px; /* Add margin bottom to separate cards vertically */
 }
 
-.food-details p {
-  margin: 5px 0;
+.food-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
-.food-actions {
-  margin-top: 10px;
+.food-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
 }
 
-/* Popup Styling */
-.popup {
+.food-card:hover .food-image {
+  opacity: 0.9;
+}
+
+.food-info {
+  padding: 10px;
+}
+
+.food-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.food-price,
+.food-quantity {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+/* Place Order Button Styling */
+.place-order-btn {
+  margin-top: 15px; /* Space from other elements */
+  margin-bottom: 10px;
+  padding: 10px 20px; /* Adjust padding */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px; /* Rounded corners */
+  width: auto; /* Make the width auto so it's centered */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+}
+
+.place-order-btn[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.place-order-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* Make it slightly bigger when hovered */
+}
+
+/* === Order Popup === */
+.order-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.order-popup {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.order-popup h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+  font-family: 'Arial', sans-serif;
+}
+
+.order-popup p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.order-popup .form-control {
+  margin-top: 10px;
+  padding: 8px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Popup Button Styling */
+.order-popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.order-popup-buttons button {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 48%; /* Make both buttons evenly spaced */
+}
+
+.order-popup-buttons button:hover {
+  transform: scale(1.05);
+}
+
+/* Confirm Button */
+.order-popup-buttons .btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.order-popup-buttons .btn-success:hover {
+  background-color: #218838;
+}
+
+/* Cancel Button */
+.order-popup-buttons .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.order-popup-buttons .btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* === Success Pop-up === */
+.order-success-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-.popup-content {
+.order-success-popup {
   background-color: #fff;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
   width: 400px;
-  max-width: 100%;
+  text-align: center;
+}
+
+.order-success-popup h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 15px;
+}
+
+.order-success-popup p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.order-success-popup button {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
   border-radius: 8px;
-  animation: popup-show 0.3s ease-out;
+  cursor: pointer;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-@keyframes popup-show {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+.order-success-popup button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
 }
 
-/* Search Bar Styling */
-.search-bar {
+/* Search Box */
+.search-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .search-input {
-  width: 300px;
-  padding: 10px;
+  padding: 8px;
+  font-size: 16px;
+  width: 250px;
   border-radius: 5px;
   border: 1px solid #ccc;
-  margin-right: 10px;
 }
 
-.search-button {
-  margin-right: 10px;
-  padding: 10px 20px;
+.search-button,
+.clear-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
   border-radius: 5px;
 }
 
-/* No Items Found Styling */
-.no-items-found {
-  text-align: center;
-  color: #ff0000; /* Red color for visibility */
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-/* Additional Styling */
-.card-header {
-  background-color: #007bff;
-  color: #fff;
-  padding: 15px;
-  border-bottom: 1px solid #007bff;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-
-.card-header h2 {
-  margin: 0;
-}
-
-.card {
-  border-radius: 8px;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-primary:hover {
+.search-button:hover,
+.clear-button:hover {
   background-color: #0056b3;
-  border-color: #0056b3;
 }
 
-.btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
+/* Spinner */
+.spinner-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-.btn-secondary:hover {
-  background-color: #5a6268;
-  border-color: #545b62;
+.spinner {
+  border: 6px solid #0346ff;
+  border-top: 6px solid var(--primary);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Heading Styles */
+h2.text-center.mb-4 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+  margin-bottom: 40px;
 }

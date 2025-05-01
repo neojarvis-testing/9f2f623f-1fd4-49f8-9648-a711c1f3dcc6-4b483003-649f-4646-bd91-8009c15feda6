@@ -14,18 +14,22 @@ export class AdminviewfoodComponent implements OnInit {
   showDialog = false;
   foodToDelete: number | null = null; 
   constructor(private foodService: FoodService) {}
+  isLoading=false;
 
   ngOnInit(): void {
     this.getAllFoods(); // Fetch food items on initialization
   }
 
   getAllFoods(): void {
+    this.isLoading=true; //show spinner
     this.foodService.getAllFoods().subscribe(
       (data) => {
         this.foods = data; // Assign fetched food items to the array
+        this.isLoading=false; // Hide spinner
         console.log('Food items fetched successfully:', this.foods);
       },
       (err) => {
+        this.isLoading=false; // Hide Spinner
         console.error('Error fetching food items:', err);
         alert('Failed to fetch food items.');
       }
@@ -44,7 +48,7 @@ export class AdminviewfoodComponent implements OnInit {
         (updatedFood) => {
           const index = this.foods.findIndex(f => f.foodId === updatedFood.foodId);
           if (index !== -1) {
-            this.foods[index] = updatedFood; // Update the food in the list
+            this.foods[index] = updatedFood;
             console.log('Food updated successfully:', updatedFood);
           }
           this.closePopup();
@@ -56,6 +60,7 @@ export class AdminviewfoodComponent implements OnInit {
       );
     }
   }
+  
 
   closePopup(): void {
     this.showPopup = false;
@@ -67,21 +72,22 @@ export class AdminviewfoodComponent implements OnInit {
      this.showDialog = true; // Show the confirmation dialog
   }
     
- deleteFood(): void {
-   if (this.foodToDelete !== null) {
-    this.foodService.deleteFood(this.foodToDelete).subscribe(() => {
-      this.foods = this.foods.filter(food => food.foodId !== this.foodToDelete); // Remove the food item
-      this.closeDialog();
-    }, (err) => {
-      console.error('Error deleting food item:', err);
-      if (err.status === 500) {
-        alert('Internal server error. Please try again later.');
-      } else {
-        alert('Failed to delete food item. Error: ' + err.message);
-      }
-   });
+  deleteFood(): void {
+    if (this.foodToDelete !== null) {
+      this.foodService.deleteFood(this.foodToDelete).subscribe(() => {
+        this.foods = this.foods.filter(food => food.foodId !== this.foodToDelete);
+        this.closeDialog();
+      }, (err) => {
+        console.error('Error deleting food item:', err);
+        if (err.status === 500) {
+          alert('Internal server error. Please try again later.');
+        } else {
+          alert('Failed to delete food item. Error: ' + err.message);
+        }
+      });
+    }
   }
-}
+  
   
 closeDialog(): void {
   this.showDialog = false;

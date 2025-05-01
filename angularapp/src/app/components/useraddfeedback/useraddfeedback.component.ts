@@ -22,10 +22,16 @@ export class UseraddfeedbackComponent implements OnInit {
   }; // Feedback object bound to the form
   successMessage: string = '';
   errorMessage: string = '';
+  isLoading = true;
 
   constructor(private foodService: FoodService, private feedbackService: FeedbackService) {}
 
   ngOnInit(): void {
+    this.isLoading = true; // Show spinner
+    setTimeout(() => {
+      this.isLoading = false; // Hide spinner after delay
+    }, 1500);
+
     this.loadFoodList();
     const userId = Number(localStorage.getItem('userId')); // Retrieve userId from localStorage
     if (!isNaN(userId) && userId > 0) {
@@ -35,6 +41,7 @@ export class UseraddfeedbackComponent implements OnInit {
       this.errorMessage = 'User not logged in. Please log in to submit feedback.';
     }
   }
+  
 
   loadFoodList(): void {
     this.foodService.getAllFoods().subscribe({

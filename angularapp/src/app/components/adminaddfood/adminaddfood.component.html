@@ -1,8 +1,16 @@
-<div class="container mt-5">
+<!-- Spinner -->
+<div *ngIf="isLoading" class="spinner-overlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Form with background -->
+<div *ngIf="!isLoading" class="form-bg">
+  <div class="form-overlay">
     <div class="card shadow-lg p-4">
+
       <h2 class="text-center mb-4" *ngIf="!editId">Add Food Item</h2>
       <h2 class="text-center mb-4" *ngIf="editId">Edit Food Item</h2>
-  
+
       <form (ngSubmit)="addFood()">
         <div class="form-group mb-3">
           <label for="foodName" class="form-label">Enter Food Name:</label>
@@ -13,10 +21,9 @@
             [(ngModel)]="food.foodName"
             name="foodName"
             placeholder="Enter food name"
-            required /> 
-          
+            required />
         </div>
-  
+
         <div class="form-group mb-3">
           <label for="price" class="form-label">Price:</label>
           <input
@@ -28,7 +35,7 @@
             placeholder="Enter food price"
             required />
         </div>
-  
+
         <div class="form-group mb-3">
           <label for="stockQuantity" class="form-label">Stock Quantity:</label>
           <input
@@ -40,20 +47,20 @@
             placeholder="Enter stock quantity"
             required />
         </div>
-  
+
         <div class="form-group mb-3">
-          <label for="photo" class="form-label">
-            Photo:
-          </label>
+          <label for="photo" class="form-label">Photo:</label>
           <input 
             type="file" 
             id="photoFile" 
             name="photoFile" 
             accept=".jpg,.png" 
             (change)="onFileChange($event, 'photoFile')" 
-            #file="ngModel" [(ngModel)]="food.photo" 
-            required>
+            #file="ngModel" 
+            [(ngModel)]="food.photo" 
+            required />
         </div>
+
         <div class="text-center">
           <button type="submit" class="btn btn-primary me-2">
             {{ editId ? 'Update Food' : 'Add Food' }}
@@ -63,15 +70,18 @@
             class="btn btn-secondary"
             (click)="router.navigate(['/adminViewFood'])">
             Cancel
-        </button> 
+          </button>
         </div>
       </form>
     </div>
   </div>
+</div>
 
+<!-- Success Dialog -->
 
-  <div class="dialog-overlay" *ngIf="showDialog">
-    <div class="dialog-box">
-      <p>Food added successfully!</p>
-      <button class="btn btn-primary" (click)="onDialogConfirm()">Ok</button>
+<div class="dialog-overlay" *ngIf="showDialog">
+  <div class="dialog-box">
+    <p>{{ dialogMessage }}</p>
+    <button class="btn btn-primary" (click)="onDialogConfirm()">OK</button>
   </div>
+</div>
