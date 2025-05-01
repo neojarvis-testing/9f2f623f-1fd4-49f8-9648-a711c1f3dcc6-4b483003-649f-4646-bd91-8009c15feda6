@@ -26,8 +26,8 @@ export class AdminviewordersComponent implements OnInit {
     this.isLoading = true; // Show spinner
     this.orderService.getAllOrders().subscribe(
       (data) => {
-        this.isLoading = false; // Hide spinner
         this.orders = data.sort((a, b) => new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime());
+        this.isLoading = false; // Hide spinner
       },
       (error) => {
         this.isLoading = false; // Hide spinner on error
@@ -40,7 +40,7 @@ export class AdminviewordersComponent implements OnInit {
     const order = this.orders.find(o => o.orderId === orderId);
 
     if (order) {
-      const updatedOrder: orders = { ...order, orderStatus: status };
+      const updatedOrder: Orders = { ...order, orderStatus: status };
       this.isLoading = true; // Show spinner
       this.orderService.updateOrder(orderId, updatedOrder).subscribe(
         (updatedData) => {
