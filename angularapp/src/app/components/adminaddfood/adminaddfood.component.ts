@@ -19,9 +19,8 @@ export class AdminaddfoodComponent implements OnInit {
 
 
   constructor(
-    private foodService: FoodService,
+    private readonly foodService: FoodService,
     public router: Router,
-    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {

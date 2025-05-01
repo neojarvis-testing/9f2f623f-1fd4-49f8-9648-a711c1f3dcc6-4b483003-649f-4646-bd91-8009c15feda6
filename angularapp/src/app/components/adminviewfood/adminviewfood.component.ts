@@ -13,7 +13,7 @@ export class AdminviewfoodComponent implements OnInit {
   showPopup: boolean = false; // Control popup visibility
   showDialog = false;
   foodToDelete: number | null = null; 
-  constructor(private foodService: FoodService) {}
+  constructor(private readonly foodService: FoodService) {}
   isLoading=false;
 
   ngOnInit(): void {
@@ -95,7 +95,7 @@ closeDialog(): void {
 }
   
 onDialogConfirm(confirm: boolean): void {
-  if (confirm) {
+  if (confirm==true) {
     this.deleteFood();
   } else {
     this.closeDialog();
