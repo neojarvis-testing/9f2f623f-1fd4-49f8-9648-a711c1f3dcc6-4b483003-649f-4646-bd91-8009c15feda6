@@ -19,6 +19,7 @@ export class UserviewfoodComponent implements OnInit {
   showOrderPopup: boolean = false; // Control order popup visibility
   orderQuantity: number = 1; // Default order quantity
   totalAmount: number = 0; // Total amount for the order
+
   order: orders = {
     orderStatus: 'Pending',
     totalAmount: 0,
@@ -32,6 +33,9 @@ export class UserviewfoodComponent implements OnInit {
   search: string = '';
   noItemFound: boolean = false;
   orderDate: string = ''; // Add orderDate property
+
+  // New flag for success pop-up
+  orderSuccess: boolean = false; // Manage success popup visibility
 
   constructor(
     private foodService: FoodService,
@@ -109,12 +113,12 @@ export class UserviewfoodComponent implements OnInit {
       this.order.userId = userId; // Set the user ID
       this.order.user.userId = userId; // Set the user ID in the User object
       this.order.food.foodId = this.selectedFood.foodId;
-
+  
       this.orderService.placeOrder(this.order).subscribe(
         () => {
-          alert('Order placed successfully');
-          this.closeOrderPopup();
-          //this.router.navigate(['/userViewOrders']); // Navigate to order history or any other page
+          // Show the order success pop-up
+          this.orderSuccess = true;
+          this.closeOrderPopup();  // Close the order popup after order confirmation
         },
         (error) => {
           console.error('Error placing order:', error);
@@ -122,5 +126,10 @@ export class UserviewfoodComponent implements OnInit {
         }
       );
     }
+  }
+  
+
+  closeOrderSuccessPopup(): void {
+    this.orderSuccess = false; // Close the success pop-up
   }
 }

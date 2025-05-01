@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Food } from 'src/app/models/food.model';
 import { FoodService } from 'src/app/services/food.service';
@@ -14,6 +14,9 @@ export class AdminaddfoodComponent implements OnInit {
   food: Food = {} as Food;
   editId: any;
   showDialog = false;
+  isLoading=false;
+  dialogMessage: string = '';
+
 
   constructor(
     private foodService: FoodService,
@@ -22,23 +25,34 @@ export class AdminaddfoodComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 800);
   }
 
   addFood(): void {
-      this.foodService.addFood(this.food).subscribe(() => {
-          this.showDialog = true;
-      }, (err) => {
-         console.log(JSON.stringify(err));
-         alert('Failed to add food');
-      }
-    );
+    this.isLoading = true;
+    this.foodService.addFood(this.food).subscribe(() => {
+      this.isLoading = false;
+      this.dialogMessage = 'Food added successfully!';
+      this.showDialog = true;
+      this.editId = null; // Reset form state if needed
+    }, (err) => {
+      this.isLoading = false;
+      this.dialogMessage = 'Failed to add food. Please try again.';
+      this.showDialog = true;
+      console.log(JSON.stringify(err));
+    });
   }
-  
-
-    onDialogConfirm(): void {
-      this.showDialog = false;
-      this.router.navigate(['/adminViewFood'])
+    
+  onDialogConfirm(): void {
+    this.showDialog = false;
+    // Redirect only if it was a success message
+    if (this.dialogMessage === 'Food added successfully!') {
+      this.router.navigate(['/adminViewFood']);
     }
+  }
 
  
 

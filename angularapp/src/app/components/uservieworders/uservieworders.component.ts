@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { orders } from 'src/app/models/orders.model';
 import { OrderService } from 'src/app/services/order.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-uservieworders',
@@ -15,7 +16,7 @@ export class UserviewordersComponent implements OnInit {
   orderToDelete: orders | null = null;
   isLoading = true;
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private router: Router) {}
 
   ngOnInit(): void {
     const storedUserId = localStorage.getItem('userId');
@@ -66,5 +67,11 @@ export class UserviewordersComponent implements OnInit {
   cancelDelete(): void {
     this.showConfirmation = false;
     this.orderToDelete = null;
+  }
+
+  refreshPage(): void {
+    console.log('hi');
+    // this.router.navigate(['/userViewOrders']);
+    this.loadOrders();
   }
 }

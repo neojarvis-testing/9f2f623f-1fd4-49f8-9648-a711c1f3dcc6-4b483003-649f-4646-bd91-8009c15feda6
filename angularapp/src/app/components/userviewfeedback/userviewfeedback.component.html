@@ -22,7 +22,11 @@
         <tr *ngFor="let feedback of feedbackList">
           <td>{{ feedback.food.foodName }}</td>
           <td>{{ feedback.feedbackText }}</td>
-          <td>{{ feedback.rating }}</td>
+          <td>
+            <div class="star-rating">
+              <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= feedback.rating">&#9733;</span>
+            </div>
+          </td>
           <td>
             <button class="btn btn-danger btn-sm" (click)="deleteFeedback(feedback.feedbackId)">Delete</button>
           </td>
