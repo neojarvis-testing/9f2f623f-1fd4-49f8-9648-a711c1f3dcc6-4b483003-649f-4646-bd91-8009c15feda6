@@ -36,7 +36,6 @@ export class UseraddfeedbackComponent implements OnInit {
     this.loadFoodList();
     const userId = Number(localStorage.getItem('userId')); // Retrieve userId from localStorage
     if (!isNaN(userId) && userId > 0) {
-     // this.feedback.userId = userId; // Assign userId directly to feedback
       this.feedback.user.userId = userId; // Assign userId to nested user object
     } else {
       this.errorMessage = 'User not logged in. Please log in to submit feedback.';

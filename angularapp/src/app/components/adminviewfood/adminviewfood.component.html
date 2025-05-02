@@ -10,7 +10,7 @@
   <!-- Food Cards Container -->
   <div class="food-container">
     <div class="food-card" *ngFor="let food of foods">
-      <img [src]="food.photo" alt="Food Image" />
+      <img [src]="food.photo" alt="Food"/>
       <p><b>Food ID:</b> {{ food.foodId }}</p>
       <p><b>Food Name:</b> {{ food.foodName }}</p>
       <p><b>Price:</b> {{ food.price }}</p>
@@ -48,8 +48,8 @@
     <div class="dialog-box">
       <h2>Delete Confirmation</h2>
       <p>Are you sure you want to delete this food item?</p>
-      <button class="btn btn-danger" (click)="onDialogConfirm(true)">Yes</button>
-      <button class="btn btn-secondary" (click)="onDialogConfirm(false)">No</button>
+      <button class="btn btn-danger" (click)="onDialogDelete()">Yes</button>
+      <button class="btn btn-secondary" (click)="onDialogClose()">No</button>
     </div>
   </div>
 
