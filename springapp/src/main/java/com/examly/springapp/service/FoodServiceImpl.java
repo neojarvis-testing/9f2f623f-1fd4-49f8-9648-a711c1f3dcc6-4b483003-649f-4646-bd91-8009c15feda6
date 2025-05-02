@@ -136,52 +136,6 @@ public class FoodServiceImpl implements FoodService {
         logger.info("Food deleted successfully with ID: {}", foodId);
         return true;
     } 
-    /**
-     * Partially updates a food item by ID.
-     * Applies the updates to the existing food item and saves the changes.
-     * Logs the update process and returns the updated food item.
-     * Throws ResourceNotFoundException if the food item is not found.
-     */
-    @Override
-    public Food patchFood(int foodId, Map<String, Object> updates) {
-        logger.info("Patching food with ID: {}", foodId);
-        Food existingFood = foodRepo.findById(foodId).orElse(null);
-        if (existingFood == null) {
-            logger.error("Food not found with ID: {}", foodId);
-            throw new ResourceNotFoundException("Food not found with ID: " + foodId);
-        }
 
-        updates.forEach((key, value) -> {
-            switch (key) {
-                case "foodName":
-                    if (value == null || value.toString().isEmpty()) {
-                        throw new InvalidInputException("Food name cannot be null or empty.");
-                    }
-                    existingFood.setFoodName(value.toString());
-                    break;
-                case "price":
-                    double price = Double.parseDouble(value.toString());
-                    if (price <= 0) {
-                        throw new InvalidInputException("Price must be greater than zero.");
-                    }
-                    existingFood.setPrice(price);
-                    break;
-                case "stockQuantity":
-                    int stockQuantity = Integer.parseInt(value.toString());
-                    if (stockQuantity < 0) {
-                        throw new InvalidInputException("Stock quantity cannot be negative.");
-                    }
-                    existingFood.setStockQuantity(stockQuantity);
-                    break;
-                // Add more fields as needed
-                default:
-                    throw new InvalidInputException("Invalid field: " + key);
-            }
-        });
-
-        Food patchedFood = foodRepo.save(existingFood);
-        logger.info("Food patched successfully: {}", patchedFood);
-        return patchedFood;
-    }
 }
 
