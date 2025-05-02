@@ -158,10 +158,6 @@ button:hover {
   margin-left: 120px;
 }
 
-/* .modal-header .close:hover {
-  color: #ff1f1f; 
-} */
-
 /* Modal Body */
 .modal-body {
   padding: 20px;
@@ -260,41 +256,6 @@ button:hover {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-/* Confirmation Popup */
-/* .modal-header {
-  background-color: rgb(30, 255, 0);
-  color: white;
-} */
-
-.modal-footer button {
-  border-radius: 8px;
-  padding: 10px;
-}
-
-.modal-footer .btn-danger {
-  background-color: #ff5f5f;
-}
-
-.modal-footer .btn-danger:hover {
-  background-color: #ff1f1f;
-}
-
-.modal-footer .btn-secondary {
-  background-color: #ddd;
-}
-
-.modal-footer .btn-secondary:hover {
-  background-color: #bbb;
-}
-
-.modal-footer .btn-warning {
-  background-color: #ffc107;
-}
-
-.modal-footer .btn-warning:hover {
-  background-color: #e0a800;
 }
 
 /* No Records Found Message */

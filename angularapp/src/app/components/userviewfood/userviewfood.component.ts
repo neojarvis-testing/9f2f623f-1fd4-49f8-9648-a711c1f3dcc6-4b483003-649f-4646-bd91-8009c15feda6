@@ -4,7 +4,6 @@ import { FoodService } from 'src/app/services/food.service';
 import { OrderService } from 'src/app/services/order.service';
 import { Orders } from 'src/app/models/orders.model';
 import { User } from 'src/app/models/user.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-userviewfood',
@@ -41,9 +40,8 @@ export class UserviewfoodComponent implements OnInit {
   noItemFound = false;
 
   constructor(
-    private foodService: FoodService,
-    private orderService: OrderService,
-    private router: Router
+    private readonly foodService: FoodService,
+    private readonly orderService: OrderService,
   ) {}
 
   ngOnInit(): void {

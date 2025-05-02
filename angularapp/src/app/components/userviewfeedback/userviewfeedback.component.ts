@@ -20,7 +20,7 @@ export class UserviewfeedbackComponent implements OnInit {
   currentPage = 1;
   totalPages: number[] = [];
 
-  constructor(private feedbackService: FeedbackService) { }
+  constructor(private readonly feedbackService: FeedbackService) { }
 
   ngOnInit(): void {
     const storedUserId = localStorage.getItem('userId');

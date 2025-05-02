@@ -266,11 +266,11 @@ export class AdminviewfoodComponent implements OnInit {
     this.foodToDelete = null; // Reset the food to delete
   }
 
-  onDialogConfirm(confirm: boolean): void {
-    if (confirm) {
-      this.deleteFood();
-    } else {
-      this.closeDialog();
-    }
+  onDialogConfirmDelete(): void {
+    this.deleteFood();
   }
+  
+  onDialogConfirmClose(): void {
+    this.closeDialog();
+  }  
 }
