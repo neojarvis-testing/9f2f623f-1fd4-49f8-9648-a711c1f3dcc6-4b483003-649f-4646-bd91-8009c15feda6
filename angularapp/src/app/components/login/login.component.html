@@ -40,8 +40,10 @@
         <button type="submit" class="btn btn-primary mt-4 w-100" [disabled]="loginForm.invalid">
           Login
         </button>
-        <a routerLink="/register" class="btn btn-link d-block text-center mt-3">Register Here</a>
-
+        <div class="text-center mt-3">
+          <span class="fw-semibold">Don't have an account?</span>
+          <a routerLink="/register" class="btn btn-link d-block text-center mt-3">Register Here</a>
+        </div>
         <div *ngIf="errorMessage" class="text-danger mt-3 text-center">{{ errorMessage }}</div>
       </form>
     </div>

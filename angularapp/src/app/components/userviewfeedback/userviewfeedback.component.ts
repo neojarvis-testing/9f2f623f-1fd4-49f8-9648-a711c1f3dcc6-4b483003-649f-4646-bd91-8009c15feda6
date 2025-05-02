@@ -9,9 +9,16 @@ import { FeedbackService } from 'src/app/services/feedback.service'; // Service 
 })
 export class UserviewfeedbackComponent implements OnInit {
   feedbackList: Feedback[] = [];
+  paginatedFeedbacks: Feedback[] = [];
   errorMessage: string = '';
-  userId: number = 0; // Define userId property to hold the ID
+  userId: number = 0;
   isLoading = true;
+
+  // ✅ Pagination properties
+  pageSize = 4; // Number of feedback items per page
+  currentPage = 1;
+  totalPages: number[] = [];
+
   constructor(private feedbackService: FeedbackService) { }
 
   ngOnInit(): void {
@@ -21,23 +28,44 @@ export class UserviewfeedbackComponent implements OnInit {
       this.loadFeedback(this.userId);
     } else {
       this.errorMessage = 'User ID not found. Cannot load feedback.';
-      this.isLoading = false; // Hide spinner if no user ID
+      this.isLoading = false;
     }
   }
 
   loadFeedback(userId: number): void {
-    this.isLoading = true; // Show spinner
+    this.isLoading = true;
     this.feedbackService.getAllFeedbacksByUserId(userId).subscribe({
       next: (data) => {
         this.feedbackList = data;
-        this.isLoading = false; // Hide spinner after data is loaded
+        this.setupPagination();
+        this.isLoading = false;
       },
       error: () => {
         this.errorMessage = 'Failed to load feedback';
-        this.isLoading = false; // Hide spinner on error
+        this.isLoading = false;
       }
     });
   }
+
+  setupPagination(): void {
+    this.totalPages = Array(Math.ceil(this.feedbackList.length / this.pageSize))
+      .fill(0)
+      .map((_, i) => i + 1);
+    this.updatePaginatedFeedback();
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.updatePaginatedFeedback();
+    }
+  }
+
+  updatePaginatedFeedback(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.paginatedFeedbacks = this.feedbackList.slice(startIndex, startIndex + this.pageSize);
+  }
+
 
   deleteFeedback(feedbackId: number): void {
     this.feedbackService.deleteFeedback(feedbackId).subscribe(

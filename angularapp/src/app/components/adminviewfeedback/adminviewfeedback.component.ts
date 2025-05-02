@@ -9,10 +9,15 @@ import { FeedbackService } from 'src/app/services/feedback.service';
 })
 export class AdminviewfeedbackComponent implements OnInit {
   feedbackList: Feedback[] = [];
+  paginatedFeedbacks: Feedback[] = [];
   errorMessage: string = '';
   isLoading = false;
+  showDialog = false;
 
-  showDialog = false; // ✅ For feedback deleted popup
+  // ✅ Pagination properties
+  pageSize = 5; // Number of feedbacks per page
+  currentPage = 1;
+  totalPages: number[] = [];
 
   constructor(private readonly feedbackService: FeedbackService) {}
 
@@ -25,6 +30,7 @@ export class AdminviewfeedbackComponent implements OnInit {
     this.feedbackService.getFeedbacks().subscribe({
       next: (data) => {
         this.feedbackList = data;
+        this.setupPagination();
         this.isLoading = false;
       },
       error: () => {
@@ -33,6 +39,26 @@ export class AdminviewfeedbackComponent implements OnInit {
       }
     });
   }
+
+  setupPagination(): void {
+    this.totalPages = Array(Math.ceil(this.feedbackList.length / this.pageSize))
+      .fill(0)
+      .map((_, i) => i + 1);
+    this.updatePaginatedFeedback();
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.updatePaginatedFeedback();
+    }
+  }
+
+  updatePaginatedFeedback(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.paginatedFeedbacks = this.feedbackList.slice(startIndex, startIndex + this.pageSize);
+  }
+
 
   deleteFeedback(feedbackId: number): void {
     this.isLoading = true;

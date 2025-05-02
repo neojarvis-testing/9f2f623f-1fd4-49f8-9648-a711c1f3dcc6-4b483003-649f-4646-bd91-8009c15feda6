@@ -15,7 +15,10 @@ export class UserviewordersComponent implements OnInit {
   showConfirmation = false;
   orderToDelete: Orders | null = null;
   isLoading = true;
-
+  pageSize = 5;
+  currentPage = 1;
+  paginatedOrders: Orders[] = [];
+  totalPages: number[] = [];
   constructor(private orderService: OrderService, private router: Router) {}
 
   ngOnInit(): void {
@@ -30,17 +33,36 @@ export class UserviewordersComponent implements OnInit {
   }
 
   loadOrders(): void {
-    this.isLoading = true; // Show spinner while loading
+    this.isLoading = true;
     this.orderService.getAllOrdersByUserId(this.userId).subscribe({
       next: (data) => {
         this.orders = data;
-        this.isLoading = false; // Hide spinner once data is loaded
+        this.setupPagination();
+        this.isLoading = false;
       },
       error: () => {
         this.errorMessage = 'Failed to load order history';
-        this.isLoading = false; // Hide spinner on error
+        this.isLoading = false;
       },
     });
+  }
+  setupPagination(): void {
+    this.totalPages = Array(Math.ceil(this.orders.length / this.pageSize))
+      .fill(0)
+      .map((_, i) => i + 1);
+    this.updatePaginatedOrders();
+  }
+  
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.updatePaginatedOrders();
+    }
+  }
+  
+  updatePaginatedOrders(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.paginatedOrders = this.orders.slice(startIndex, startIndex + this.pageSize);
   }
 
   confirmDelete(order: Orders): void {
@@ -73,4 +95,16 @@ export class UserviewordersComponent implements OnInit {
     // this.router.navigate(['/userViewOrders']);
     this.loadOrders();
   }
+  showAlert(): void {
+    alert('Order is already on the way, so it cannot be canceled.');
+  }
+  
+  redirectToFeedback(): void {
+    this.router.navigate(['/userAddFeedback']);
+  }
+showPopup = false;
+
+closePopup(): void {
+  this.showPopup = false;
+}
 }
