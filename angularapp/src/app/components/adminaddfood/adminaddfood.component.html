@@ -105,7 +105,7 @@
 <div class="dialog-overlay" *ngIf="showDialog">
    <div class="dialog-box">
    <h2>{{ dialogMessage }}</h2>
-   <img *ngIf="food.photo" [src]="food.photo" alt="Food Image" class="food-image" />
+   <img *ngIf="food.photo" [src]="food.photo" alt="Food" class="food-image" />
    <p *ngIf="dialogMessage === 'Food added successfully!'">
   <b>Food Name:</b> {{ food.foodName }}<br>
   <b>Price:</b> {{ food.price | currency:'INR' }}<br>

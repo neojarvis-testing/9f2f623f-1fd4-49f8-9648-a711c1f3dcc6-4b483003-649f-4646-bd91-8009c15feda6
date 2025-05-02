@@ -30,5 +30,6 @@ button{
 .container-fluid {
     background: linear-gradient(rgba(12, 14, 20, 0.9), rgba(30, 38, 56, 0.9)), url('https://neurosciencenews.com/files/2019/05/red-meat-ms-risk-neurosciencnews-public.jpg') no-repeat center center;
     background-size: cover;
+    padding: 50px;
   }
    

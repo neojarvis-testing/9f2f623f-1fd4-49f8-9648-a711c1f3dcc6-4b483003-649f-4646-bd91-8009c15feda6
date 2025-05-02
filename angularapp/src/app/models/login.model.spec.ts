@@ -6,7 +6,7 @@ describe('Login Model', () => {
     // Create a sample Login object
     const login: Login = {
       email: 'user@example.com',
-      pwd: 'securepassword123'
+      pwd: 'securepwd123'
     };
 
     expect(login).toBeTruthy();
