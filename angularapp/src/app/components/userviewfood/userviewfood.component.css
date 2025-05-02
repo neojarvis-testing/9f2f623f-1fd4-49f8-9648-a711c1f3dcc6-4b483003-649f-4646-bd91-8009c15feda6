@@ -302,3 +302,9 @@ h2.text-center.mb-4 {
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
   margin-bottom: 40px;
 }
+.out-of-stock-message {
+  color: #ff0000; /* Red color */
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}

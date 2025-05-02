@@ -129,6 +129,7 @@ export class UserviewfoodComponent implements OnInit {
   }
 
   closeOrderSuccessPopup(): void {
+    this.getAllFoods();
     this.orderSuccess = false; 
   }
 }

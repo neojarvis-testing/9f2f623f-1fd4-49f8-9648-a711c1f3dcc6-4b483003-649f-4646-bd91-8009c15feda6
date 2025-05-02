@@ -146,3 +146,9 @@
     opacity: 1;
   }
 }
+.out-of-stock-message {
+  color: #ff0000; /* Red color */
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+}

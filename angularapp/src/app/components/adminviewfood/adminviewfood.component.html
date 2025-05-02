@@ -13,8 +13,10 @@
       <img [src]="food.photo" alt="Food Image" />
       <p><b>Food ID:</b> {{ food.foodId }}</p>
       <p><b>Food Name:</b> {{ food.foodName }}</p>
-      <p><b>Price:</b> {{ food.price }}</p>
+      <p><b>Price:</b> {{ food.price | currency:'INR'}}</p>
       <p><b>Stock Quantity:</b> {{ food.stockQuantity }}</p>
+      <h3 *ngIf="food.stockQuantity === 0" class="out-of-stock-message">Out of stock</h3>
+
       <button class="btn btn-warning" (click)="openEditPopup(food)">Edit</button>
       <button class="btn btn-danger" (click)="confirmDeleteFood(food.foodId)">Delete</button>
     </div>
