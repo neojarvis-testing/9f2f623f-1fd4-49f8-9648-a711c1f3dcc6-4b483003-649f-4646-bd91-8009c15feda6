@@ -13,20 +13,22 @@ import { UseraddfeedbackComponent } from './components/useraddfeedback/useraddfe
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
 import { UserviewfoodComponent } from './components/userviewfood/userviewfood.component';
 import { UserviewordersComponent } from './components/uservieworders/uservieworders.component';
+import { AdminGuard } from './admin.guard';
+import { UserGuard } from './user.guard';
 
 const routes: Routes = [
   {path:"register",component:RegistrationComponent},
   {path:"login",component:LoginComponent},
   {path:"",component:HomeComponent},
-  {path:"adminAddFood",component:AdminaddfoodComponent},
-  {path:"adminViewFood",component:AdminviewfoodComponent},
-  {path:"userViewFood",component:UserviewfoodComponent},
-  {path:"userViewOrders",component:UserviewordersComponent},
-  {path:"adminOrdersChart",component:AdminorderschartComponent},
-  {path:"adminViewOrders",component:AdminviewordersComponent},
-  {path:"userAddFeedback",component:UseraddfeedbackComponent},
-  {path:"userViewFeedback",component:UserviewfeedbackComponent},
-  {path:"adminViewFeedback",component:AdminviewfeedbackComponent},
+  {path:"adminAddFood",component:AdminaddfoodComponent,canActivate:[AdminGuard]},
+  {path:"adminViewFood",component:AdminviewfoodComponent,canActivate:[AdminGuard]},
+  {path:"userViewFood",component:UserviewfoodComponent,canActivate:[UserGuard]},
+  {path:"userViewOrders",component:UserviewordersComponent,canActivate:[UserGuard]},
+  {path:"adminOrdersChart",component:AdminorderschartComponent,canActivate:[AdminGuard]},
+  {path:"adminViewOrders",component:AdminviewordersComponent,canActivate:[AdminGuard]},
+  {path:"userAddFeedback",component:UseraddfeedbackComponent,canActivate:[UserGuard]},
+  {path:"userViewFeedback",component:UserviewfeedbackComponent,canActivate:[UserGuard]},
+  {path:"adminViewFeedback",component:AdminviewfeedbackComponent,canActivate:[AdminGuard]},
  
   {path:'error',component:ErrorComponent},
   {path:"**",redirectTo:"error",pathMatch:'full'}
