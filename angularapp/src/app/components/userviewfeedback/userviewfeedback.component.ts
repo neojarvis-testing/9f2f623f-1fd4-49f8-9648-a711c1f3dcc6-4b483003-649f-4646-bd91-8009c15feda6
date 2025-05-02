@@ -11,9 +11,10 @@ export class UserviewfeedbackComponent implements OnInit {
   feedbackList: Feedback[] = [];
   paginatedFeedbacks: Feedback[] = [];
   errorMessage: string = '';
-  userId: number = 0;
+  userId: number = 0; 
   isLoading = true;
-
+  showDeleteConfirmation = false;
+  deleteFeedbackId: number | null = null; // Store feedback id to delete
   // ✅ Pagination properties
   pageSize = 4; // Number of feedback items per page
   currentPage = 1;
@@ -28,7 +29,7 @@ export class UserviewfeedbackComponent implements OnInit {
       this.loadFeedback(this.userId);
     } else {
       this.errorMessage = 'User ID not found. Cannot load feedback.';
-      this.isLoading = false;
+      this.isLoading = false; 
     }
   }
 
@@ -47,6 +48,19 @@ export class UserviewfeedbackComponent implements OnInit {
     });
   }
 
+  // Trigger the confirmation popup
+  confirmDelete(feedbackId: number): void {
+    this.deleteFeedbackId = feedbackId;
+    this.showDeleteConfirmation = true; // Show the confirmation popup
+  }
+
+  // Cancel deletion
+  cancelDelete(): void {
+    this.showDeleteConfirmation = false; // Hide the confirmation popup
+    this.deleteFeedbackId = null; // Reset the feedback ID to delete
+  }
+
+  // Perform delete operation
   setupPagination(): void {
     this.totalPages = Array(Math.ceil(this.feedbackList.length / this.pageSize))
       .fill(0)
@@ -68,15 +82,18 @@ export class UserviewfeedbackComponent implements OnInit {
 
 
   deleteFeedback(feedbackId: number): void {
-    this.feedbackService.deleteFeedback(feedbackId).subscribe(
-      () => {
-        this.feedbackList = this.feedbackList.filter(feedback => feedback.feedbackId !== feedbackId); // Remove the deleted feedback from the list
-        alert('Feedback deleted successfully');
-      },
-      (error) => {
-        console.error('Error deleting feedback', error);
-        alert('Failed to delete feedback.');
-      }
-    );
+    if (feedbackId !== null) {
+      this.feedbackService.deleteFeedback(feedbackId).subscribe(
+        () => {
+          this.feedbackList = this.feedbackList.filter(feedback => feedback.feedbackId !== feedbackId); // Remove the deleted feedback from the list
+          this.showDeleteConfirmation = false; // Hide the confirmation popup
+          this.deleteFeedbackId = null; // Reset the feedback ID
+        },
+        (error) => {
+          console.error('Error deleting feedback', error);
+          this.errorMessage = 'Failed to delete feedback.';
+        }
+      );
+    }
   }
 }
