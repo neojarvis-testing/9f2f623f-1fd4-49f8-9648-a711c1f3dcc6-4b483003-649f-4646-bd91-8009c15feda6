@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
+import * as AOS from 'aos';
 
 @Component({
   selector: 'app-home',
@@ -7,15 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(public authservice:AuthService) { }
+    
   isLoading = true;
   email:string ='foodmart@gmail.com';
   ngOnInit(): void {
     setTimeout(() => {
       this.isLoading = false;
-    }, 1500); // 1.5 seconds loading delay
+      AOS.init(); 
+    }, 2500); 
   }
-
-
 }
