@@ -40,17 +40,6 @@
           </div>
         </div>
 
-        <!-- Rating -->
-        <div class="form-group">
-          <label for="rating">Rating</label>
-          <div class="star-rating">
-            <span *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)" [class.filled]="star <= feedback.rating">&#9733;</span>
-          </div>
-          <div *ngIf="feedback.rating < 1 || feedback.rating > 5" class="text-danger">
-            Please provide a rating between 1 and 5.
-          </div>
-        </div>
-
         <button type="submit" class="btn btn-primary" [disabled]="!foodId || feedback.feedbackText.length < 10 || feedback.rating < 1 || feedback.rating > 5">
           Submit Feedback
         </button>
