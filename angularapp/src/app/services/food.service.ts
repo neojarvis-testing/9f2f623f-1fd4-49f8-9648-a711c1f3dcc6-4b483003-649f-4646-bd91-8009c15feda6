@@ -31,4 +31,9 @@ export class FoodService {
     return this.http.delete<void>(`${APIURL.APIurl}/food/${foodId}`);
   }
 
+  
+patchFood(foodId: number, partialFood: Partial<Food>): Observable<Food> {
+  return this.http.patch<Food>(`${APIURL.APIurl}/food/${foodId}`, partialFood);
+  }
+  
 }

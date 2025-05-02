@@ -1,6 +1,7 @@
 package com.examly.springapp.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -95,4 +96,16 @@ public class FoodController {
         boolean isDeleted = foodService.deleteFood(foodId);
         return ResponseEntity.status(200).body(isDeleted);
     }
+    /**
+     * Endpoint for partially updating a food item by ID.
+     * Partially updates a food item by its ID and returns the updated food item with HTTP status 200.
+     */
+ @Operation(summary = "Partially update food item by ID", description = "Allows an admin to partially update the details of a food item by its ID.")
+ @PatchMapping("/{foodId}")
+ @RolesAllowed("ADMIN")
+ public ResponseEntity<Food> patchFood(@PathVariable int foodId, @RequestBody Map<String, Object> updates) {
+    Food patchedFood = foodService.patchFood(foodId, updates);
+    return ResponseEntity.status(200).body(patchedFood);
+ }
+
 }

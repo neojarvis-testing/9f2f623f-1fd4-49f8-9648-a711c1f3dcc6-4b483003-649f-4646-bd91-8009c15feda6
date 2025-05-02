@@ -1,6 +1,7 @@
 package com.examly.springapp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.examly.springapp.model.Food;
 
@@ -10,5 +11,6 @@ public interface FoodService {
     public Food getFoodById(int foodId);
     public Food updateFood(int foodId, Food foodDetails);
     public boolean deleteFood(int foodId);
+    public Food patchFood(int foodId, Map<String, Object> updates);
 
 }
