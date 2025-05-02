@@ -87,6 +87,7 @@ export class AdminviewordersComponent implements OnInit {
         this.setupPagination(); // Refresh pagination after deletion
         this.isLoading = false;
         this.showSuccessPopup = true;
+        this.fetchOrders();
       },
       error: () => {
         console.error('Error deleting order');
