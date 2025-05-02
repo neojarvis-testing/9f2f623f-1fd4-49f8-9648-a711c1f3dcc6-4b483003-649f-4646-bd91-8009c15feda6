@@ -1,5 +1,9 @@
 <div class="nav" >
-    <h4 routerLink="/" class="cursor">🫕 Food Mart</h4>
+    <button routerLink="/" class="button" data-text="Awesome">
+      <span class="actual-text">&nbsp;FoodMart&nbsp;</span>
+      <span aria-hidden="true" class="hover-text">&nbsp;FoodMart&nbsp;</span>
+      </button>
+       
     <div class="box">
         <a routerLink="/register" *ngIf="!authService.isLoggedUser()">Register</a>  
         <a routerLink="/login" *ngIf="!authService.isLoggedUser()">Login</a>
@@ -36,7 +40,6 @@
     </div>
 </div>
 
-
 <div class="dialog-overlay" *ngIf="showDialog">
   <div class="dialog-box">
     <h2>Logout</h2>
@@ -46,5 +49,3 @@
     <button class="btn btn-danger" (click)="onDialogConfirm(false)">No</button> </div>
   </div>
 </div>
-
-  
