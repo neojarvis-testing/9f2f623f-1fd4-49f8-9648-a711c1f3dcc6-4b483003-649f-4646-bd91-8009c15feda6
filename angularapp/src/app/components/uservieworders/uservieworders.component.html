@@ -39,11 +39,9 @@
             <td>{{ order.orderStatus }}</td>
             <td>
               <!-- Show Cancel button only if status is "Pending" -->
-              <button *ngIf="order.orderStatus === 'Pending'" 
-                      class="btn btn-danger btn-sm" 
-                      (click)="confirmDelete(order)">
-                Cancel
-              </button>
+              <button *ngIf="order.orderStatus === 'Pending' || order.orderStatus === 'Making Food'" 
+              class="btn btn-danger btn-sm" (click)="confirmDelete(order)">Cancel</button>
+
 
               <!-- Disable Cancel button and show an alert if status is "On The Way" -->
               <button *ngIf="order.orderStatus === 'On the way'" 
