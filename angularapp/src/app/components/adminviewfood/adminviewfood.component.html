@@ -26,15 +26,15 @@
       <h2>Edit Food</h2>
       <form (ngSubmit)="updateFood()">
         <div class="form-group mb-3">
-          <label>Food Name:</label>
+          Food Name:
           <input type="text" [(ngModel)]="selectedFood.foodName" name="foodName" class="form-control" required />
         </div>
         <div class="form-group mb-3">
-          <label>Price:</label>
+          Price:
           <input type="number" [(ngModel)]="selectedFood.price" name="price" class="form-control" required />
         </div>
         <div class="form-group mb-3">
-          <label>Stock Quantity:</label>
+          Stock Quantity:
           <input type="number" [(ngModel)]="selectedFood.stockQuantity" name="stockQuantity" class="form-control" required />
         </div>
         <button type="submit" class="btn btn-success">Save</button>

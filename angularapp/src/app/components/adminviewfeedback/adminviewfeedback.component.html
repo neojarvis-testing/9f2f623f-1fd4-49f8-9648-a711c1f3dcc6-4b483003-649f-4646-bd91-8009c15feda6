@@ -7,7 +7,7 @@
 <div class="feedback-bg">
   <div class="container mt-5">
     <h2 class="text-center mb-4">User Feedbacks</h2>
-    <!-- <h5 (click)="loadFeedback()">🔄️</h5>  -->
+
     <div *ngIf="errorMessage" class="alert alert-danger text-center">
       {{ errorMessage }}
     </div>
@@ -46,19 +46,6 @@
     </div>
 
     <p *ngIf="paginatedFeedbacks.length === 0" class="text-center text-light">No feedback available.</p>
-  </div>
-
-  <!-- ✅ Pagination Controls -->
-  <div class="pagination-container">
-    <button class="btn btn-primary" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
-      Previous
-    </button>
-    <span *ngFor="let page of totalPages" (click)="changePage(page)" [class.active]="page === currentPage">
-      {{ page }}
-    </span>
-    <button class="btn btn-primary" [disabled]="currentPage === totalPages.length" (click)="changePage(currentPage + 1)">
-      Next
-    </button>
   </div>
 
   <!-- Success Popup Dialog -->

@@ -6,7 +6,7 @@ describe('User Model', () => {
     // Create a sample User object
     const user: User = {
       email: 'testuser@example.com',
-      pwd: 'testpassword',
+      pwd: 'testpwd',
       username: 'testuser',
       mobileNumber: '1234567890',
       userRole: 'admin'
