@@ -1,6 +1,7 @@
 package com.examly.springapp.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -95,4 +96,5 @@ public class FoodController {
         boolean isDeleted = foodService.deleteFood(foodId);
         return ResponseEntity.status(200).body(isDeleted);
     }
+
 }
