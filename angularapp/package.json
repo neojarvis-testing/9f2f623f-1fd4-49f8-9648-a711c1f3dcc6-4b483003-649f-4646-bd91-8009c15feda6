@@ -22,6 +22,7 @@
     "aos": "^2.3.4",
     "bootstrap": "^5.3.5",
     "chart.js": "^3.9.1",
+    "jwt-decode": "^4.0.0",
     "karma-coverage": "2.2.0",
     "puppeteer": "^19.7.5",
     "rxjs": "~6.6.0",

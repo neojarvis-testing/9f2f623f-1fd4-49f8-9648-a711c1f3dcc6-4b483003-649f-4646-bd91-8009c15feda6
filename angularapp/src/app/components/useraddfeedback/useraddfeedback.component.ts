@@ -5,6 +5,7 @@ import { FoodService } from 'src/app/services/food.service';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { User } from 'src/app/models/user.model';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-useraddfeedback',
@@ -24,7 +25,7 @@ export class UseraddfeedbackComponent implements OnInit {
   errorMessage: string = '';
   isLoading = true;
 
-  constructor(private readonly foodService: FoodService, private readonly feedbackService: FeedbackService) {}
+  constructor(private foodService: FoodService, private feedbackService: FeedbackService, private router:Router) {}
 
   ngOnInit(): void {
     this.isLoading = true; // Show spinner
@@ -63,6 +64,7 @@ export class UseraddfeedbackComponent implements OnInit {
           this.successMessage = 'Thank you for your feedback!';
            this.feedback = { feedbackText: '', rating: 0, user: { userId: 0} }; // Reset form
          //feedbackForm.reset();
+          this.router.navigate(['/userViewFeedback'])
         },
         error: (err) => {
           console.error('Error submitting feedback:', err);
