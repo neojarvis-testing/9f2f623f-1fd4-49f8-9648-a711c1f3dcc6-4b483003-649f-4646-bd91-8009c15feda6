@@ -43,7 +43,7 @@ export class AdminorderschartComponent implements OnInit {
     'rgba(255, 159, 64, 0.2)'
   ];
 
-  constructor(private orderService: OrderService) { }
+  constructor(private readonly orderService: OrderService) { }
 
   ngOnInit(): void {
     Chart.register(...registerables);
@@ -81,8 +81,41 @@ export class AdminorderschartComponent implements OnInit {
     this.createChart('polarArea', sortedDates, sortedData, this.polarColors, 'Orders Per Day');
     this.createChart('pie', sortedDates, sortedData, this.colors, 'Orders Per Day');
   }
-
   createChart(type: ChartType, labels: string[], data: number[], colors: string[], title: string): void {
+    const scalesConfig = {};
+  
+    if (type === 'pie' || type === 'doughnut') {
+      Object.assign(scalesConfig, {});
+    } else if (type === 'radar' || type === 'polarArea') {
+      Object.assign(scalesConfig, {
+        r: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      });
+    } else {
+      Object.assign(scalesConfig, {
+        x: {
+          title: {
+            display: true,
+            text: 'Order Date'
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          },
+          title: {
+            display: true,
+            text: 'No of Orders'
+          }
+        }
+      });
+    }
+
     const config: ChartConfiguration<typeof type, number[], string> = {
       type: type,
       data: {
@@ -108,37 +141,10 @@ export class AdminorderschartComponent implements OnInit {
             text: title
           }
         },
-        scales: type === 'pie' || type === 'doughnut' ? {} :
-        type === 'radar' || type === 'polarArea'? {
-          r: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 1
-            }
-          }
-        } :
-        {  
-          x: {
-            title: {
-              display: true,
-              text: 'Order Date'
-            }
-          },
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 1
-            },
-            title: {
-              display: true,
-              text: 'No of Orders'
-            }
-          },
-          
-        }
+        scales: scalesConfig
       }
     };
-
+  
     switch (type) {
       case 'bar':
         this.barChartInstance = new Chart(this.barChart.nativeElement, config as ChartConfiguration<'bar', number[], string>);
@@ -160,4 +166,5 @@ export class AdminorderschartComponent implements OnInit {
         break;
     }
   }
+  
 }
