@@ -32,6 +32,10 @@ export class UserviewfoodComponent implements OnInit {
     user: { userId: 0 } as User, 
     food: { foodId: 0 } as Food
   };
+  currentPage = 1;
+  itemsPerPage = 4; // You can adjust this number
+  paginatedFoods: Food[] = [];
+
   
   search = '';
   noItemFound = false;
@@ -46,34 +50,15 @@ export class UserviewfoodComponent implements OnInit {
     this.getAllFoods();
   }
 
-  searchProduct(): void {
-    this.foodService.getAllFoods().subscribe(data => {
-      this.foods = data;
-      if (this.search !== '') {
-        this.foods = this.foods.filter(filt => {
-          this.noItemFound = true;
-          return filt.foodName.toLowerCase().includes(this.search.toLowerCase());
-        });
-        this.noItemFound = this.foods.length === 0;
-      } else {
-        this.noItemFound = false;
-      }
-    });
-  }
-
-  reset(): void {
-    this.search = '';
-    this.noItemFound = false;
-    this.getAllFoods();
-  }
-
   getAllFoods(): void {
-    this.isLoading = true; 
+    this.isLoading = true;
     this.foodService.getAllFoods().subscribe({
       next: (data) => {
         this.foods = data;
-        this.isLoading = false; 
-        this.noItemFound = false; 
+        this.currentPage = 1;
+        this.updatePaginatedFoods();
+        this.isLoading = false;
+        this.noItemFound = false;
       },
       error: (err) => {
         console.error('Error fetching food items:', err);
@@ -82,6 +67,29 @@ export class UserviewfoodComponent implements OnInit {
       }
     });
   }
+  
+  searchProduct(): void {
+    this.foodService.getAllFoods().subscribe(data => {
+      this.foods = data;
+      if (this.search !== '') {
+        this.foods = this.foods.filter(filt =>
+          filt.foodName.toLowerCase().includes(this.search.toLowerCase())
+        );
+        this.noItemFound = this.foods.length === 0;
+      } else {
+        this.noItemFound = false;
+      }
+      this.currentPage = 1;
+      this.updatePaginatedFoods();
+    });
+  }
+  
+  reset(): void {
+    this.search = '';
+    this.noItemFound = false;
+    this.getAllFoods();
+  }
+
 
   openOrderPopup(food: Food): void {
     this.selectedFood = { ...food }; 
@@ -132,4 +140,19 @@ export class UserviewfoodComponent implements OnInit {
     this.getAllFoods();
     this.orderSuccess = false; 
   }
+  updatePaginatedFoods(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedFoods = this.foods.slice(startIndex, endIndex);
+  }
+  
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.updatePaginatedFoods();
+  }
+  
+  get totalPages(): number[] {
+    return Array(Math.ceil(this.foods.length / this.itemsPerPage)).fill(0).map((_, i) => i + 1);
+  }
+  
 }
