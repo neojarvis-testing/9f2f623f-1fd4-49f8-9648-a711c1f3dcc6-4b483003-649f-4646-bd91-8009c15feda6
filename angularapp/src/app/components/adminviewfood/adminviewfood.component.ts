@@ -88,7 +88,6 @@ export class AdminviewfoodComponent implements OnInit {
     }
   }
   
-  
 closeDialog(): void {
   this.showDialog = false;
   this.foodToDelete = null; // Reset the food to delete

@@ -9,14 +9,18 @@ import { FeedbackService } from 'src/app/services/feedback.service'; // Service 
 })
 export class AdminviewfeedbackComponent implements OnInit {
   feedbackList: Feedback[] = [];
+  paginatedFeedbacks: Feedback[] = [];
   errorMessage: string = '';
   isLoading = false;
-
   showDialog = false; // ✅ For feedback deleted popup
   showDeleteConfirmation = false; // ✅ For delete confirmation popup
   confirmFeedbackId: number = 0; // Store the ID of the feedback to delete
+  // ✅ Pagination properties
+  pageSize = 5; // Number of feedbacks per page
+  currentPage = 1;
+  totalPages: number[] = [];
 
-  constructor(private feedbackService: FeedbackService) {}
+  constructor(private readonly feedbackService: FeedbackService) {}
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -27,6 +31,7 @@ export class AdminviewfeedbackComponent implements OnInit {
     this.feedbackService.getFeedbacks().subscribe({
       next: (data) => {
         this.feedbackList = data;
+        this.setupPagination();
         this.isLoading = false;
       },
       error: () => {
@@ -48,6 +53,26 @@ export class AdminviewfeedbackComponent implements OnInit {
   }
 
   // Perform deletion if confirmed
+  setupPagination(): void {
+    this.totalPages = Array(Math.ceil(this.feedbackList.length / this.pageSize))
+      .fill(0)
+      .map((_, i) => i + 1);
+    this.updatePaginatedFeedback();
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.updatePaginatedFeedback();
+    }
+  }
+
+  updatePaginatedFeedback(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.paginatedFeedbacks = this.feedbackList.slice(startIndex, startIndex + this.pageSize);
+  }
+
+
   deleteFeedback(feedbackId: number): void {
     this.isLoading = true;
     this.feedbackService.deleteFeedback(feedbackId).subscribe(

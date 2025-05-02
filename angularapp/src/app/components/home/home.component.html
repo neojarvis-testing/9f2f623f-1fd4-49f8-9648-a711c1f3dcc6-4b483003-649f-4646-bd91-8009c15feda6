@@ -12,23 +12,23 @@
         style="background: linear-gradient(rgba(15, 23, 43, .9), rgba(15, 23, 43, .9)), url('https://neurosciencenews.com/files/2019/05/red-meat-ms-risk-neurosciencnews-public.jpg'); background-position: center; background-repeat: no-repeat; background-size: cover;">
         <div class="container my-5 py-5">
           <div class="row align-items-center g-5">
-            <div class="col-lg-6 text-center text-lg-start">
+            <div class="col-lg-6 text-center text-lg-start" data-aos="fade-up" data-aos-delay="400">
               <h1 class="display-3 text-white">Enjoy Our<br>Delicious Meal</h1>
               <p class="text-white mb-4 pb-2">Craving something delicious? Discover fresh bites, trusted vendors, and your favorite meals — all in one place.</p>
-              <a href="login" class="btn btn-primary py-sm-3 px-sm-5 me-3">Get Started</a>
+              <a *ngIf="!authservice.isLoggedUser()" href="login" class="btn btn-primary ">Get Started</a>
             </div>
-            <div class="col-lg-6 text-center text-lg-end overflow-hidden">
-               <img class="img-fluid" src="https://cdn.pixabay.com/photo/2025/04/14/13/32/buddha-bowl-9533507_1280.png" alt="Hero Image">
-              </div>
+            <div class="col-lg-6 text-center text-lg-end overflow-hidden" data-aos="zoom-out" data-aos-delay="200">
+               <img class="img-fluid" src="https://cdn.pixabay.com/photo/2025/04/14/13/32/buddha-bowl-9533507_1280.png" alt="Hero"> 
+             </div>
           </div>
         </div>
       </div>
   
       <!-- Services Section -->
-      <div class="container-xxl py-5">
+      <div class="container-xxl py-5" >
         <div class="container">
           <div class="row g-4">
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6" data-aos="fade-up" data-aos-delay="200">
               <div class="service-item rounded pt-3">
                 <div class="p-4 text-center">
                   <img src="https://cdn-icons-png.flaticon.com/512/3171/3171065.png" alt="Chef" width="60" class="mb-4" />
@@ -37,7 +37,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6" data-aos="fade-up" data-aos-delay="300">
               <div class="service-item rounded pt-3">
                 <div class="p-4 text-center">
                   <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Quality Food" width="60" class="mb-4" />
@@ -46,7 +46,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6" data-aos="fade-up" data-aos-delay="400">
               <div class="service-item rounded pt-3">
                 <div class="p-4 text-center">
                   <img src="https://cdn-icons-png.flaticon.com/512/891/891419.png" alt="Online Order" width="60" class="mb-4" />
@@ -55,7 +55,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6" data-aos="fade-up" data-aos-delay="500">
               <div class="service-item rounded pt-3">
                 <div class="p-4 text-center">
                   <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="24/7 Service" width="60" class="mb-4" />
@@ -69,67 +69,79 @@
       </div>
   
       <!-- About Section -->
-      <div class="container-xxl py-5">
+      <div class="container-xxl py-5" data-aos="fade-up" data-aos-delay="400">
         <div class="container">
           <div class="row g-5 align-items-center">
             <div class="col-lg-6">
               <div class="row g-3">
                 <div class="col-6 text-start">
-                  <img class="img-fluid rounded w-100" src="https://images.unsplash.com/photo-1538334421852-687c439c92f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="About 1">
+                  <img class="img-fluid rounded w-100" src="https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="About 1">
                 </div>
                 <div class="col-6 text-start">
-                    <img class="img-fluid rounded w-75" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D]" alt="About 2" style="margin-top: 25%;">                </div>
-                <div class="col-6 text-end">
-                  <img class="img-fluid rounded w-75" src="https://plus.unsplash.com/premium_photo-1661962305366-0c62646fd249?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="About 3">
+                    <img class="img-fluid rounded w-75" src="https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="About 2" style="margin-top: 25%;">
                 </div>
                 <div class="col-6 text-end">
-                    <img class="img-fluid rounded w-100" src="https://images.unsplash.com/photo-1667388968964-4aa652df0a9b?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="About 4">                </div>
+                  <img class="img-fluid rounded w-75" src="https://images.pexels.com/photos/539451/pexels-photo-539451.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="About 3">
+                </div>
+                <div class="col-6 text-end">
+                    <img class="img-fluid rounded w-100" src="https://images.pexels.com/photos/628776/pexels-photo-628776.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="About 4"> 
+                </div>
               </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
               <h5 class="section-title text-primary fw-normal" style="font-family: Arial, Helvetica, sans-serif;">About Us</h5>
               <h1 class="mb-4">Welcome to <i class="fa fa-utensils text-primary"></i> Food Mart</h1>
               <p class="mb-4">The Food Mart App is a digital platform designed to connect users with restaurants and
                 food vendors, ensuring a seamless and efficient food ordering experience.</p>
               <p class="mb-4">The system ensures smooth transactions, real-time order status updates, and a user-friendly experience.</p>
-              <a class="btn btn-primary py-3 px-5 mt-2" href="#">Register</a>
+              <a *ngIf="!authservice.isLoggedUser()" class="btn btn-primary" href="register">Register</a>
             </div>
           </div>
         </div>
       </div>
   
       <!-- Footer Section -->
-      <div class="container-fluid bg-dark text-light footer pt-5 mt-5">
+      <div class="container-fluid bg-dark text-light footer pt-5 mt-5" >
         <div class="container py-5">
           <div class="row g-5">
-            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-              <h4 class="text-primary mb-4">Food Mart</h4>
-              <a class="btn btn-link" href="#">About Us</a>
-              <a class="btn btn-link" href="#">Contact Us</a>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+              <h4 class="mb-4" style="color:#F57D1F">Our Team</h4>
+              <p>Tarakeswar</p>
+              <p>Vipul</p>
+              <p>Amisha</p>
+              <p>Harshit</p>
+              <p>Nimesh</p>
             </div>
-            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-              <h4 class="text-primary mb-4">Contact</h4>
-              <p><i class="fa fa-map-marker-alt me-3"></i>Abc Street, 12345 XYZ</p>
-              <p><i class="fa fa-phone-alt me-3"></i>+91 1234567890</p>
-              <p><i class="fa fa-envelope me-3"></i>{{email}}</p>
+
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+              <h4 class="mb-4" style="color:#F57D1F">Contact Us</h4>
+              <p>Abc Street, 12345 XYZ</p>
+              <p>+91 1234567890</p>
+              <p>{{email}}</p>
             </div>
-            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-              <h4 class="text-primary mb-4">Opening</h4>
-              <h5>Monday - Saturday</h5>
-              <p>09AM - 09PM</p>
-              <h5>Sunday</h5>
-              <p>10AM - 08PM</p>
+
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+              <h4 class="mb-4" style="color:#F57D1F">Available in</h4>
+              <p>Hyderabad</p>
+              <p>Bangalore</p>
+              <p>Chennai</p>
             </div>
-            <div class="col-lg-3 col-md-6" style="color: rgb(244, 244, 68); font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-              <h4 class="text-primary mb-4">Newsletter</h4>
+      
+            <!-- <div class="col-lg-3 col-md-6">
+              <h4 class="mb-4" style="color:#F57D1F">Newsletter</h4>
               <p>Subscribe for our latest updates.</p>
-              <div class="position-relative" style="max-width: 400px;">
-                <a href="register"><button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Sign Up</button></a>
-              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
+              <h2 class="mb-4" style="color:#F57D1F">FoodMart</h2>
+              <p>© 2025 FoodMart Limited</p>
             </div>
           </div>
         </div>
+                
+        <div class="d-flex justify-content-end">
+          <a class="btn btn-primary" href="#">↑</a>
+        </div>
       </div>
-  
     </div>
-  </div>
+  </div> 

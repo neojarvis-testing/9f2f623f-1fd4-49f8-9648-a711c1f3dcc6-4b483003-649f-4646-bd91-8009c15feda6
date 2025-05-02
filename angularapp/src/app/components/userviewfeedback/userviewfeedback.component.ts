@@ -9,11 +9,16 @@ import { FeedbackService } from 'src/app/services/feedback.service'; // Service 
 })
 export class UserviewfeedbackComponent implements OnInit {
   feedbackList: Feedback[] = [];
+  paginatedFeedbacks: Feedback[] = [];
   errorMessage: string = '';
   userId: number = 0; 
   isLoading = true;
   showDeleteConfirmation = false;
   deleteFeedbackId: number | null = null; // Store feedback id to delete
+  // ✅ Pagination properties
+  pageSize = 4; // Number of feedback items per page
+  currentPage = 1;
+  totalPages: number[] = [];
 
   constructor(private feedbackService: FeedbackService) { }
 
@@ -33,6 +38,7 @@ export class UserviewfeedbackComponent implements OnInit {
     this.feedbackService.getAllFeedbacksByUserId(userId).subscribe({
       next: (data) => {
         this.feedbackList = data;
+        this.setupPagination();
         this.isLoading = false;
       },
       error: () => {
@@ -55,6 +61,26 @@ export class UserviewfeedbackComponent implements OnInit {
   }
 
   // Perform delete operation
+  setupPagination(): void {
+    this.totalPages = Array(Math.ceil(this.feedbackList.length / this.pageSize))
+      .fill(0)
+      .map((_, i) => i + 1);
+    this.updatePaginatedFeedback();
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.updatePaginatedFeedback();
+    }
+  }
+
+  updatePaginatedFeedback(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.paginatedFeedbacks = this.feedbackList.slice(startIndex, startIndex + this.pageSize);
+  }
+
+
   deleteFeedback(feedbackId: number): void {
     if (feedbackId !== null) {
       this.feedbackService.deleteFeedback(feedbackId).subscribe(

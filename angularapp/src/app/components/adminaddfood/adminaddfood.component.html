@@ -11,7 +11,7 @@
       <h2 class="text-center mb-4" *ngIf="!editId">Add Food Item</h2>
       <h2 class="text-center mb-4" *ngIf="editId">Edit Food Item</h2>
 
-      <form (ngSubmit)="addFood()">
+      <form (ngSubmit)="addFood()" #foodForm="ngForm">
         <div class="form-group mb-3">
           <label for="foodName" class="form-label">Enter Food Name:</label>
           <input
@@ -21,7 +21,11 @@
             [(ngModel)]="food.foodName"
             name="foodName"
             placeholder="Enter food name"
-            required />
+            required
+            #foodName="ngModel" />
+          <div *ngIf="foodName.invalid && foodName.touched" class="text-danger">
+            Food name is required.
+          </div>
         </div>
 
         <div class="form-group mb-3">
@@ -33,7 +37,13 @@
             [(ngModel)]="food.price"
             name="price"
             placeholder="Enter food price"
-            required />
+            required
+            min="0"
+            #price="ngModel" />
+          <div *ngIf="price.invalid && price.touched" class="text-danger">
+            <div *ngIf="price.errors?.required">Price is required.</div>
+            <div *ngIf="price.errors?.min">Price cannot be negative.</div>
+          </div>
         </div>
 
         <div class="form-group mb-3">
@@ -45,7 +55,13 @@
             [(ngModel)]="food.stockQuantity"
             name="stockQuantity"
             placeholder="Enter stock quantity"
-            required />
+            required
+            min="0"
+            #stockQuantity="ngModel" />
+          <div *ngIf="stockQuantity.invalid && stockQuantity.touched" class="text-danger">
+            <div *ngIf="stockQuantity.errors?.required">Stock quantity is required.</div>
+            <div *ngIf="stockQuantity.errors?.min">Stock quantity cannot be negative.</div>
+          </div>
         </div>
 
         <div class="form-group mb-3">
@@ -59,10 +75,13 @@
             #file="ngModel" 
             [(ngModel)]="food.photo" 
             required />
+          <div *ngIf="file.invalid && file.touched" class="text-danger">
+            Photo is required.
+          </div>
         </div>
 
         <div class="text-center">
-          <button type="submit" class="btn btn-primary me-2">
+          <button type="submit" class="btn btn-primary me-2" [disabled]="foodForm.invalid">
             {{ editId ? 'Update Food' : 'Add Food' }}
           </button>
           <button
@@ -77,11 +96,18 @@
   </div>
 </div>
 
-<!-- Success Dialog -->
 
+<!-- Success Dialog -->
 <div class="dialog-overlay" *ngIf="showDialog">
-  <div class="dialog-box">
-    <p>{{ dialogMessage }}</p>
-    <button class="btn btn-primary" (click)="onDialogConfirm()">OK</button>
+   <div class="dialog-box">
+   <h2>{{ dialogMessage }}</h2>
+   <img *ngIf="food.photo" [src]="food.photo" alt="Food Image" class="food-image" />
+   <p *ngIf="dialogMessage === 'Food added successfully!'">
+  <b>Food Name:</b> {{ food.foodName }}<br>
+  <b>Price:</b> {{ food.price | currency:'INR' }}<br>
+  <b>Stock Quantity:</b> {{ food.stockQuantity }}
+   </p>
+   <button class="btn btn-primary" (click)="onDialogConfirm()">OK</button>
+   </div>
   </div>
-</div>
+  
