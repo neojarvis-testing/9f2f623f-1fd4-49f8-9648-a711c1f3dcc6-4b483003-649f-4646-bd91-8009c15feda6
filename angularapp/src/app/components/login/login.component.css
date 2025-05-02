@@ -12,6 +12,7 @@
   margin-top: -50px; /* Move the form upwards */
   max-width: 400px; /* Decrease the maximum width */
   width: 100%;
+  margin-top: 50px;
 }
 
 .login-box h2 {

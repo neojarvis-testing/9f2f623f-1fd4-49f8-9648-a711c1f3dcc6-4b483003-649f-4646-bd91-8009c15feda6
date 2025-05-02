@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Feedback } from 'src/app/models/feedback.model';
-import { FeedbackService } from 'src/app/services/feedback.service';
+import { Feedback } from 'src/app/models/feedback.model'; // Feedback model
+import { FeedbackService } from 'src/app/services/feedback.service'; // Service to fetch feedback
 
 @Component({
   selector: 'app-adminviewfeedback',
@@ -12,8 +12,9 @@ export class AdminviewfeedbackComponent implements OnInit {
   paginatedFeedbacks: Feedback[] = [];
   errorMessage: string = '';
   isLoading = false;
-  showDialog = false;
-
+  showDialog = false; // ✅ For feedback deleted popup
+  showDeleteConfirmation = false; // ✅ For delete confirmation popup
+  confirmFeedbackId: number = 0; // Store the ID of the feedback to delete
   // ✅ Pagination properties
   pageSize = 5; // Number of feedbacks per page
   currentPage = 1;
@@ -40,6 +41,18 @@ export class AdminviewfeedbackComponent implements OnInit {
     });
   }
 
+  // Trigger delete confirmation dialog
+  confirmDelete(feedbackId: number): void {
+    this.confirmFeedbackId = feedbackId;
+    this.showDeleteConfirmation = true; // Show confirmation dialog
+  }
+
+  // Cancel deletion and close the confirmation dialog
+  cancelDelete(): void {
+    this.showDeleteConfirmation = false;
+  }
+
+  // Perform deletion if confirmed
   setupPagination(): void {
     this.totalPages = Array(Math.ceil(this.feedbackList.length / this.pageSize))
       .fill(0)
@@ -64,38 +77,25 @@ export class AdminviewfeedbackComponent implements OnInit {
     this.isLoading = true;
     this.feedbackService.deleteFeedback(feedbackId).subscribe(
       () => {
+        // Remove the feedback from the list without reloading the page
         this.feedbackList = this.feedbackList.filter(
           feedback => feedback.feedbackId !== feedbackId
         );
         this.isLoading = false;
-        this.showDialog = true; // ✅ Show custom success popup
+        this.showDeleteConfirmation = false; // Close the confirmation dialog
+        this.showDialog = true; // Show success popup
       },
       (error) => {
         console.error('Error deleting feedback', error);
         this.isLoading = false;
         this.errorMessage = 'Failed to delete feedback.';
+        this.showDeleteConfirmation = false; // Close the confirmation dialog
       }
     );
   }
 
+  // Close the success popup
   onDialogConfirm(): void {
     this.showDialog = false;
   }
 }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
