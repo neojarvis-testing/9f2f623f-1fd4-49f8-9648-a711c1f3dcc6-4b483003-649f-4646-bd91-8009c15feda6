@@ -16,6 +16,4 @@ export class HomeComponent implements OnInit {
       this.isLoading = false;
     }, 1500); // 1.5 seconds loading delay
   }
-
-
 }
