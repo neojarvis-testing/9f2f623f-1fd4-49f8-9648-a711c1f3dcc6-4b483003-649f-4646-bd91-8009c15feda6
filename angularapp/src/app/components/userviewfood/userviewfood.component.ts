@@ -12,13 +12,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./userviewfood.component.css']
 })
 export class UserviewfoodComponent implements OnInit {
-
   isLoading = true; 
-  foods: Food[] = []; // Array to store food items
-  selectedFood: Food | null = null; // Store the food item to be ordered
-  showOrderPopup: boolean = false; // Control order popup visibility
-  orderQuantity: number = 1; // Default order quantity
-  totalAmount: number = 0; // Total amount for the order
+  foods: Food[] = []; 
+  selectedFood: Food | null = null; 
+  showOrderPopup = false; 
+  orderQuantity = 1; 
+  totalAmount = 0; 
+  orderSuccess = false; 
+  orderSuccessFoodName = ''; // Store food name separately for success popup
+  orderDate = ''; 
 
   order: Orders = {
     orderStatus: 'Pending',
@@ -26,16 +28,13 @@ export class UserviewfoodComponent implements OnInit {
     quantity: 0,
     foodId: 0,
     orderDate: '',
-    userId: 0, // Assuming a static user ID for now, replace with actual user ID if needed
-    user: { userId: 0 } as User ,// Initialize the User object
-    food: {foodId:0} as Food
+    userId: 0, 
+    user: { userId: 0 } as User, 
+    food: { foodId: 0 } as Food
   };
-  search: string = '';
-  noItemFound: boolean = false;
-  orderDate: string = ''; // Add orderDate property
-
-  // New flag for success pop-up
-  orderSuccess: boolean = false; // Manage success popup visibility
+  
+  search = '';
+  noItemFound = false;
 
   constructor(
     private foodService: FoodService,
@@ -69,32 +68,32 @@ export class UserviewfoodComponent implements OnInit {
   }
 
   getAllFoods(): void {
-    this.isLoading = true; // Show spinner while loading
+    this.isLoading = true; 
     this.foodService.getAllFoods().subscribe({
       next: (data) => {
         this.foods = data;
-        this.isLoading = false; // Hide spinner after loading completes
-        this.noItemFound = false; // Reset no items found flag
+        this.isLoading = false; 
+        this.noItemFound = false; 
       },
       error: (err) => {
         console.error('Error fetching food items:', err);
         alert('Failed to fetch food items.');
-        this.isLoading = false; // Hide spinner if error occurs
+        this.isLoading = false;
       }
     });
   }
 
   openOrderPopup(food: Food): void {
-    this.selectedFood = { ...food }; // Create a copy of the food object
-    this.orderQuantity = 1; // Reset order quantity
-    this.totalAmount = this.selectedFood.price; // Initialize total amount
-    this.orderDate = new Date().toLocaleDateString(); // Set the order date to the current date
-    this.showOrderPopup = true; // Show the order popup
+    this.selectedFood = { ...food }; 
+    this.orderQuantity = 1; 
+    this.totalAmount = this.selectedFood.price; 
+    this.orderDate = new Date().toLocaleDateString(); 
+    this.showOrderPopup = true; 
   }
 
   closeOrderPopup(): void {
     this.showOrderPopup = false;
-    this.selectedFood = null; // Reset the selected food
+    this.selectedFood = null; 
   }
 
   updateTotalAmount(): void {
@@ -105,20 +104,21 @@ export class UserviewfoodComponent implements OnInit {
 
   confirmOrder(): void {
     if (this.selectedFood) {
-      const userId = Number(localStorage.getItem('userId')); // Get the user ID from local storage
+      const userId = Number(localStorage.getItem('userId')); 
+
+      this.orderSuccessFoodName = this.selectedFood.foodName; // Store food name before closing popup
       this.order.foodId = this.selectedFood.foodId;
       this.order.quantity = this.orderQuantity;
       this.order.totalAmount = this.totalAmount;
-      this.order.orderDate = new Date().toISOString(); // System-generated order date
-      this.order.userId = userId; // Set the user ID
-      this.order.user.userId = userId; // Set the user ID in the User object
+      this.order.orderDate = new Date().toISOString();
+      this.order.userId = userId;
+      this.order.user.userId = userId;
       this.order.food.foodId = this.selectedFood.foodId;
   
       this.orderService.placeOrder(this.order).subscribe(
         () => {
-          // Show the order success pop-up
           this.orderSuccess = true;
-          this.closeOrderPopup();  // Close the order popup after order confirmation
+          this.closeOrderPopup(); 
         },
         (error) => {
           console.error('Error placing order:', error);
@@ -127,9 +127,9 @@ export class UserviewfoodComponent implements OnInit {
       );
     }
   }
-  
 
   closeOrderSuccessPopup(): void {
-    this.orderSuccess = false; // Close the success pop-up
+    this.getAllFoods();
+    this.orderSuccess = false; 
   }
 }

@@ -150,11 +150,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean deleteOrder(int orderId) {
         logger.info("Deleting order with ID: {}", orderId);
+    
         Orders order = orderRepo.findById(orderId).orElse(null);
         if (order == null) {
             logger.error("Order not found with ID: {}", orderId);
             throw new ResourceNotFoundException("Order not found with ID: " + orderId);
         }
+
+        // Restore stock quantity
+        Food food = order.getFood();
+        if (food != null) {
+            food.setStockQuantity(food.getStockQuantity() + order.getQuantity());
+            foodRepo.save(food); // Save updated stock quantity
+            logger.info("Restored stock quantity for {}: {}", food.getFoodName(), food.getStockQuantity());
+        }
+
         orderRepo.deleteById(orderId);
         logger.info("Order deleted successfully with ID: {}", orderId);
         return true;

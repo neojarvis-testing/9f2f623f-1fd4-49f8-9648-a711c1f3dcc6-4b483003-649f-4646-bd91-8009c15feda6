@@ -6,17 +6,14 @@
 <!-- Food List Container -->
 <div class="user-view-food-container">
   <div class="container mt-5">
-    <!-- Food List Header -->
     <h2 class="text-center mb-4">Food List</h2>
 
-    <!-- Search and Clear Buttons -->
     <div class="search-container">
       <input type="text" [(ngModel)]="search" class="search-input" placeholder="Search for food..." />
       <button class="search-button" (click)="searchProduct()">Search</button>
       <button class="clear-button" (click)="reset()">Clear</button>
     </div>
 
-    <!-- Food Cards -->
     <div class="food-list-container">
       <div *ngFor="let food of foods" class="food-card">
         <img [src]="food.photo" class="food-image" alt="{{ food.foodName }}">
@@ -25,21 +22,23 @@
           <p class="food-price">Price: ₹{{ food.price }}</p>
           <p class="food-quantity">Stock Quantity: {{ food.stockQuantity }}</p>
         </div>
+        
+
+        <h3 *ngIf="food.stockQuantity === 0" class="out-of-stock-message">Out of stock</h3>
+
         <button class="place-order-btn" [disabled]="food.stockQuantity === 0" (click)="openOrderPopup(food)">
           Place Order
         </button>
       </div>
     </div>
 
-    <!-- No Items Found Message -->
     <p *ngIf="noItemFound" class="text-muted">No food items found matching your search.</p>
 
     <!-- Order Popup -->
     <div *ngIf="showOrderPopup" class="order-popup-overlay">
       <div class="order-popup">
-        <button class="close-btn" (click)="closeOrderPopup()">&times;</button> <!-- Close Button -->
-        <h3>Order {{ selectedFood?.foodName }}</h3>
-        <p>Price: ₹{{ selectedFood?.price }}</p>
+        <h4>{{ selectedFood?.foodName }}</h4>  
+        <p>Price: {{ selectedFood?.price | currency:'INR'}}</p>
         <label for="quantity">Quantity:</label>
         <input 
           type="number" 
@@ -58,11 +57,11 @@
       </div>
     </div>
 
-    <!-- Order Success Pop-up -->
+    <!-- Order Success Popup -->
     <div *ngIf="orderSuccess" class="order-success-popup-overlay">
       <div class="order-success-popup">
         <h3>Order Placed Successfully</h3>
-        <p><strong>Product Name:</strong> {{ selectedFood?.foodName }}</p>
+        <h5><strong>Product Name:</strong> {{ orderSuccessFoodName }}</h5>
         <p><strong>Quantity:</strong> {{ orderQuantity }}</p>
         <p><strong>Total Amount:</strong> ₹{{ totalAmount }}</p>
         <p><strong>Order Date:</strong> {{ orderDate }}</p>
