@@ -77,6 +77,7 @@ export class UserviewordersComponent implements OnInit {
           this.orders = this.orders.filter(order => order.orderId !== this.orderToDelete?.orderId);
           this.showConfirmation = false;
           this.orderToDelete = null;
+          this.loadOrders();
         },
         error: () => {
           this.errorMessage = 'Failed to delete order';
