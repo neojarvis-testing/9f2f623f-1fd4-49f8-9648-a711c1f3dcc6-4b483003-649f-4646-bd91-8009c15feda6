@@ -1,14 +1,9 @@
-<!-- Spinner Overlay -->
-<div *ngIf="isLoading" class="spinner-overlay">
-  <div class="spinner"></div>
-</div>
-
 <div class="container mt-5">
   <h2 class="text-center mb-4">My Feedback</h2>
 
   <div *ngIf="errorMessage" class="alert alert-danger text-center">{{ errorMessage }}</div>
 
-  <div class="table-responsive" *ngIf="feedbackList.length > 0">
+  <div class="table-responsive" *ngIf="paginatedFeedbacks.length > 0">
     <table class="table table-bordered table-hover">
       <thead class="thead-dark">
         <tr>
@@ -19,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let feedback of feedbackList">
+        <tr *ngFor="let feedback of paginatedFeedbacks">
           <td>{{ feedback.food.foodName }}</td>
           <td>{{ feedback.feedbackText }}</td>
           <td>
@@ -34,5 +29,19 @@
       </tbody>
     </table>
   </div>
-  <p *ngIf="feedbackList.length === 0" class="text-center text-muted">No feedback available.</p>
+
+  <p *ngIf="paginatedFeedbacks.length === 0" class="text-center text-muted">No feedback available.</p>
+
+  <!-- ✅ Pagination Controls -->
+  <div class="pagination-container">
+    <button class="btn btn-primary" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      Previous
+    </button>
+    <span *ngFor="let page of totalPages" (click)="changePage(page)" [class.active]="page === currentPage">
+      {{ page }}
+    </span>
+    <button class="btn btn-primary" [disabled]="currentPage === totalPages.length" (click)="changePage(currentPage + 1)">
+      Next
+    </button>
+  </div>
 </div>

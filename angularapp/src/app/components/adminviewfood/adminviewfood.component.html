@@ -4,20 +4,34 @@
 </div>
 
 <div class="food-bg">
-
   <h2 class="text-center mb-4">Food List</h2>
 
   <!-- Food Cards Container -->
   <div class="food-container">
-    <div class="food-card" *ngFor="let food of foods">
+    <div class="food-card" *ngFor="let food of paginatedFoods">
       <img [src]="food.photo" alt="Food Image" />
       <p><b>Food ID:</b> {{ food.foodId }}</p>
       <p><b>Food Name:</b> {{ food.foodName }}</p>
-      <p><b>Price:</b> {{ food.price }}</p>
+      <p><b>Price:</b> {{ food.price | currency:'INR'}}</p>
       <p><b>Stock Quantity:</b> {{ food.stockQuantity }}</p>
+      <h3 *ngIf="food.stockQuantity === 0" class="out-of-stock-message">Out of stock</h3>
+
       <button class="btn btn-warning" (click)="openEditPopup(food)">Edit</button>
       <button class="btn btn-danger" (click)="confirmDeleteFood(food.foodId)">Delete</button>
     </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="pagination-container">
+    <button class="btn btn-primary" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      Previous
+    </button>
+    <span *ngFor="let page of totalPages" (click)="changePage(page)" [class.active]="page === currentPage">
+      {{ page }}
+    </span>
+    <button class="btn btn-primary" [disabled]="currentPage === totalPages.length" (click)="changePage(currentPage + 1)">
+      Next
+    </button>
   </div>
 
   <!-- Edit Popup -->
@@ -52,5 +66,4 @@
       <button class="btn btn-secondary" (click)="onDialogConfirm(false)">No</button>
     </div>
   </div>
-
 </div>

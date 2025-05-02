@@ -8,70 +8,90 @@ import { FoodService } from 'src/app/services/food.service';
   styleUrls: ['./adminviewfood.component.css']
 })
 export class AdminviewfoodComponent implements OnInit {
-  foods: Food[] = []; // Array to store food items
-  selectedFood: Food | null = null; // Store the food item to be edited
-  showPopup: boolean = false; // Control popup visibility
+  foods: Food[] = [];
+  paginatedFoods: Food[] = [];
+  selectedFood: Food | null = null;
+  showPopup = false;
   showDialog = false;
-  foodToDelete: number | null = null; 
+  foodToDelete: number | null = null;
+  isLoading = false;
+
+  pageSize = 4;
+  currentPage = 1;
+  totalPages: number[] = [];
+
   constructor(private readonly foodService: FoodService) {}
-  isLoading=false;
 
   ngOnInit(): void {
-    this.getAllFoods(); // Fetch food items on initialization
+    this.getAllFoods();
   }
 
   getAllFoods(): void {
-    this.isLoading=true; //show spinner
-    this.foodService.getAllFoods().subscribe(
-      (data) => {
-        this.foods = data; // Assign fetched food items to the array
-        this.isLoading=false; // Hide spinner
-        console.log('Food items fetched successfully:', this.foods);
+    this.isLoading = true;
+    this.foodService.getAllFoods().subscribe({
+      next: (data) => {
+        this.foods = data;
+        this.setupPagination();
+        this.isLoading = false;
       },
-      (err) => {
-        this.isLoading=false; // Hide Spinner
+      error: (err) => {
         console.error('Error fetching food items:', err);
         alert('Failed to fetch food items.');
+        this.isLoading = false;
       }
-    );
+    });
+  }
+
+  setupPagination(): void {
+    this.totalPages = Array(Math.ceil(this.foods.length / this.pageSize))
+      .fill(0)
+      .map((_, i) => i + 1);
+    this.updatePaginatedFoods();
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.updatePaginatedFoods();
+    }
+  }
+
+  updatePaginatedFoods(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.paginatedFoods = this.foods.slice(startIndex, startIndex + this.pageSize);
   }
 
   openEditPopup(food: Food): void {
-    console.log('Edit button clicked:', food); // Debugging output
-    this.selectedFood = { ...food }; // Create a copy of the food object
-    this.showPopup = true; // Show the popup
+    this.selectedFood = { ...food };
+    this.showPopup = true;
+  }
+
+  closePopup(): void {
+    this.showPopup = false;
+    this.selectedFood = null;
   }
 
   updateFood(): void {
     if (this.selectedFood) {
-      this.foodService.updateFood(this.selectedFood.foodId, this.selectedFood).subscribe(
-        (updatedFood) => {
-          const index = this.foods.findIndex(f => f.foodId === updatedFood.foodId);
-          if (index !== -1) {
-            this.foods[index] = updatedFood;
-            console.log('Food updated successfully:', updatedFood);
-          }
+      this.foodService.updateFood(this.selectedFood.foodId, this.selectedFood).subscribe({
+        next: () => {
+          alert('Food updated successfully!');
           this.closePopup();
+          this.getAllFoods();
         },
-        (err) => {
-          console.error('Error updating food item:', err);
-          alert('Failed to update food item.');
+        error: (err) => {
+          console.error('Error updating food:', err);
+          alert('Failed to update food.');
         }
-      );
+      });
     }
   }
-  
 
-  closePopup(): void {
-    this.showPopup = false;
-    this.selectedFood = null; // Reset the selected food
+  confirmDeleteFood(foodId: number): void {
+    this.foodToDelete = foodId;
+    this.showDialog = true;
   }
 
-   confirmDeleteFood(foodId: number): void {
-     this.foodToDelete = foodId;
-     this.showDialog = true; // Show the confirmation dialog
-  }
-    
   deleteFood(): void {
     if (this.foodToDelete !== null) {
       this.foodService.deleteFood(this.foodToDelete).subscribe(() => {
@@ -87,18 +107,15 @@ export class AdminviewfoodComponent implements OnInit {
       });
     }
   }
-  
-  
-closeDialog(): void {
-  this.showDialog = false;
-  this.foodToDelete = null; // Reset the food to delete
-}
-  
-onDialogConfirm(confirm: boolean): void {
-  if (confirm==true) {
-    this.deleteFood();
-  } else {
-    this.closeDialog();
+  closeDialog(): void {
+    this.showDialog = false;
+    this.foodToDelete = null; // Reset the food to delete
   }
-}   
+  onDialogConfirm(confirm: boolean): void {
+    if (confirm) {
+      this.deleteFood();
+    } else {
+      this.closeDialog();
+    }
+  }   
 }
