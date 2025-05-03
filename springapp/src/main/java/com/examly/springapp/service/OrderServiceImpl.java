@@ -191,4 +191,47 @@ public class OrderServiceImpl implements OrderService {
         logger.info("Orders found for User ID {}: {}", userId, userOrders);
         return userOrders;   
     }
+
+    @Override
+    public Orders createOrder(Orders orders) {
+        logger.info("Adding order: {}", orders);
+        if (orders == null || orders.getOrderStatus() == null || orders.getOrderStatus().isEmpty()) {
+            logger.error("Invalid order status: {}", orders);
+            throw new InvalidInputException("Order status cannot be null or empty.");
+        }
+
+        // Fetch and set User 
+        User user = userRepo.findById(orders.getUser().getUserId()).orElse(null);
+        if (user == null) {
+            logger.error("User not found: {}", orders.getUser().getUserId());
+            throw new UserNotFoundException("User not found");
+        }
+        orders.setUser(user);
+
+        // Fetch and set Food
+        Food food = foodRepo.findById(orders.getFood().getFoodId()).orElse(null);
+        if (food == null) {
+            logger.error("Food not found: {}", orders.getFood().getFoodId());
+            throw new ResourceNotFoundException("Food not found"); 
+        }
+        if (food.getStockQuantity() < orders.getQuantity()) {
+            if (food.getStockQuantity() == 0) {
+                logger.error("Food out of stock: {}", food.getFoodName());
+                throw new ResourceNotFoundException(food.getFoodName() + " Out of Stock!!");
+            }
+            logger.error("Insufficient stock for {}: Available Quantity is {}", food.getFoodName(), food.getStockQuantity());
+            throw new ResourceNotFoundException("Available Quantity of " + food.getFoodName() + " is " + food.getStockQuantity());
+        }
+        orders.setFood(food);
+
+        // Set default Order Status
+        orders.setOrderStatus("Pending");
+        orders.setOrderDate(LocalDate.now());
+        orders.setTotalAmount(food.getPrice()*orders.getQuantity());
+        food.setStockQuantity(food.getStockQuantity() - orders.getQuantity());
+        Orders savedOrder = orderRepo.save(orders);
+        logger.info("Order added successfully: {}", savedOrder);
+        return savedOrder;
+    }
+
 }

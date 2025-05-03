@@ -30,7 +30,8 @@ export class AdminviewfeedbackComponent implements OnInit {
   loadFeedback(): void {
     this.feedbackService.getFeedbacks().subscribe({
       next: (data) => {
-        this.feedbackList = data;
+        // Sort feedbacks by date in descending order
+        this.feedbackList = data.sort((a, b) => b.feedbackId-a.feedbackId);
         this.setupPagination();
         this.isLoading = false;
       },
@@ -40,6 +41,7 @@ export class AdminviewfeedbackComponent implements OnInit {
       }
     });
   }
+  
 
   // Trigger delete confirmation dialog
   confirmDelete(feedbackId: number): void {

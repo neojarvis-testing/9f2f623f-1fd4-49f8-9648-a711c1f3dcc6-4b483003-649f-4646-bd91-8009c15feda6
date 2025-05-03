@@ -31,7 +31,7 @@ export class AdminviewordersComponent implements OnInit {
     this.isLoading = true;
     this.orderService.getAllOrders().subscribe({
       next: (data) => {
-        this.orders = data.sort((a, b) => new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime());
+        this.orders = data.sort((a, b) => b.orderId-a.orderId);
         this.setupPagination();
         this.isLoading = false;
       },

@@ -14,22 +14,22 @@ import jakarta.servlet.http.HttpServletRequest;
 @Component
 public class JwtUtils {
     @Value("${SECRET_KEY}")// in property add SECRET_KEY=java
-     private String secretKey;
+     private String SECRET_KEY;
     public String genrateToken(Authentication authentication) {
           UserDetails userDetails = (UserDetails) authentication.getPrincipal();
           return Jwts.builder()
           .setSubject(userDetails.getUsername())
           .setIssuedAt(new Date())
           .setExpiration(new Date(System.currentTimeMillis()+(60*60*1000)))
-          .signWith(SignatureAlgorithm.HS256,secretKey)
+          .signWith(SignatureAlgorithm.HS256,SECRET_KEY)
           .compact();
 
     }
     public String extractUsername(String token){
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
     }
     public Date extractExperation(String token){
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getExpiration();
     }
     public boolean isTokenExpired(String token){
         Date expire = extractExperation(token);

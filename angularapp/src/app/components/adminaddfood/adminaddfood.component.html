@@ -64,7 +64,7 @@
           <div *ngIf="stockQuantity.invalid && stockQuantity.touched" class="text-danger">
             <div *ngIf="stockQuantity.errors?.required">Stock quantity is required.</div>
             <div *ngIf="stockQuantity.errors?.min">Stock quantity cannot be negative.</div>
-            <div *ngIf="stockQuantity.errors?.pattern">Stock quantity must be a whole number.</div>
+            <div *ngIf="stockQuantity.errors?.pattern">Stock quantity must be a positive whole number.</div>
           </div>
         </div>
 
