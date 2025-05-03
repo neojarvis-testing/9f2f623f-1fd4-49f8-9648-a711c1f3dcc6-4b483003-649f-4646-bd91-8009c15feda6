@@ -35,7 +35,7 @@ export class AdminaddfoodComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.food.foodName = this.toTitleCase(this.food.foodName); // Convert to title case
+    this.food.foodName = this.food.foodName; // Convert to title case
     this.foodService.addFood(this.food).subscribe(() => {
       this.isLoading = false;
       this.dialogMessage = 'Food added successfully!';
@@ -72,11 +72,5 @@ export class AdminaddfoodComponent implements OnInit {
       console.log(this.food)
       reader.readAsDataURL(file);
     }
-  }
-
-  toTitleCase(str: string): string {
-    return str.replace(/\w\S*/g, (txt) => {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
   }
 }

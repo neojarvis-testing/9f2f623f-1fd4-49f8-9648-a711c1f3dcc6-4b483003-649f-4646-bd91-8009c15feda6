@@ -9,7 +9,7 @@ import { APIURL } from '../constant/api_url';
 })
 export class OrderService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
 
   placeOrder(order: Orders): Observable<Orders> {

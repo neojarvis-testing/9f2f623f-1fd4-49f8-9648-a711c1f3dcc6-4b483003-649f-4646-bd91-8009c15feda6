@@ -10,7 +10,7 @@ import { Login } from '../models/login.model';
 })
 export class AuthService {
  
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
  
   register(user: User): Observable<any>{
     return this.http.post<any>(`${APIURL.APIurl}/register`, user);

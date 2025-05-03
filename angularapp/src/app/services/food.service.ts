@@ -9,7 +9,7 @@ import { APIURL } from '../constant/api_url';
 })
 export class FoodService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getAllFoods(): Observable<Food[]> {
     return this.http.get<Food[]>(`${APIURL.APIurl}/food`);
