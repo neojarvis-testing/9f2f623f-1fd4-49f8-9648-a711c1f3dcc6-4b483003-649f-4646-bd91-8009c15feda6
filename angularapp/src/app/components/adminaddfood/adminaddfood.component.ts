@@ -35,7 +35,6 @@ export class AdminaddfoodComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.food.foodName = this.food.foodName; // Convert to title case
     this.foodService.addFood(this.food).subscribe(() => {
       this.isLoading = false;
       this.dialogMessage = 'Food added successfully!';
