@@ -23,7 +23,7 @@ export class RegistrationComponent {
   passwordMismatch = false;
   mismatchDialog = false;
 
-  constructor(private authService: AuthService, private readonly router: Router) {}
+  constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
   onSubmit(form: NgForm): void {
     this.passwordMismatch = this.user.password !== this.user.confirmPassword;

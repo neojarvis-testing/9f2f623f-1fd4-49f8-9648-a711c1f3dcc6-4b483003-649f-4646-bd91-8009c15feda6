@@ -9,9 +9,9 @@ import { APIURL } from '../constant/api_url';
 })
 export class FeedbackService {
 
-  private apiUrl = `${APIURL.APIurl}/feedback`;
+  private readonly apiUrl = `${APIURL.APIurl}/feedback`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   sendFeedback(feedback: Feedback): Observable<Feedback> {
     return this.http.post<Feedback>(this.apiUrl, feedback);
