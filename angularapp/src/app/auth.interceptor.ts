@@ -24,72 +24,22 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = localStorage.getItem('token')
     //validity chek for token
     if (token) {
-   const decodedToken: any = jwtDecode(token);
-   const currentTime = Math.floor(Date.now() / 1000);
-  // console.log(decodedToken.exp +' '+ currentTime+' '+ (decodedToken.exp < currentTime))
-   if (decodedToken.exp < currentTime) {
-   // Token is expired
-   this.authService.logout();
-   this.router.navigate(['/login']);
-   return throwError(() => new Error('Token expired'));
-
-   }
+      const decodedToken: any = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (decodedToken.exp < currentTime) {
+      // Token is expired
+        this.authService.logout();
+        this.router.navigate(['/login']);
+        return throwError(() => new Error('Token expired'));
+      }
   
-   const authReq = request.clone({
-   setHeaders: {
-   Authorization: `Bearer ${token}`
+      const authReq = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return next.handle(authReq)
    }
-   });
-   return next.handle(authReq)
-  //  .pipe(
-  //  catchError((error: HttpErrorResponse) => {
-  //  if (error.status === 401) {
-  //  // Handle unauthorized error
-  //  this.router.navigate(['/login']);
-  //  }
-  //  return throwError(() => error);
-  //  })
-  //  );
-   }
-  
    return next.handle(request);
    }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //     if(token){
-      
-//       const authreq = request.clone({
-//         setHeaders:{
-//           Authorization: `Bearer ${token}`
-//         }
-//       })
-//       return next.handle(authreq)
-//     }
-//     return next.handle(request);
-//   }
-
-// }
-
-
-
-  

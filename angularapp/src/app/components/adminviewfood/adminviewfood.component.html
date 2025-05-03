@@ -1,6 +1,15 @@
 <!-- Spinner -->
-<div *ngIf="isLoading" class="spinner-overlay">
-  <div class="spinner"></div>
+<div *ngIf="isLoading" class="spinner-overlay" >
+  <div class="loader">
+    <div class="panWrapper">
+      <div class="pan">
+        <div class="food"></div>
+        <div class="panBase"></div>
+        <div class="panHandle"></div>
+      </div>
+      <div class="panShadow"></div>
+      </div>
+  </div>
 </div>
 
 <div class="food-bg">
@@ -14,6 +23,7 @@
       <p><b>Food Name:</b> {{ food.foodName | titlecase }}</p>
       <p><b>Price:</b> {{ food.price | currency: 'INR' }}</p>
       <p><b>Stock Quantity:</b> {{ food.stockQuantity }}</p>
+      <h3 *ngIf="food.stockQuantity === 0" class="out-of-stock-message text-danger">Out of stock</h3>
       <button class="btn btn-warning" (click)="openEditPopup(food)">Edit</button>
       <button class="btn btn-danger" (click)="confirmDeleteFood(food.foodId)">Delete</button>
     </div>
@@ -54,7 +64,7 @@
       </form>
     </div>
   </div>
-
+ 
   <!-- Delete Confirmation Dialog -->
   <div class="dialog-overlay" *ngIf="showDialog">
     <div class="dialog-box">
