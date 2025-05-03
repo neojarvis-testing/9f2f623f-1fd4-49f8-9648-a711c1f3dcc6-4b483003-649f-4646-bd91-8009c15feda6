@@ -58,18 +58,18 @@ export class UseraddfeedbackComponent implements OnInit {
     if (this.foodId && this.feedback.feedbackText.length >= 10 && this.feedback.rating >= 1 && this.feedback.rating <= 5) {
       this.feedback.date = new Date(); // Add current date
       this.feedback.food.foodId=this.foodId
-      this.feedbackService.sendFeedback(this.feedback).subscribe({
-        next: () => {
+      this.feedbackService.sendFeedback(this.feedback).subscribe(
+         () => {
           this.successMessage = 'Thank you for your feedback!';
            this.feedback = { feedbackText: '', rating: 0, user: { userId: 0} }; // Reset form
          //feedbackForm.reset();
           this.router.navigate(['/userViewFeedback'])
         },
-        error: (err) => {
+         (err) => {
           console.error('Error submitting feedback:', err);
           this.errorMessage = 'Failed to submit feedback. Please try again later.';
         }
-      });
+      );
     } else {
       this.errorMessage = 'Please fill out all required fields correctly!';
     }
