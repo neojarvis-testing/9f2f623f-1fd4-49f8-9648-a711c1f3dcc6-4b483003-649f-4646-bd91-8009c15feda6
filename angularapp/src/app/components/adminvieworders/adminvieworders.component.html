@@ -31,8 +31,8 @@
           <td>{{ order.orderId }}</td>
           <td>{{ order.user.userId }}</td> 
           <td>{{ order.food.foodId }}</td>
-          <td>{{ order.orderDate }}</td>
-          <td>{{ order.food.foodName }}</td>   
+          <td>{{ order.orderDate | date}}</td>
+          <td>{{ order.food.foodName|titlecase }}</td>   
           <td>{{ order.quantity }}</td>
           <td>{{ order.totalAmount | currency:'INR' }}</td>
           <td>{{ order.orderStatus }}</td>

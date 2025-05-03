@@ -44,6 +44,7 @@
   opacity: 1;
   backdrop-filter: blur(10px);
   transform: translateY(20px);
+  margin: auto;
   }
 
 /* Header styling */
@@ -73,6 +74,7 @@ label {
 .text-danger {
   font-size: 0.875rem;
   color: #dc3545;
+  font-size: 0.875rem;
 }
 
 /* Dropdown styling with icon on the right side */

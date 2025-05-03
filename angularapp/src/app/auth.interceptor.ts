@@ -4,6 +4,7 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -14,7 +15,7 @@ import { AuthService } from './services/auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private readonly router:Router,private readonly authService:AuthService) {}
+  constructor(private router:Router,private authService:AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if(request.url.includes('/login') || request.url.includes('/register')){
@@ -25,6 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if (token) {
    const decodedToken: any = jwtDecode(token);
    const currentTime = Math.floor(Date.now() / 1000);
+  // console.log(decodedToken.exp +' '+ currentTime+' '+ (decodedToken.exp < currentTime))
    if (decodedToken.exp < currentTime) {
    // Token is expired
    this.authService.logout();
@@ -39,8 +41,55 @@ export class AuthInterceptor implements HttpInterceptor {
    }
    });
    return next.handle(authReq)
+  //  .pipe(
+  //  catchError((error: HttpErrorResponse) => {
+  //  if (error.status === 401) {
+  //  // Handle unauthorized error
+  //  this.router.navigate(['/login']);
+  //  }
+  //  return throwError(() => error);
+  //  })
+  //  );
    }
   
    return next.handle(request);
    }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //     if(token){
+      
+//       const authreq = request.clone({
+//         setHeaders:{
+//           Authorization: `Bearer ${token}`
+//         }
+//       })
+//       return next.handle(authreq)
+//     }
+//     return next.handle(request);
+//   }
+
+// }
+
+
+
+  
