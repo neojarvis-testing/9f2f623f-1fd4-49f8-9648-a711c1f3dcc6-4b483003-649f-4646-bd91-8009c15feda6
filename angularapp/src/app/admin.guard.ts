@@ -12,7 +12,7 @@ export class AdminGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.authService.isAdmin()? true : this.router.createUrlTree(['/error']);
   }
-  constructor(private authService:AuthService,private router:Router){}
+  constructor(private readonly authService:AuthService,private readonly router:Router){}
 }
 
  

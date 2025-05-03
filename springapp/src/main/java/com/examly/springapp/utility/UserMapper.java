@@ -6,6 +6,10 @@ import com.examly.springapp.model.User;
 
 public class UserMapper {
 
+    private UserMapper() {
+        throw new UnsupportedOperationException("Utility class - instantiation not allowed");
+    }
+    `
     public static UserDTO mapToUserDTO(User user){
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(user.getEmail());

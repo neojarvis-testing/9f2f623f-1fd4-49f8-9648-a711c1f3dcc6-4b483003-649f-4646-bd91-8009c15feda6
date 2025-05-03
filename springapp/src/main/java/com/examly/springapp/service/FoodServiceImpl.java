@@ -1,7 +1,6 @@
 package com.examly.springapp.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +79,6 @@ public class FoodServiceImpl implements FoodService {
         logger.info("Fetching food by ID: {}", foodId);
         Food food = foodRepo.findById(foodId).orElse(null);
         if (food == null) {
-            logger.error("Food not found with ID: {}", foodId);
             throw new ResourceNotFoundException("Food not found with ID: " + foodId);
         }
         logger.info("Food found: {}", food);
@@ -111,7 +109,6 @@ public class FoodServiceImpl implements FoodService {
 
         Food existingFood = foodRepo.findById(foodId).orElse(null);
         if (existingFood == null) {
-            logger.error("Food not found with ID: {}", foodId);
             throw new ResourceNotFoundException("Food not found with ID: " + foodId);
         }
         foodDetails.setFoodId(foodId);
@@ -129,7 +126,6 @@ public class FoodServiceImpl implements FoodService {
     public boolean deleteFood(int foodId) {
         logger.info("Deleting food with ID: {}", foodId);
         if (!foodRepo.existsById(foodId)) {
-            logger.error("Food not found with ID: {}", foodId);
             throw new ResourceNotFoundException("Food not found with ID: " + foodId);
         }
         foodRepo.deleteById(foodId);
