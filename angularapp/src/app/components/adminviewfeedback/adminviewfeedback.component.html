@@ -1,6 +1,15 @@
 <!-- Spinner Overlay -->
-<div *ngIf="isLoading" class="spinner-overlay">
-  <div class="spinner"></div>
+<div *ngIf="isLoading" class="spinner-overlay" >
+  <div class="loader">
+    <div class="panWrapper">
+      <div class="pan">
+        <div class="food"></div>
+        <div class="panBase"></div>
+        <div class="panHandle"></div>
+      </div>
+      <div class="panShadow"></div>
+      </div>
+  </div>
 </div>
 
 <!-- Wrapper for Background Image -->
@@ -16,16 +25,19 @@
       <table class="table table-bordered table-hover">
         <thead class="thead-dark">
           <tr>
+            <th>Feedback Id</th>
             <th>Username</th>
-            <th>UserId</th>
+            <th>User Id</th>
             <th>Foodname</th>
             <th>Feedback</th>
             <th>Rating</th>
+            <th>Date</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let feedback of paginatedFeedbacks">
+            <td>{{feedback.feedbackId}}</td>
             <td>{{ feedback.user.username }}</td>
             <td>{{ feedback.user.userId }}</td>
             <td>{{ feedback.food.foodName }}</td>
@@ -35,6 +47,7 @@
                 <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= feedback.rating">&#9733;</span>
               </div>
             </td>
+            <td>{{ feedback.date | date: 'dd MMM yyyy' }}</td>
             <td>
               <button class="btn btn-danger btn-sm" (click)="confirmDelete(feedback.feedbackId)">
                 Delete
@@ -46,6 +59,19 @@
     </div>
 
     <p *ngIf="paginatedFeedbacks.length === 0" class="text-center text-light">No feedback available.</p>
+  </div>
+
+  <!-- ✅ Pagination Controls -->
+  <div class="pagination-container">
+    <button class="btn btn-primary" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      Previous
+    </button>
+    <span *ngFor="let page of totalPages" (click)="changePage(page)" [class.active]="page === currentPage">
+      {{ page }}
+    </span>
+    <button class="btn btn-primary" [disabled]="currentPage === totalPages.length" (click)="changePage(currentPage + 1)">
+      Next
+    </button>
   </div>
 
   <!-- Success Popup Dialog -->

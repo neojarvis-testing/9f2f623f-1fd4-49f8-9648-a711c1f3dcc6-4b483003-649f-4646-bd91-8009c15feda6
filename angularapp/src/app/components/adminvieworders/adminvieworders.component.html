@@ -1,9 +1,18 @@
 <div class="order-bg">  
 
   <!-- Spinner -->
-  <div class="spinner-overlay" *ngIf="isLoading">
-    <div class="spinner"></div>
-  </div>  
+  <div *ngIf="isLoading" class="spinner-overlay" >
+    <div class="loader">
+      <div class="panWrapper">
+        <div class="pan">
+          <div class="food"></div>
+          <div class="panBase"></div>
+          <div class="panHandle"></div>
+        </div>
+        <div class="panShadow"></div>
+        </div>
+    </div>
+  </div>
 
   <!-- Main Container -->
   <div class="container mt-5">
@@ -31,8 +40,8 @@
           <td>{{ order.orderId }}</td>
           <td>{{ order.user.userId }}</td> 
           <td>{{ order.food.foodId }}</td>
-          <td>{{ order.orderDate }}</td>
-          <td>{{ order.food.foodName }}</td>   
+          <td>{{ order.orderDate | date}}</td>
+          <td>{{ order.food.foodName|titlecase }}</td>   
           <td>{{ order.quantity }}</td>
           <td>{{ order.totalAmount | currency:'INR' }}</td>
           <td>{{ order.orderStatus }}</td>

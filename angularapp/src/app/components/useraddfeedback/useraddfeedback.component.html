@@ -1,5 +1,14 @@
-<div *ngIf="isLoading" class="spinner-overlay">
-  <div class="spinner"></div>
+<div *ngIf="isLoading" class="spinner-overlay" >
+  <div class="loader">
+    <div class="panWrapper">
+      <div class="pan">
+        <div class="food"></div>
+        <div class="panBase"></div>
+        <div class="panHandle"></div>
+      </div>
+      <div class="panShadow"></div>
+      </div>
+  </div>
 </div>
 
 <div class="user-view-orders-container">
@@ -37,6 +46,17 @@
           ></textarea>
           <div *ngIf="feedback.feedbackText.length < 10" class="text-danger">
             Feedback must be at least 10 characters long.
+          </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="form-group">
+          <label for="rating">Rating</label>
+          <div class="star-rating">
+            <span *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)" [class.filled]="star <= feedback.rating">&#9733;</span>
+          </div>
+          <div *ngIf="feedback.rating < 1 || feedback.rating > 5" class="text-danger">
+            Please provide a rating between 1 and 5.
           </div>
         </div>
 

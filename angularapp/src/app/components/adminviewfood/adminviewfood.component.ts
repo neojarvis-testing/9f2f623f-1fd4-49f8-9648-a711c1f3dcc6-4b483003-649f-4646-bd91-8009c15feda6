@@ -23,70 +23,99 @@ export class AdminviewfoodComponent implements OnInit {
   constructor(private readonly foodService: FoodService) {}
 
   ngOnInit(): void {
-    this.getAllFoods(); // Fetch food items on initialization
+    this.getAllFoods();
   }
 
   getAllFoods(): void {
-    this.isLoading = true; // Show spinner
-    this.foodService.getAllFoods().subscribe(
-      (data) => {
-        this.foods = data; // Assign fetched food items to the array
-        this.isLoading = false; // Hide spinner
-        console.log('Food items fetched successfully:', this.foods);
+    this.isLoading = true;
+    this.foodService.getAllFoods().subscribe({
+      next: (data) => {
+        this.foods = data;
+        this.calculatePagination();
+        this.updatePaginatedFoods();
+        this.isLoading = false;
       },
-      (err) => {
-        this.isLoading = false; // Hide spinner
+      error: (err) => {
+        this.isLoading = false;
         console.error('Error fetching food items:', err);
         alert('Failed to fetch food items.');
       }
-    );
+    });
+  }
+
+  calculatePagination(): void {
+    const totalPagesCount = Math.ceil(this.foods.length / this.pageSize);
+    this.totalPages = Array.from({ length: totalPagesCount }, (_, i) => i + 1);
+  }
+
+  updatePaginatedFoods(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedFoods = this.foods.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.updatePaginatedFoods();
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedFoods();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages.length) {
+      this.currentPage++;
+      this.updatePaginatedFoods();
+    }
   }
 
   openEditPopup(food: Food): void {
-    console.log('Edit button clicked:', food); // Debugging output
-    this.selectedFood = { ...food }; // Create a copy of the food object
-    this.showPopup = true; // Show the popup
-  }
-
-  updateFood(): void {
-    if (this.selectedFood) {
-      this.foodService.updateFood(this.selectedFood.foodId, this.selectedFood).subscribe(
-        (updatedFood) => {
-          const index = this.foods.findIndex(f => f.foodId === updatedFood.foodId);
-          if (index !== -1) {
-            this.foods[index] = updatedFood;
-            console.log('Food updated successfully:', updatedFood);
-          }
-          this.closePopup();
-        },
-        (err) => {
-          console.error('Error updating food item:', err);
-          alert('Failed to update food item.');
-        }
-      );
-    }
+    this.selectedFood = { ...food };
+    this.showPopup = true;
   }
 
   closePopup(): void {
     this.showPopup = false;
-    this.selectedFood = null; // Reset the selected food
+    this.selectedFood = null;
   }
+
+  updateFood(): void {
+    if (this.selectedFood) {
+      this.foodService.updateFood(this.selectedFood.foodId, this.selectedFood).subscribe({
+        next: () => {
+          this.closePopup();
+          this.getAllFoods();
+          this.showSuccessDialog = true; // Show success popup
+        },
+        error: (err) => {
+          console.error('Error updating food:', err);
+          alert('Failed to update food.');
+        }
+      });
+    }
+  }
+  
 
   confirmDeleteFood(foodId: number): void {
     this.foodToDelete = foodId;
-    this.showDialog = true; // Show the confirmation dialog
+    this.showDialog = true;
   }
 
   deleteFood(): void {
     if (this.foodToDelete !== null) {
-      this.foodService.deleteFood(this.foodToDelete).subscribe(() => {
-        this.foods = this.foods.filter(food => food.foodId !== this.foodToDelete);
-        this.closeDialog();
-      }, (err) => {
-        console.error('Error deleting food item:', err);
-        if (err.status === 500) {
-          alert('Internal server error. Please try again later.');
-        } else {
+      this.foodService.deleteFood(this.foodToDelete).subscribe({
+        next: () => {
+          this.foods = this.foods.filter(food => food.foodId !== this.foodToDelete);
+          this.closeDialog();
+          this.calculatePagination();
+          this.updatePaginatedFoods();
+        },
+        error: (err) => {
+          console.error('Error deleting food item:', err);
           alert('Failed to delete food item. Error: ' + err.message);
         }
       });
@@ -95,14 +124,20 @@ export class AdminviewfoodComponent implements OnInit {
 
   closeDialog(): void {
     this.showDialog = false;
-    this.foodToDelete = null; // Reset the food to delete
+    this.foodToDelete = null;
   }
 
-  onDialogConfirmDelete(): void {
-    this.deleteFood();
+  onDialogConfirm(confirm: boolean): void {
+    if (confirm) {
+      this.deleteFood();
+    } else {
+      this.closeDialog();
+    }
   }
-  
-  onDialogConfirmClose(): void {
-    this.closeDialog();
-  }  
+  showSuccessDialog = false;
+
+closeSuccessDialog(): void {
+  this.showSuccessDialog = false;
+}
+
 }

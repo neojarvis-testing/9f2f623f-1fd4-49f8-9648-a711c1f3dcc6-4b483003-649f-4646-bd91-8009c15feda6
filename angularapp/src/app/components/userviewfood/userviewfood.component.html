@@ -1,6 +1,15 @@
 <!-- Spinner -->
-<div *ngIf="isLoading" class="spinner-overlay">
-  <div class="spinner"></div>
+<div *ngIf="isLoading" class="spinner-overlay" >
+  <div class="loader">
+    <div class="panWrapper">
+      <div class="pan">
+        <div class="food"></div>
+        <div class="panBase"></div>
+        <div class="panHandle"></div>
+      </div>
+      <div class="panShadow"></div>
+      </div>
+  </div>
 </div>
 
 <!-- Food List Container -->
@@ -18,7 +27,7 @@
       <div *ngFor="let food of paginatedFoods" class="food-card">
         <img [src]="food.photo" class="food-image" alt="{{ food.foodName }}">
         <div class="food-info">
-          <p class="food-name">{{ food.foodName }}</p>
+          <p class="food-name">{{ food.foodName | titlecase}}</p>
           <p class="food-price">Price: ₹{{ food.price }}</p>
           <p class="food-quantity">Stock Quantity: {{ food.stockQuantity }}</p>
         </div>
@@ -50,7 +59,7 @@
     <!-- Order Popup -->
     <div *ngIf="showOrderPopup" class="order-popup-overlay">
       <div class="order-popup">
-        <h4>{{ selectedFood?.foodName }}</h4>
+        <h4>{{ selectedFood?.foodName | titlecase }}</h4>
         <p>Price: {{ selectedFood?.price | currency:'INR'}}</p>
         <label for="quantity">Quantity:</label>
         <input 
@@ -74,7 +83,7 @@
     <div *ngIf="orderSuccess" class="order-success-popup-overlay">
       <div class="order-success-popup">
         <h3>Order Placed Successfully</h3>
-        <h5><strong>Product Name:</strong> {{ orderSuccessFoodName }}</h5>
+        <h5><strong>Product Name:</strong> {{ orderSuccessFoodName | titlecase}}</h5>
         <p><strong>Quantity:</strong> {{ orderQuantity }}</p>
         <p><strong>Total Amount:</strong> ₹{{ totalAmount }}</p>
         <p><strong>Order Date:</strong> {{ orderDate }}</p>

@@ -40,6 +40,25 @@ public SecurityFilterChain cFilterChain(HttpSecurity http)throws Exception{
      http.cors(cors->cors.disable())
     .csrf(csrf->csrf.disable())
     .authorizeHttpRequests(auth->auth
+    .requestMatchers("/api/register","/api/login").permitAll()
+    .requestMatchers(HttpMethod.POST, "/api/food").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.GET,"/api/food").hasAnyRole("ADMIN","USER")
+    .requestMatchers(HttpMethod.PUT, "/api/food/{foodId}").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.DELETE, "/api/food/{foodId}").hasRole("ADMIN")
+
+    .requestMatchers(HttpMethod.POST, "/api/orders","/api/orders/s").hasRole("USER")
+    .requestMatchers(HttpMethod.GET, "/api/orders").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.GET, "/api/orders/{orderId}").permitAll()
+    .requestMatchers(HttpMethod.GET, "/api/orders/user/{userId}").hasRole("USER")
+    .requestMatchers(HttpMethod.PUT, "/api/orders/{orderId}").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.DELETE, "/api/orders/{orderId}").permitAll()
+
+    .requestMatchers(HttpMethod.POST, "/api/feedback").hasRole("USER")
+    .requestMatchers(HttpMethod.GET,"/api/feedback").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.GET,"/api/feedback/{id}").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.GET, "/api/feedback/user/{userId}").hasRole("USER")
+    .requestMatchers(HttpMethod.DELETE, "/api/feedback/{id}").permitAll()
+    .requestMatchers("/swagger-ui/**","/v3/api-docs/**","/swagger-ui.html").permitAll()
     .anyRequest().permitAll())
     .exceptionHandling(exception->exception.authenticationEntryPoint(entryPoint))
     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

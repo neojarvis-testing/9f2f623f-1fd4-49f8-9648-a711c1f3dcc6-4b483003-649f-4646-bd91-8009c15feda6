@@ -1,23 +1,45 @@
 <!-- Spinner -->
-<div *ngIf="isLoading" class="spinner-overlay">
-  <div class="spinner"></div>
+<div *ngIf="isLoading" class="spinner-overlay" >
+  <div class="loader">
+    <div class="panWrapper">
+      <div class="pan">
+        <div class="food"></div>
+        <div class="panBase"></div>
+        <div class="panHandle"></div>
+      </div>
+      <div class="panShadow"></div>
+      </div>
+  </div>
 </div>
 
 <div class="food-bg">
-
   <h2 class="text-center mb-4">Food List</h2>
 
   <!-- Food Cards Container -->
   <div class="food-container">
-    <div class="food-card" *ngFor="let food of foods">
-      <img [src]="food.photo" alt="Food"/>
+    <div class="food-card" *ngFor="let food of paginatedFoods">
+      <img [src]="food.photo" alt="Food" />
       <p><b>Food ID:</b> {{ food.foodId }}</p>
-      <p><b>Food Name:</b> {{ food.foodName }}</p>
-      <p><b>Price:</b> {{ food.price }}</p>
+      <p><b>Food Name:</b> {{ food.foodName | titlecase }}</p>
+      <p><b>Price:</b> {{ food.price | currency: 'INR' }}</p>
       <p><b>Stock Quantity:</b> {{ food.stockQuantity }}</p>
+      <h3 *ngIf="food.stockQuantity === 0" class="out-of-stock-message text-danger">Out of stock</h3>
       <button class="btn btn-warning" (click)="openEditPopup(food)">Edit</button>
       <button class="btn btn-danger" (click)="confirmDeleteFood(food.foodId)">Delete</button>
     </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="pagination">
+    <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+
+    <button *ngFor="let page of totalPages"
+            (click)="goToPage(page)"
+            [class.active]="page === currentPage">
+      {{ page }}
+    </button>
+
+    <button (click)="goToNextPage()" [disabled]="currentPage === totalPages.length">Next</button>
   </div>
 
   <!-- Edit Popup -->
@@ -42,15 +64,22 @@
       </form>
     </div>
   </div>
-
+ 
   <!-- Delete Confirmation Dialog -->
   <div class="dialog-overlay" *ngIf="showDialog">
     <div class="dialog-box">
       <h2>Delete Confirmation</h2>
       <p>Are you sure you want to delete this food item?</p>
-      <button class="btn btn-danger" (click)="onDialogDelete()">Yes</button>
-      <button class="btn btn-secondary" (click)="onDialogClose()">No</button>
+      <button class="btn btn-danger" (click)="onDialogConfirm(true)">Yes</button>
+      <button class="btn btn-secondary" (click)="onDialogConfirm(false)">No</button>
     </div>
   </div>
-
+</div>
+<!-- Success Popup Dialog -->
+<div class="dialog-overlay" *ngIf="showSuccessDialog">
+  <div class="dialog-box">
+    <h2>Success</h2>
+    <p>Food item updated successfully!</p>
+    <button class="btn btn-success" (click)="closeSuccessDialog()">OK</button>
+  </div>
 </div>
