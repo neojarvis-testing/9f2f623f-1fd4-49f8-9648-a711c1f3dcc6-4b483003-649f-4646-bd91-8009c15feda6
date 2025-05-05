@@ -375,6 +375,7 @@ h2 {
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 5px;
+  color: white;
 }
 
 .pagination-container span.active {
